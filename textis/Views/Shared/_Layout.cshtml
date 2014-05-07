@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
@@ -15,22 +15,22 @@
 <body>
     <div class="container">
         <div class="masthead">
-            <h3 class="text-muted">@Html.ActionLink("Application Name", "Index", "Home")</h3>
+            <h3 class="text-muted">@Html.ActionLink("Skjátextar.is", "Index", "Home")</h3>
             <ul class="nav nav-justified">
                 <li>@Html.ActionLink("Forsíða", "Index", "Home", null, new { @class = "active" })</li>
-                <li>@Html.ActionLink("Textabeiðni", "Contact", "Home")</li>
+                <li>@Html.ActionLink("Textabeiðni", "RequestSubtitle", "Home")</li>
                 <li>@Html.ActionLink("Um Síðuna", "About", "Home")</li>
-                <li>@Html.ActionLink("Algengar Spurningar", "About", "Home")</li>
+                <li>@Html.ActionLink("Algengar Spurningar", "faq", "Home")</li>
             </ul>
         </div>
     </div>
     
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <br />
+    </div>
+    <div class="footer">
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>@DateTime.Now.Year &copy; @ViewBag.Title</p>
         </footer>
     </div>
 
