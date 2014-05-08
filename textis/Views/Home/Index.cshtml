@@ -4,22 +4,18 @@
 
 <div class="jumbotron">
     <h1>Skjátextar.is</h1>
-    
-    @using (Html.BeginForm())
-{
-    <p>
-        @Html.TextBox("SearchString", "", new { placeholder="Sláðu inn titill skjátexta ", style = "width:780px" }) <input type="submit" value="Leita" />
-    </p>
-}
-
- 
-
+   @using (Html.BeginForm())
+        {
+            <p>
+                @Html.TextBox("SearchString", "", new { placeholder="Sláðu inn titill skjátexta ", style = "width:780px" }) <input type="submit" value="Leita" />
+            </p>
+        }
 </div>
 
 <div class="row">
     <div class="col-lg-4">
         <h2>Hvernig byrja ég?</h2>
-        <p id="click_getting_started"><span class="glyphicon glyphicon-chevron-down"></span></p>
+        <p id="click_getting_started"><i class="glyphicon glyphicon-chevron-down"></i></p>
         <div id="getting_started_index_text">
             <p>
                 ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
@@ -28,20 +24,21 @@
             </p>
             <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
         </div>
-</div>
+    </div>
     <div class="col-lg-4">
-       <h2>Setja inn nýjan Skjátexta</h2><p id="click_add_new_subtitle"><span class="glyphicon glyphicon-chevron-down"></span></p>
+        <h2>Setja inn nýjan Skjátexta</h2><p id="click_add_new_subtitle"><i class="glyphicon glyphicon-chevron-down"></i></p>
         <div id="add_new_subtitle_index_text">
             <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
             <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
         </div>
-        
+
     </div>
 
     <div class="col-lg-4">
-        <h2>Óska eftir Skjátexta</h2><p id="click_request_new_subtitle"><span class="glyphicon glyphicon-chevron-down"></span></p>
+        <h2>Óska eftir Skjátexta</h2><p id="click_request_new_subtitle"><i class="glyphicon glyphicon-chevron-down"></i></p>
         <div id="request_new_subtitle_index_text">
             <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
             <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
         </div>
+    </div>
 </div>

@@ -28,12 +28,3 @@ $('#click_request_new_subtitle').click(function () {
     $("i", this).toggleClass("glyphicon glyphicon-chevron-up glyphicon glyphicon-chevron-down");
 });
 
-$('#faqs h3').each(function () {
-    var tis = $(this), state = false, answer = tis.next('div').slideUp();
-    tis.click(function () {
-        state = !state;
-        answer.slideToggle(state);
-        tis.toggleClass('active', state);
-    });
-});
-
