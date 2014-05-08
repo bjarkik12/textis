@@ -12,8 +12,8 @@
         <EntityTypeShape EntityType="TextisModel.Upvote" Width="1.5" PointX="0.5" PointY="0.875" />
         <AssociationConnector Association="TextisModel.ProjectProjectLine" />
         <AssociationConnector Association="TextisModel.ProjectComment" />
-        <AssociationConnector Association="TextisModel.ProjectCategory" />
         <AssociationConnector Association="TextisModel.ProjectUpvote" />
+        <AssociationConnector Association="TextisModel.CategoryProject" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

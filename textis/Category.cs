@@ -14,9 +14,14 @@ namespace textis
     
     public partial class Category
     {
+        public Category()
+        {
+            this.Project = new HashSet<Project>();
+        }
+    
         public int Id { get; set; }
         public string Name { get; set; }
     
-        public virtual Project Project { get; set; }
+        public virtual ICollection<Project> Project { get; set; }
     }
 }

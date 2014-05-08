@@ -27,10 +27,11 @@ namespace textis
         public string Name { get; set; }
         public string Status { get; set; }
         public string Url { get; set; }
+        public int CategoryId { get; set; }
     
         public virtual ICollection<ProjectLine> ProjectLine { get; set; }
         public virtual ICollection<Comment> Comment { get; set; }
-        public virtual Category Category { get; set; }
         public virtual ICollection<Upvote> Upvote { get; set; }
+        public virtual Category Category { get; set; }
     }
 }
