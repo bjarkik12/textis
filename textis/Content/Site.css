@@ -14,7 +14,23 @@
     text-align: center;
 }
 
+/*Styling the faqs*/
+.faqs { position:relative; }
+.faqs h4	{ cursor:pointer; }
+.faqs h4.active	{ color:#d74646; }
+.faqs div   { position:relative; }
+.faqs div p	{ padding:0; margin-bottom:15px; }
+
 /*Styling for the search field*/
+
+/*Auto hide setnings / faq */
+.dropdown_faq_header{
+    font-size: 1.5em;
+    cursor: pointer;
+}
+.glyphicon-chevron-down { color: black }
+.glyphicon-chevron-up { color: red }
+
 
 
 /* Set width on the form input elements since they're 100% wide by default */
