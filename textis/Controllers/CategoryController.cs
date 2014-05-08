@@ -7,131 +7,111 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using textis;
-using textis.Repository;
 
 namespace textis.Controllers
 {
-    public class ProjectController : Controller
+    public class CategoryController : Controller
     {
-        //private TextisModelContainer db = new TextisModelContainer();
+        private TextisModelContainer db = new TextisModelContainer();
 
-        IProjectRepository m_DataBase;
-        TextisModelContainer db;
-
-        public ProjectController()
-        {
-            m_DataBase = new ProjectRepository();
-            db = new TextisModelContainer();
-        }
-
-        // GET: /Project/
+        // GET: /Category/
         public ActionResult Index()
         {
-            //var project = db.Project.Include(p => p.Category);
-            var project = m_DataBase.GetAll();
-            return View(project.ToList());
+            return View(db.Category.ToList());
         }
 
-        // GET: /Project/Details/5
+        // GET: /Category/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Project project = m_DataBase.GetSingle(id);
-            if (project == null)
+            Category category = db.Category.Find(id);
+            if (category == null)
             {
                 return HttpNotFound();
             }
-            return View(project);
+            return View(category);
         }
 
-        // GET: /Project/Create
+        // GET: /Category/Create
         public ActionResult Create()
         {
-            ViewBag.CategoryId = new SelectList(db.Category, "Id", "Name");
             return View();
         }
 
-        // POST: /Project/Create
+        // POST: /Category/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Id,User,Date,Name,Status,Url,CategoryId")] Project project)
+        public ActionResult Create([Bind(Include="Id,Name")] Category category)
         {
             if (ModelState.IsValid)
             {
-                m_DataBase.Create(project);
-                //db.SaveChanges();
+                db.Category.Add(category);
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CategoryId = new SelectList(db.Category, "Id", "Name", project.CategoryId);
-            return View(project);
+            return View(category);
         }
 
-        // GET: /Project/Edit/5
+        // GET: /Category/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //Project project = db.Project.Find(id);
-            Project project = m_DataBase.GetSingle(id);
-            if (project == null)
+            Category category = db.Category.Find(id);
+            if (category == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CategoryId = new SelectList(db.Category, "Id", "Name", project.CategoryId);
-            return View(project);
+            return View(category);
         }
 
-        // POST: /Project/Edit/5
+        // POST: /Category/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,User,Date,Name,Status,Url,CategoryId")] Project project)
+        public ActionResult Edit([Bind(Include="Id,Name")] Category category)
         {
             if (ModelState.IsValid)
             {
-                //db.Entry(project).State = EntityState.Modified;
-                m_DataBase.Update(project);
-                //db.SaveChanges();
+                db.Entry(category).State = EntityState.Modified;
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.CategoryId = new SelectList(db.Category, "Id", "Name", project.CategoryId);
-            return View(project);
+            return View(category);
         }
 
-        // GET: /Project/Delete/5
+        // GET: /Category/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //Project project = db.Project.Find(id);
-            Project project = m_DataBase.GetSingle(id);
-            if (project == null)
+            Category category = db.Category.Find(id);
+            if (category == null)
             {
                 return HttpNotFound();
             }
-            return View(project);
+            return View(category);
         }
 
-        // POST: /Project/Delete/5
+        // POST: /Category/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            //Project project = db.Project.Find(id);
-            //db.Project.Remove(project);
-            //db.SaveChanges();
-            m_DataBase.Delete(id);
+            Category category = db.Category.Find(id);
+            db.Category.Remove(category);
+            db.SaveChanges();
             return RedirectToAction("Index");
         }
 

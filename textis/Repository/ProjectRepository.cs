@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Data.Entity;
 
 namespace textis.Repository
 {
@@ -21,10 +22,29 @@ namespace textis.Repository
             return query.ToList();
         }
 
-        public Project GetSingle(int id)
+        public void Create(Project project)
+        {
+            context.Project.Add(project);
+            context.SaveChanges();
+        }
+
+        public Project GetSingle(int? id)
         {
             var query = this.GetAll().FirstOrDefault(x => x.Id == id);
             return query;
+        }
+
+        public void Update(Project project)
+        {
+            context.Entry(project).State = EntityState.Modified;
+            context.SaveChanges();
+        }
+
+        public void Delete(int? id)
+        {
+            Project project = this.GetSingle(id);
+            context.Project.Remove(project);
+            context.SaveChanges();
         }
     }
 }
