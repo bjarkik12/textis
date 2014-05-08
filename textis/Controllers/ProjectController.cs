@@ -25,14 +25,32 @@ namespace textis.Controllers
         }
 
         // GET: /Project/
-        public ActionResult Index()
+
+
+        public ActionResult Index(string searchString)
         {
-            //var project = db.Project.Include(p => p.Category);
-            var project = m_DataBase.GetAll();
+            var project = from m in m_DataBase.GetAll()
+                          select m;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                project = project.Where(s => s.Name.Contains(searchString));
+            }
+
             return View(project.ToList());
         }
+        // public ActionResult Index()
+       // {
+            
+            
+            //var project = db.Project.Include(p => p.Category);
+            //var project = m_DataBase.GetAll();
+         //   return View(project.ToList());
+       // }
 
         // GET: /Project/Details/5
+        
+        
         public ActionResult Details(int? id)
         {
             if (id == null)
