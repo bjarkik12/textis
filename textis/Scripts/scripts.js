@@ -36,3 +36,4 @@ $('#faqs h3').each(function () {
         tis.toggleClass('active', state);
     });
 });
+

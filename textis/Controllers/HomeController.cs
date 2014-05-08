@@ -15,28 +15,21 @@ namespace textis.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "Um Síðuna";
 
             return View();
         }
 
         public ActionResult Faq()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "Algengar Spurningar";
 
             return View();
         }
 
         public ActionResult RequestSubtitle()
         {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "Textabeiðni";
 
             return View();
         }
