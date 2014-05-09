@@ -17,17 +17,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", null, new { @class = "navbar-brand" })
+                @Html.ActionLink("textis", "Index", "Home", null, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Project", "Index", "Project")</li>
-                    <li>@Html.ActionLink("Category", "Index", "Category")</li>
-                    <li>@Html.ActionLink("Comment", "Index", "Comment")</li>
-                    <li>@Html.ActionLink("Upvote", "Index", "Upvote")</li>
-                    <li>@Html.ActionLink("ProjectLine", "Index", "ProjectLine")</li>
+                    <li>@Html.ActionLink("Leit", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Óska eftir texta", "Index", "Project")</li>
+                    <li>@Html.ActionLink("Leiðbeiningar", "Index", "Category")</li>
+                    <li>@Html.ActionLink("Hvað er textis?", "About", "Home")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -37,7 +34,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p class="foot">&copy; @DateTime.Now.Year - textis</p>
         </footer>
     </div>
 
