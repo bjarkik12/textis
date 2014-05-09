@@ -160,7 +160,7 @@ namespace textis.Controllers
         protected override void Dispose(bool disposing)
         {
             m_CommentRepository.Dispose();
-            //m_ProjectRepository.Dispose();
+            m_ProjectRepository.Dispose();
             base.Dispose(disposing);
         }
     }

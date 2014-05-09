@@ -145,7 +145,6 @@ namespace textis.Controllers
         protected override void Dispose(bool disposing)
         {
             m_CategoryRepository.Dispose();
-            //m_ProjectRepository.Dispose();
             base.Dispose(disposing);
         }
     }
