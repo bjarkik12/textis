@@ -70,10 +70,22 @@ namespace textis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include="Id,ProjectId,Text,User,Date")] Comment comment)
         {
+            String strUser = User.Identity.Name;
+            if (Request.IsAuthenticated)
+            {
+                comment.User = strUser;
+            }
+            else
+            {
+                comment.User = "Nafnlaus";
+            }
+            comment.Date = DateTime.Now;
+
             if (ModelState.IsValid)
             {
                 //db.Comment.Add(comment);
                 //db.SaveChanges();
+                
                 m_CommentRepository.Create(comment);
                 m_CommentRepository.Save();
 
