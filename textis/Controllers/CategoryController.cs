@@ -14,13 +14,13 @@ namespace textis.Controllers
     public class CategoryController : Controller
     {
         ICategoryRepository m_CategoryRepository;
-        IProjectRepository m_ProjectRepository;
+        //IProjectRepository m_ProjectRepository;
         //private TextisModelContainer db = new TextisModelContainer();
 
         public CategoryController()
         {
             m_CategoryRepository = new CategoryRepository();
-            m_ProjectRepository = new ProjectRepository();
+            //m_ProjectRepository = new ProjectRepository();
             //db = new TextisModelContainer();
         }
 

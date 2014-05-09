@@ -15,15 +15,19 @@ namespace textis.Controllers
     {
         //private TextisModelContainer db = new TextisModelContainer();
 
-        ICommentRepository m_DataBase;
+        ICommentRepository m_CommentRepository;
+        IProjectRepository m_ProjectRepository;
+
+        //ICommentRepository m_DataBase;
         //TextisModelContainer db;
-        private TextisModelContainer db;
+        //private TextisModelContainer db;
 
 
         public CommentController()
         {
-            m_DataBase = new CommentRepository();
-            db = new TextisModelContainer();
+            m_CommentRepository = new CommentRepository();
+            m_ProjectRepository = new ProjectRepository();
+            //db = new TextisModelContainer();
         }
 
 
@@ -32,7 +36,7 @@ namespace textis.Controllers
         {
             //var comment = db.Comment.Include(c => c.Project);
             //return View(comment.ToList());
-            var comment = m_DataBase.GetAll();
+            var comment = m_CommentRepository.GetAll();
             return View(comment.ToList());
         }
 
@@ -44,7 +48,7 @@ namespace textis.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Comment comment = db.Comment.Find(id);
-            Comment comment = m_DataBase.GetSingle(id);
+            Comment comment = m_CommentRepository.GetSingle(id);
             if (comment == null)
             {
                 return HttpNotFound();
@@ -55,7 +59,7 @@ namespace textis.Controllers
         // GET: /Comment/Create
         public ActionResult Create()
         {
-            ViewBag.ProjectId = new SelectList(db.Project, "Id", "Name");
+            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name");
             return View();
         }
 
@@ -70,12 +74,13 @@ namespace textis.Controllers
             {
                 //db.Comment.Add(comment);
                 //db.SaveChanges();
-                m_DataBase.Create(comment);
+                m_CommentRepository.Create(comment);
+                m_CommentRepository.Save();
 
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ProjectId = new SelectList(db.Project, "Id", "Name", comment.ProjectId);
+            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", comment.ProjectId);
             return View(comment);
         }
 
@@ -87,12 +92,12 @@ namespace textis.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Comment comment = db.Comment.Find(id);
-            Comment comment = m_DataBase.GetSingle(id);
+            Comment comment = m_CommentRepository.GetSingle(id);
             if (comment == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.ProjectId = new SelectList(db.Project, "Id", "Name", comment.ProjectId);
+            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", comment.ProjectId);
             return View(comment);
         }
 
@@ -107,10 +112,11 @@ namespace textis.Controllers
             {
                 //db.Entry(comment).State = EntityState.Modified;
                 //db.SaveChanges();
-                m_DataBase.Update(comment);
+                m_CommentRepository.Update(comment);
+                m_CommentRepository.Save();
                 return RedirectToAction("Index");
             }
-            ViewBag.ProjectId = new SelectList(db.Project, "Id", "Name", comment.ProjectId);
+            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", comment.ProjectId);
             return View(comment);
         }
 
@@ -122,7 +128,7 @@ namespace textis.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Comment comment = db.Comment.Find(id);
-            Comment comment = m_DataBase.GetSingle(id);
+            Comment comment = m_CommentRepository.GetSingle(id);
             if (comment == null)
             {
                 return HttpNotFound();
@@ -138,10 +144,11 @@ namespace textis.Controllers
             //Comment comment = db.Comment.Find(id);
             //db.Comment.Remove(comment);
             //db.SaveChanges();
-            Comment comment = m_DataBase.GetSingle(id);
+            Comment comment = m_CommentRepository.GetSingle(id);
             if (comment != null)
             {
-                m_DataBase.Delete(id);
+                m_CommentRepository.Delete(id);
+                m_CommentRepository.Save();
             }
             else
             {
@@ -152,10 +159,8 @@ namespace textis.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
+            m_CommentRepository.Dispose();
+            //m_ProjectRepository.Dispose();
             base.Dispose(disposing);
         }
     }
