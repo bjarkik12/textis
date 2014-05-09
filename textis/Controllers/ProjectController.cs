@@ -27,8 +27,17 @@ namespace textis.Controllers
         // GET: /Project/
 
 
-        public ActionResult Index(string searchString)
+        public ActionResult Index(string CategoryList, string searchString)
         {
+            var m_CategoryList = new List<String>();
+
+            var m_CategoryQuery = from d in db.Project
+                                  orderby d.Category
+                                  select d.Category;
+
+            ViewBag.CategoryList = new SelectList(m_CategoryList);
+
+            
             var project = from m in m_DataBase.GetAll()
                           select m;
 

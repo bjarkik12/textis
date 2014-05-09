@@ -10,9 +10,9 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 
-    @using (Html.BeginForm())
-    {
+    @using (Html.BeginForm("Index", "Project", FormMethod.Get)){
     <p>
+        Genre: @Html.DropDownList("Category", "All")
         Title: @Html.TextBox("SearchString") <br />
         <input type="submit" value="Leita" />
     </p>
