@@ -3,7 +3,14 @@
 }
 
 <div class="jumbotron">
-    <h1>ASP.NET</h1>
+    <h1>textis</h1>
+    @using (Html.BeginForm())
+    {
+        <div class="search_box">
+            @Html.TextBox("SearchString", "", new { placeholder = "Titill myndar" })
+            <input type="submit" value="Leita" />
+        </div>
+    }
     
 </div>
 

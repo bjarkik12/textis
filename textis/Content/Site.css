@@ -10,7 +10,6 @@
 }
 
 .foot{
-    color: red;
     text-align: center;
     font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -46,3 +45,18 @@ input[type="checkbox"].input-validation-error {
 .validation-summary-valid {
     display: none;
 }
+
+/*our changes:*/
+
+h1{
+    text-align: center;
+}
+
+.search_box{
+    text-align: center;
+}
+
+.search_box #SearchString{
+    width: 40em;
+}
+
