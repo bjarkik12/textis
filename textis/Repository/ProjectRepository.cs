@@ -10,12 +10,6 @@ namespace textis.Repository
     {
         private readonly TextisModelContainer context = new TextisModelContainer();
 
-
-        public void Dispose(bool disposing)
-        {
-            // empty
-        }
-
         public List<Project> GetAll()
         {
             IQueryable<Project> query = context.Project; 
@@ -25,7 +19,7 @@ namespace textis.Repository
         public void Create(Project project)
         {
             context.Project.Add(project);
-            context.SaveChanges();
+            //context.SaveChanges();
         }
 
         public Project GetSingle(int? id)
@@ -37,14 +31,39 @@ namespace textis.Repository
         public void Update(Project project)
         {
             context.Entry(project).State = EntityState.Modified;
-            context.SaveChanges();
+            //context.SaveChanges();
         }
 
         public void Delete(int? id)
         {
             Project project = this.GetSingle(id);
             context.Project.Remove(project);
+            //context.SaveChanges();
+        }
+
+        public void Save()
+        {
             context.SaveChanges();
+        }
+        
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    context.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }
