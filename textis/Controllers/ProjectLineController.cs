@@ -14,22 +14,24 @@ namespace textis.Controllers
     public class ProjectLineController : Controller
     {
        // private TextisModelContainer db = new TextisModelContainer();
-        IProjectLineRepository m_DataBase;
+        IProjectLineRepository m_ProjectLineRepository;
+        IProjectRepository m_ProjectRepository;
         //TextisModelContainer db;
-        private TextisModelContainer db;
+        //private TextisModelContainer db;
 
 
         public ProjectLineController()
         {
-            m_DataBase = new ProjectLineRepository();
-            db = new TextisModelContainer();
+            m_ProjectLineRepository = new ProjectLineRepository();
+            m_ProjectRepository = new ProjectRepository();
+            //db = new TextisModelContainer();
         }
         // GET: /ProjectLine/
         public ActionResult Index()
         {
            // var projectline = db.ProjectLine.Include(p => p.Project);
             //return View(projectline.ToList());
-            var projectLine = m_DataBase.GetAll();
+            var projectLine = m_ProjectLineRepository.GetAll();
             return View(projectLine.ToList());
         }
 
@@ -41,7 +43,7 @@ namespace textis.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             // ProjectLine projectline = db.ProjectLine.Find(id);
-            ProjectLine projectLine = m_DataBase.GetSingle(id);
+            ProjectLine projectLine = m_ProjectLineRepository.GetSingle(id);
 
             if (projectLine == null)
             {
@@ -53,7 +55,7 @@ namespace textis.Controllers
         // GET: /ProjectLine/Create
         public ActionResult Create()
         {
-            ViewBag.ProjectId = new SelectList(db.Project, "Id", "Name");
+            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name");
             return View();
         }
 
@@ -68,11 +70,12 @@ namespace textis.Controllers
             {
                 //db.ProjectLine.Add(projectline);
                 //db.SaveChanges();
-                m_DataBase.Create(projectLine);
+                m_ProjectLineRepository.Create(projectLine);
+                m_ProjectLineRepository.Save();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ProjectId = new SelectList(db.Project, "Id", "Name", projectLine.ProjectId);
+            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", projectLine.ProjectId);
             return View(projectLine);
         }
 
@@ -84,12 +87,12 @@ namespace textis.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //ProjectLine projectline = db.ProjectLine.Find(id);
-            ProjectLine projectLine = m_DataBase.GetSingle(id);
+            ProjectLine projectLine = m_ProjectLineRepository.GetSingle(id);
             if (projectLine == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.ProjectId = new SelectList(db.Project, "Id", "Name", projectLine.ProjectId);
+            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", projectLine.ProjectId);
             return View(projectLine);
         }
 
@@ -104,10 +107,11 @@ namespace textis.Controllers
             {
                 //db.Entry(projectline).State = EntityState.Modified;
                 //db.SaveChanges();
-                m_DataBase.Update(projectLine);
+                m_ProjectLineRepository.Update(projectLine);
+                m_ProjectLineRepository.Save();
                 return RedirectToAction("Index");
             }
-            ViewBag.ProjectId = new SelectList(db.Project, "Id", "Name", projectLine.ProjectId);
+            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", projectLine.ProjectId);
             return View(projectLine);
         }
 
@@ -119,7 +123,7 @@ namespace textis.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             // ProjectLine projectLine = db.ProjectLine.Find(id);
-            ProjectLine projectLine = m_DataBase.GetSingle(id);
+            ProjectLine projectLine = m_ProjectLineRepository.GetSingle(id);
             if (projectLine == null)
             {
                 return HttpNotFound();
@@ -135,10 +139,11 @@ namespace textis.Controllers
             //ProjectLine projectline = db.ProjectLine.Find(id);
             //db.ProjectLine.Remove(projectline);
             //db.SaveChanges();
-            ProjectLine projectLine = m_DataBase.GetSingle(id);
+            ProjectLine projectLine = m_ProjectLineRepository.GetSingle(id);
             if (projectLine != null)
             {
-                m_DataBase.Delete(id);
+                m_ProjectLineRepository.Delete(id);
+                m_ProjectLineRepository.Save();
             }
             else
             {
@@ -149,11 +154,11 @@ namespace textis.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
+            m_ProjectLineRepository.Dispose();
+            //m_ProjectRepository.Dispose();
             base.Dispose(disposing);
+            
+
         }
     }
 }
