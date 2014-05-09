@@ -15,12 +15,12 @@
 <body>
     <div class="container">
         <div class="masthead">
-            <h3 class="text-muted">@Html.ActionLink("Skjátextar.is", "Index", "Home")</h3>
+            @*<h3 class="text-muted">@Html.ActionLink("Skjátextar.is", "Index", "Home")</h3>*@
             <ul class="nav nav-justified">
-                <li>@Html.ActionLink("Forsíða", "Index", "Home", null, new { @class = "active" })</li>
-                <li>@Html.ActionLink("Textabeiðni", "RequestSubtitle", "Home")</li>
+                <li>@Html.ActionLink("Textis", "Index", "Home", null, new { @class = "active" })</li>
+                <li>@Html.ActionLink("Óska eftir texta", "RequestSubtitle", "Home")</li>
                 <li>@Html.ActionLink("Um Síðuna", "About", "Home")</li>
-                <li>@Html.ActionLink("Algengar Spurningar", "faq", "Home")</li>
+                <li>@Html.ActionLink("Leiðbeiningar", "faq", "Home")</li>
             </ul>
         </div>
     </div>
