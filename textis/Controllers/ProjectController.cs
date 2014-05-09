@@ -16,7 +16,9 @@ namespace textis.Controllers
         //private TextisModelContainer db = new TextisModelContainer();
 
         IProjectRepository m_DataBase;
-        TextisModelContainer db;
+        //TextisModelContainer db;
+        private TextisModelContainer db;
+
 
         public ProjectController()
         {
@@ -149,7 +151,15 @@ namespace textis.Controllers
             //Project project = db.Project.Find(id);
             //db.Project.Remove(project);
             //db.SaveChanges();
-            m_DataBase.Delete(id);
+            Project project = m_DataBase.GetSingle(id);
+            if (project != null)
+            {
+               m_DataBase.Delete(id); 
+            }
+            else
+            {
+                return HttpNotFound();
+            }
             return RedirectToAction("Index");
         }
 

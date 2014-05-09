@@ -11,118 +11,135 @@ using textis.Repository;
 
 namespace textis.Controllers
 {
-    public class CategoryController : Controller
+    public class CommentController : Controller
     {
-        ICategoryRepository m_DataBase;
-        private TextisModelContainer db = new TextisModelContainer();
+        //private TextisModelContainer db = new TextisModelContainer();
 
-        public CategoryController()
+        ICommentRepository m_DataBase;
+        //TextisModelContainer db;
+        private TextisModelContainer db;
+
+
+        public CommentController()
         {
-            m_DataBase = new CategoryRepository();
+            m_DataBase = new CommentRepository();
             db = new TextisModelContainer();
         }
 
 
-        // GET: /Category/
+        // GET: /Comment/
         public ActionResult Index()
         {
-            return View(db.Category.ToList());
+            //var comment = db.Comment.Include(c => c.Project);
+            //return View(comment.ToList());
+            var comment = m_DataBase.GetAll();
+            return View(comment.ToList());
         }
 
-        // GET: /Category/Details/5
+        // GET: /Comment/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = m_DataBase.GetSingle(id);
-            if (category == null)
+            //Comment comment = db.Comment.Find(id);
+            Comment comment = m_DataBase.GetSingle(id);
+            if (comment == null)
             {
                 return HttpNotFound();
             }
-            return View(category);
+            return View(comment);
         }
 
-        // GET: /Category/Create
+        // GET: /Comment/Create
         public ActionResult Create()
         {
+            ViewBag.ProjectId = new SelectList(db.Project, "Id", "Name");
             return View();
         }
 
-        // POST: /Category/Create
+        // POST: /Comment/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Id,Name")] Category category)
+        public ActionResult Create([Bind(Include="Id,ProjectId,Text,User,Date")] Comment comment)
         {
             if (ModelState.IsValid)
             {
-                m_DataBase.Create(category);
+                //db.Comment.Add(comment);
                 //db.SaveChanges();
+                m_DataBase.Create(comment);
+
                 return RedirectToAction("Index");
             }
 
-            return View(category);
+            ViewBag.ProjectId = new SelectList(db.Project, "Id", "Name", comment.ProjectId);
+            return View(comment);
         }
 
-        // GET: /Category/Edit/5
+        // GET: /Comment/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = m_DataBase.GetSingle(id);
-            if (category == null)
+            //Comment comment = db.Comment.Find(id);
+            Comment comment = m_DataBase.GetSingle(id);
+            if (comment == null)
             {
                 return HttpNotFound();
             }
-            return View(category);
+            ViewBag.ProjectId = new SelectList(db.Project, "Id", "Name", comment.ProjectId);
+            return View(comment);
         }
 
-        // POST: /Category/Edit/5
+        // POST: /Comment/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,Name")] Category category)
+        public ActionResult Edit([Bind(Include="Id,ProjectId,Text,User,Date")] Comment comment)
         {
             if (ModelState.IsValid)
             {
-                //db.Entry(category).State = EntityState.Modified;
-                m_DataBase.Update(category);
+                //db.Entry(comment).State = EntityState.Modified;
                 //db.SaveChanges();
+                m_DataBase.Update(comment);
                 return RedirectToAction("Index");
             }
-            return View(category);
+            ViewBag.ProjectId = new SelectList(db.Project, "Id", "Name", comment.ProjectId);
+            return View(comment);
         }
 
-        // GET: /Category/Delete/5
+        // GET: /Comment/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = db.Category.Find(id);
-            if (category == null)
+            //Comment comment = db.Comment.Find(id);
+            Comment comment = m_DataBase.GetSingle(id);
+            if (comment == null)
             {
                 return HttpNotFound();
             }
-            return View(category);
+            return View(comment);
         }
 
-        // POST: /Category/Delete/5
+        // POST: /Comment/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Category category = m_DataBase.GetSingle(id);
-            //db.Category.Remove(category);
+            //Comment comment = db.Comment.Find(id);
+            //db.Comment.Remove(comment);
             //db.SaveChanges();
-            if (category != null)
+            Comment comment = m_DataBase.GetSingle(id);
+            if (comment != null)
             {
                 m_DataBase.Delete(id);
             }
@@ -130,7 +147,6 @@ namespace textis.Controllers
             {
                 return HttpNotFound();
             }
-            
             return RedirectToAction("Index");
         }
 

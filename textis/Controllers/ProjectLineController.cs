@@ -11,118 +11,132 @@ using textis.Repository;
 
 namespace textis.Controllers
 {
-    public class CategoryController : Controller
+    public class ProjectLineController : Controller
     {
-        ICategoryRepository m_DataBase;
-        private TextisModelContainer db = new TextisModelContainer();
+       // private TextisModelContainer db = new TextisModelContainer();
+        IProjectLineRepository m_DataBase;
+        //TextisModelContainer db;
+        private TextisModelContainer db;
 
-        public CategoryController()
+
+        public ProjectLineController()
         {
-            m_DataBase = new CategoryRepository();
+            m_DataBase = new ProjectLineRepository();
             db = new TextisModelContainer();
         }
-
-
-        // GET: /Category/
+        // GET: /ProjectLine/
         public ActionResult Index()
         {
-            return View(db.Category.ToList());
+           // var projectline = db.ProjectLine.Include(p => p.Project);
+            //return View(projectline.ToList());
+            var projectLine = m_DataBase.GetAll();
+            return View(projectLine.ToList());
         }
 
-        // GET: /Category/Details/5
+        // GET: /ProjectLine/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = m_DataBase.GetSingle(id);
-            if (category == null)
+            // ProjectLine projectline = db.ProjectLine.Find(id);
+            ProjectLine projectLine = m_DataBase.GetSingle(id);
+
+            if (projectLine == null)
             {
                 return HttpNotFound();
             }
-            return View(category);
+            return View(projectLine);
         }
 
-        // GET: /Category/Create
+        // GET: /ProjectLine/Create
         public ActionResult Create()
         {
+            ViewBag.ProjectId = new SelectList(db.Project, "Id", "Name");
             return View();
         }
 
-        // POST: /Category/Create
+        // POST: /ProjectLine/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Id,Name")] Category category)
+        public ActionResult Create([Bind(Include="Id,ProjectId,User,TimeFrom,TimeTo,TextLine1,TextLine2,Date,Language")] ProjectLine projectLine)
         {
             if (ModelState.IsValid)
             {
-                m_DataBase.Create(category);
+                //db.ProjectLine.Add(projectline);
                 //db.SaveChanges();
+                m_DataBase.Create(projectLine);
                 return RedirectToAction("Index");
             }
 
-            return View(category);
+            ViewBag.ProjectId = new SelectList(db.Project, "Id", "Name", projectLine.ProjectId);
+            return View(projectLine);
         }
 
-        // GET: /Category/Edit/5
+        // GET: /ProjectLine/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = m_DataBase.GetSingle(id);
-            if (category == null)
+            //ProjectLine projectline = db.ProjectLine.Find(id);
+            ProjectLine projectLine = m_DataBase.GetSingle(id);
+            if (projectLine == null)
             {
                 return HttpNotFound();
             }
-            return View(category);
+            ViewBag.ProjectId = new SelectList(db.Project, "Id", "Name", projectLine.ProjectId);
+            return View(projectLine);
         }
 
-        // POST: /Category/Edit/5
+        // POST: /ProjectLine/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,Name")] Category category)
+        public ActionResult Edit([Bind(Include="Id,ProjectId,User,TimeFrom,TimeTo,TextLine1,TextLine2,Date,Language")] ProjectLine projectLine)
         {
             if (ModelState.IsValid)
             {
-                //db.Entry(category).State = EntityState.Modified;
-                m_DataBase.Update(category);
+                //db.Entry(projectline).State = EntityState.Modified;
                 //db.SaveChanges();
+                m_DataBase.Update(projectLine);
                 return RedirectToAction("Index");
             }
-            return View(category);
+            ViewBag.ProjectId = new SelectList(db.Project, "Id", "Name", projectLine.ProjectId);
+            return View(projectLine);
         }
 
-        // GET: /Category/Delete/5
+        // GET: /ProjectLine/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = db.Category.Find(id);
-            if (category == null)
+            // ProjectLine projectLine = db.ProjectLine.Find(id);
+            ProjectLine projectLine = m_DataBase.GetSingle(id);
+            if (projectLine == null)
             {
                 return HttpNotFound();
             }
-            return View(category);
+            return View(projectLine);
         }
 
-        // POST: /Category/Delete/5
+        // POST: /ProjectLine/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Category category = m_DataBase.GetSingle(id);
-            //db.Category.Remove(category);
+            //ProjectLine projectline = db.ProjectLine.Find(id);
+            //db.ProjectLine.Remove(projectline);
             //db.SaveChanges();
-            if (category != null)
+            ProjectLine projectLine = m_DataBase.GetSingle(id);
+            if (projectLine != null)
             {
                 m_DataBase.Delete(id);
             }
@@ -130,7 +144,6 @@ namespace textis.Controllers
             {
                 return HttpNotFound();
             }
-            
             return RedirectToAction("Index");
         }
 
