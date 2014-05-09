@@ -9,6 +9,12 @@
     padding-right: 15px;
 }
 
+.foot{
+    color: red;
+    text-align: center;
+    font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
 /* Set width on the form input elements since they're 100% wide by default */
 input,
 select,
