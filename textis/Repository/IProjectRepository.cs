@@ -11,7 +11,6 @@ namespace textis.Repository
         void Create(Project project);
         void Update(Project project);
         void Delete(int? id);
-
         void Dispose(bool disposing);
         
     }
