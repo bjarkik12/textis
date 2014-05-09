@@ -16,7 +16,9 @@ namespace textis.Controllers
         //private TextisModelContainer db = new TextisModelContainer();
 
         IProjectRepository m_DataBase;
-        TextisModelContainer db;
+        //TextisModelContainer db;
+        private TextisModelContainer db;
+
 
         public ProjectController()
         {
@@ -25,14 +27,32 @@ namespace textis.Controllers
         }
 
         // GET: /Project/
-        public ActionResult Index()
+
+
+        public ActionResult Index(string searchString)
         {
-            //var project = db.Project.Include(p => p.Category);
-            var project = m_DataBase.GetAll();
+            var project = from m in m_DataBase.GetAll()
+                          select m;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                project = project.Where(s => s.Name.Contains(searchString));
+            }
+
             return View(project.ToList());
         }
+        // public ActionResult Index()
+       // {
+            
+            
+            //var project = db.Project.Include(p => p.Category);
+            //var project = m_DataBase.GetAll();
+         //   return View(project.ToList());
+       // }
 
         // GET: /Project/Details/5
+        
+        
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -131,7 +151,15 @@ namespace textis.Controllers
             //Project project = db.Project.Find(id);
             //db.Project.Remove(project);
             //db.SaveChanges();
-            m_DataBase.Delete(id);
+            Project project = m_DataBase.GetSingle(id);
+            if (project != null)
+            {
+               m_DataBase.Delete(id); 
+            }
+            else
+            {
+                return HttpNotFound();
+            }
             return RedirectToAction("Index");
         }
 

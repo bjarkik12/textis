@@ -3,14 +3,15 @@ using System.Collections.Generic;
 
 namespace textis.Repository
 {
-    interface IProjectRepository
+    interface ICommentRepository
     {
-        List<Project> GetAll();
-        Project GetSingle(int? id);
+        List<Comment> GetAll();
+        Comment GetSingle(int? id);
         //List<Project> GetBy();
-        void Create(Project project);
-        void Update(Project project);
+        void Create(Comment comment);
+        void Update(Comment comment);
         void Delete(int? id);
+
         void Dispose(bool disposing);
         
     }
