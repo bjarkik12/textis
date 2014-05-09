@@ -11,10 +11,6 @@ namespace textis.Repository
         private readonly TextisModelContainer context = new TextisModelContainer();
 
 
-        public void Dispose(bool disposing)
-        {
-            // empty
-        }
 
         public List<Upvote> GetAll()
         {
@@ -25,7 +21,7 @@ namespace textis.Repository
         public void Create(Upvote upvote)
         {
             context.Upvote.Add(upvote);
-            context.SaveChanges();
+            //context.SaveChanges();
         }
 
         public Upvote GetSingle(int? id)
@@ -37,14 +33,39 @@ namespace textis.Repository
         public void Update(Upvote upvote)
         {
             context.Entry(upvote).State = EntityState.Modified;
-            context.SaveChanges();
+            //context.SaveChanges();
         }
 
         public void Delete(int? id)
         {
             Upvote upvote = this.GetSingle(id);
             context.Upvote.Remove(upvote);
+            //context.SaveChanges();
+        }
+
+        public void Save()
+        {
             context.SaveChanges();
+        }
+
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    context.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace textis.Repository
 {
-    interface IUpvoteRepository
+    interface IUpvoteRepository : IDisposable
     {
         List<Upvote> GetAll();
         Upvote GetSingle(int? id);
@@ -11,8 +11,9 @@ namespace textis.Repository
         void Create(Upvote upvote);
         void Update(Upvote upvote);
         void Delete(int? id);
-
-        void Dispose(bool disposing);
+        //void Dispose();
+        //void Dispose(bool disposing);
+        void Save();
         
     }
 }

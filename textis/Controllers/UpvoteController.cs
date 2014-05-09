@@ -14,15 +14,18 @@ namespace textis.Controllers
     public class UpvoteController : Controller
     {
         //private TextisModelContainer db = new TextisModelContainer();
-        IUpvoteRepository m_DataBase;
+        IUpvoteRepository m_UpvoteRepository;
+        IProjectRepository m_ProjectRepository;
+
         //TextisModelContainer db;
-        private TextisModelContainer db;
+        //private TextisModelContainer db;
 
 
         public UpvoteController()
         {
-            m_DataBase = new UpvoteRepository();
-            db = new TextisModelContainer();
+            m_UpvoteRepository = new UpvoteRepository();
+            m_ProjectRepository = new ProjectRepository();
+            //db = new TextisModelContainer();
         }
 
         // GET: /Upvote/
@@ -30,7 +33,7 @@ namespace textis.Controllers
         {
            // var upvote = db.Upvote.Include(u => u.Project);
            // return View(upvote.ToList());
-            var comment = m_DataBase.GetAll();
+            var comment = m_UpvoteRepository.GetAll();
             return View(comment.ToList());
         }
 
@@ -42,7 +45,7 @@ namespace textis.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Upvote upvote = db.Upvote.Find(id);
-            Upvote upvote = m_DataBase.GetSingle(id);
+            Upvote upvote = m_UpvoteRepository.GetSingle(id);
             if (upvote == null)
             {
                 return HttpNotFound();
@@ -53,7 +56,7 @@ namespace textis.Controllers
         // GET: /Upvote/Create
         public ActionResult Create()
         {
-            ViewBag.ProjectId = new SelectList(db.Project, "Id", "Name");
+            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name");
             return View();
         }
 
@@ -68,11 +71,12 @@ namespace textis.Controllers
             {
                 //db.Upvote.Add(upvote);
                 //db.SaveChanges();
-                m_DataBase.Create(upvote);
+                m_UpvoteRepository.Create(upvote);
+                m_UpvoteRepository.Save();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ProjectId = new SelectList(db.Project, "Id", "Name", upvote.ProjectId);
+            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", upvote.ProjectId);
             return View(upvote);
         }
 
@@ -84,12 +88,12 @@ namespace textis.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Upvote upvote = db.Upvote.Find(id);
-            Upvote upvote = m_DataBase.GetSingle(id);
+            Upvote upvote = m_UpvoteRepository.GetSingle(id);
             if (upvote == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.ProjectId = new SelectList(db.Project, "Id", "Name", upvote.ProjectId);
+            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", upvote.ProjectId);
             return View(upvote);
         }
 
@@ -104,10 +108,11 @@ namespace textis.Controllers
             {
                 //db.Entry(upvote).State = EntityState.Modified;
                 //db.SaveChanges();
-                m_DataBase.Update(upvote);
+                m_UpvoteRepository.Update(upvote);
+                m_UpvoteRepository.Save();
                 return RedirectToAction("Index");
             }
-            ViewBag.ProjectId = new SelectList(db.Project, "Id", "Name", upvote.ProjectId);
+            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", upvote.ProjectId);
             return View(upvote);
         }
 
@@ -119,7 +124,7 @@ namespace textis.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Upvote upvote = db.Upvote.Find(id);
-            Upvote upvote = m_DataBase.GetSingle(id);
+            Upvote upvote = m_UpvoteRepository.GetSingle(id);
             if (upvote == null)
             {
                 return HttpNotFound();
@@ -135,10 +140,11 @@ namespace textis.Controllers
             //Upvote upvote = db.Upvote.Find(id);
             //db.Upvote.Remove(upvote);
             //db.SaveChanges();
-            Upvote upvote = m_DataBase.GetSingle(id);
+            Upvote upvote = m_UpvoteRepository.GetSingle(id);
             if(upvote != null)
             {
-                m_DataBase.Delete(id);
+                m_UpvoteRepository.Delete(id);
+                m_UpvoteRepository.Save();
             }
             else
             {
@@ -149,11 +155,10 @@ namespace textis.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
+            m_UpvoteRepository.Dispose();
+            //m_ProjectRepository.Dispose();
             base.Dispose(disposing);
+            
         }
     }
 }
