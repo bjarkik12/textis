@@ -20,6 +20,17 @@ namespace textis.Controllers
         //TextisModelContainer db;
         //private TextisModelContainer db;
 
+        public string GetUsername()
+        {
+            if (Request.IsAuthenticated)
+            {
+                return User.Identity.Name;
+            }
+            else
+            {
+                return "Nafnlaus";
+            }
+        }
 
         public ProjectController()
         {
@@ -83,6 +94,9 @@ namespace textis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include="Id,User,Date,Name,Status,Url,CategoryId")] Project project)
         {
+            project.User = GetUsername();
+            project.Date = DateTime.Now;
+            
             if (ModelState.IsValid)
             {
                 m_ProjectRepository.Create(project);
@@ -119,6 +133,9 @@ namespace textis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include="Id,User,Date,Name,Status,Url,CategoryId")] Project project)
         {
+            project.User = GetUsername();
+            project.Date = DateTime.Now;
+
             if (ModelState.IsValid)
             {
                 //db.Entry(project).State = EntityState.Modified;

@@ -24,7 +24,6 @@ namespace textis.Controllers
             //db = new TextisModelContainer();
         }
 
-
         // GET: /Category/
         public ActionResult Index()
         {
@@ -59,6 +58,7 @@ namespace textis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include="Id,Name")] Category category)
         {
+
             if (ModelState.IsValid)
             {
                 m_CategoryRepository.Create(category);

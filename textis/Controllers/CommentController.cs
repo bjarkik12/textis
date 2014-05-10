@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using textis;
 using textis.Repository;
+using textis.HelpFunction;
 
 namespace textis.Controllers
 {
@@ -23,6 +24,17 @@ namespace textis.Controllers
         //private TextisModelContainer db;
 
 
+        public string GetUsername(){
+            if (Request.IsAuthenticated)
+            {
+                return User.Identity.Name;
+            }
+            else
+            {
+                return "Nafnlaus";
+            }
+        }
+        
         public CommentController()
         {
             m_CommentRepository = new CommentRepository();
@@ -70,15 +82,7 @@ namespace textis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include="Id,ProjectId,Text,User,Date")] Comment comment)
         {
-            String strUser = User.Identity.Name;
-            if (Request.IsAuthenticated)
-            {
-                comment.User = strUser;
-            }
-            else
-            {
-                comment.User = "Nafnlaus";
-            }
+            comment.User = GetUsername();
             comment.Date = DateTime.Now;
 
             if (ModelState.IsValid)
@@ -124,6 +128,7 @@ namespace textis.Controllers
             {
                 //db.Entry(comment).State = EntityState.Modified;
                 //db.SaveChanges();
+                comment.User = GetUsername();
                 m_CommentRepository.Update(comment);
                 m_CommentRepository.Save();
                 return RedirectToAction("Index");
