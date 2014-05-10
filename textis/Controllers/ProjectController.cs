@@ -15,30 +15,25 @@ namespace textis.Controllers
     {
         //private TextisModelContainer db = new TextisModelContainer();
 
-        IProjectRepository m_DataBase;
-        TextisModelContainer db;
+        IProjectRepository m_ProjectRepository;
+        ICategoryRepository m_CategoryRepository;
+        //TextisModelContainer db;
+        //private TextisModelContainer db;
+
 
         public ProjectController()
         {
-            m_DataBase = new ProjectRepository();
-            db = new TextisModelContainer();
+            m_ProjectRepository = new ProjectRepository();
+            m_CategoryRepository = new CategoryRepository();
+            //db = new TextisModelContainer();
         }
 
         // GET: /Project/
 
 
-        public ActionResult Index(string CategoryList, string searchString)
+        public ActionResult Index(string searchString)
         {
-            var m_CategoryList = new List<String>();
-
-            var m_CategoryQuery = from d in db.Project
-                                  orderby d.Category
-                                  select d.Category;
-
-            ViewBag.CategoryList = new SelectList(m_CategoryList);
-
-            
-            var project = from m in m_DataBase.GetAll()
+            var project = from m in m_ProjectRepository.GetAll()
                           select m;
 
             if (!String.IsNullOrEmpty(searchString))
@@ -53,7 +48,7 @@ namespace textis.Controllers
             
             
             //var project = db.Project.Include(p => p.Category);
-            //var project = m_DataBase.GetAll();
+            //var project = m_ProjectRepository.GetAll();
          //   return View(project.ToList());
        // }
 
@@ -66,7 +61,7 @@ namespace textis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Project project = m_DataBase.GetSingle(id);
+            Project project = m_ProjectRepository.GetSingle(id);
             if (project == null)
             {
                 return HttpNotFound();
@@ -77,7 +72,7 @@ namespace textis.Controllers
         // GET: /Project/Create
         public ActionResult Create()
         {
-            ViewBag.CategoryId = new SelectList(db.Category, "Id", "Name");
+            ViewBag.CategoryId = new SelectList(m_CategoryRepository.GetAll(), "Id", "Name");
             return View();
         }
 
@@ -90,12 +85,13 @@ namespace textis.Controllers
         {
             if (ModelState.IsValid)
             {
-                m_DataBase.Create(project);
+                m_ProjectRepository.Create(project);
+                m_ProjectRepository.Save();
                 //db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CategoryId = new SelectList(db.Category, "Id", "Name", project.CategoryId);
+            ViewBag.CategoryId = new SelectList(m_CategoryRepository.GetAll(), "Id", "Name", project.CategoryId);
             return View(project);
         }
 
@@ -107,12 +103,12 @@ namespace textis.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Project project = db.Project.Find(id);
-            Project project = m_DataBase.GetSingle(id);
+            Project project = m_ProjectRepository.GetSingle(id);
             if (project == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CategoryId = new SelectList(db.Category, "Id", "Name", project.CategoryId);
+            ViewBag.CategoryId = new SelectList(m_CategoryRepository.GetAll(), "Id", "Name", project.CategoryId);
             return View(project);
         }
 
@@ -126,11 +122,12 @@ namespace textis.Controllers
             if (ModelState.IsValid)
             {
                 //db.Entry(project).State = EntityState.Modified;
-                m_DataBase.Update(project);
+                m_ProjectRepository.Update(project);
+                m_ProjectRepository.Save();
                 //db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.CategoryId = new SelectList(db.Category, "Id", "Name", project.CategoryId);
+            ViewBag.CategoryId = new SelectList(m_CategoryRepository.GetAll(), "Id", "Name", project.CategoryId);
             return View(project);
         }
 
@@ -142,7 +139,7 @@ namespace textis.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             //Project project = db.Project.Find(id);
-            Project project = m_DataBase.GetSingle(id);
+            Project project = m_ProjectRepository.GetSingle(id);
             if (project == null)
             {
                 return HttpNotFound();
@@ -158,16 +155,23 @@ namespace textis.Controllers
             //Project project = db.Project.Find(id);
             //db.Project.Remove(project);
             //db.SaveChanges();
-            m_DataBase.Delete(id);
+            Project project = m_ProjectRepository.GetSingle(id);
+            if (project != null)
+            {
+                m_ProjectRepository.Delete(id);
+                m_ProjectRepository.Save();
+            }
+            else
+            {
+                return HttpNotFound();
+            }
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
+            m_ProjectRepository.Dispose();
+            //m_ProjectRepository.Dispose();
             base.Dispose(disposing);
         }
     }

@@ -6,38 +6,40 @@ using System.Data.Entity;
 
 namespace textis.Repository
 {
-    public class ProjectRepository : IProjectRepository
+    public class UpvoteRepository : IUpvoteRepository
     {
         private readonly TextisModelContainer context = new TextisModelContainer();
 
-        public List<Project> GetAll()
+
+
+        public List<Upvote> GetAll()
         {
-            IQueryable<Project> query = context.Project; 
+            IQueryable<Upvote> query = context.Upvote;
             return query.ToList();
         }
 
-        public void Create(Project project)
+        public void Create(Upvote upvote)
         {
-            context.Project.Add(project);
+            context.Upvote.Add(upvote);
             //context.SaveChanges();
         }
 
-        public Project GetSingle(int? id)
+        public Upvote GetSingle(int? id)
         {
             var query = this.GetAll().FirstOrDefault(x => x.Id == id);
             return query;
         }
 
-        public void Update(Project project)
+        public void Update(Upvote upvote)
         {
-            context.Entry(project).State = EntityState.Modified;
+            context.Entry(upvote).State = EntityState.Modified;
             //context.SaveChanges();
         }
 
         public void Delete(int? id)
         {
-            Project project = this.GetSingle(id);
-            context.Project.Remove(project);
+            Upvote upvote = this.GetSingle(id);
+            context.Upvote.Remove(upvote);
             //context.SaveChanges();
         }
 
@@ -45,7 +47,7 @@ namespace textis.Repository
         {
             context.SaveChanges();
         }
-        
+
         private bool disposed = false;
 
         protected virtual void Dispose(bool disposing)
@@ -65,5 +67,7 @@ namespace textis.Repository
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+
     }
 }

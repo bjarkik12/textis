@@ -6,38 +6,38 @@ using System.Data.Entity;
 
 namespace textis.Repository
 {
-    public class ProjectRepository : IProjectRepository
+    public class CategoryRepository : ICategoryRepository
     {
         private readonly TextisModelContainer context = new TextisModelContainer();
 
-        public List<Project> GetAll()
+        public List<Category> GetAll()
         {
-            IQueryable<Project> query = context.Project; 
+            IQueryable<Category> query = context.Category;
             return query.ToList();
         }
 
-        public void Create(Project project)
+        public void Create(Category category)
         {
-            context.Project.Add(project);
+            context.Category.Add(category);
             //context.SaveChanges();
         }
 
-        public Project GetSingle(int? id)
+        public Category GetSingle(int? id)
         {
             var query = this.GetAll().FirstOrDefault(x => x.Id == id);
             return query;
         }
 
-        public void Update(Project project)
+        public void Update(Category category)
         {
-            context.Entry(project).State = EntityState.Modified;
+            context.Entry(category).State = EntityState.Modified;
             //context.SaveChanges();
         }
 
         public void Delete(int? id)
         {
-            Project project = this.GetSingle(id);
-            context.Project.Remove(project);
+            Category category = this.GetSingle(id);
+            context.Category.Remove(category);
             //context.SaveChanges();
         }
 
@@ -45,7 +45,7 @@ namespace textis.Repository
         {
             context.SaveChanges();
         }
-        
+
         private bool disposed = false;
 
         protected virtual void Dispose(bool disposing)

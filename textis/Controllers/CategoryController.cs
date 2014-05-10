@@ -7,17 +7,28 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using textis;
+using textis.Repository;
 
 namespace textis.Controllers
 {
     public class CategoryController : Controller
     {
-        private TextisModelContainer db = new TextisModelContainer();
+        ICategoryRepository m_CategoryRepository;
+        //IProjectRepository m_ProjectRepository;
+        //private TextisModelContainer db = new TextisModelContainer();
+
+        public CategoryController()
+        {
+            m_CategoryRepository = new CategoryRepository();
+            //m_ProjectRepository = new ProjectRepository();
+            //db = new TextisModelContainer();
+        }
+
 
         // GET: /Category/
         public ActionResult Index()
         {
-            return View(db.Category.ToList());
+            return View(m_CategoryRepository.GetAll().ToList());
         }
 
         // GET: /Category/Details/5
@@ -27,7 +38,7 @@ namespace textis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = db.Category.Find(id);
+            Category category = m_CategoryRepository.GetSingle(id);
             if (category == null)
             {
                 return HttpNotFound();
@@ -50,8 +61,10 @@ namespace textis.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Category.Add(category);
-                db.SaveChanges();
+                m_CategoryRepository.Create(category);
+                //db.SaveChanges();
+                m_CategoryRepository.Save();
+
                 return RedirectToAction("Index");
             }
 
@@ -65,7 +78,7 @@ namespace textis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = db.Category.Find(id);
+            Category category = m_CategoryRepository.GetSingle(id);
             if (category == null)
             {
                 return HttpNotFound();
@@ -82,8 +95,11 @@ namespace textis.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(category).State = EntityState.Modified;
-                db.SaveChanges();
+                //db.Entry(category).State = EntityState.Modified;
+                m_CategoryRepository.Update(category);
+                //db.SaveChanges();
+                m_CategoryRepository.Save();
+
                 return RedirectToAction("Index");
             }
             return View(category);
@@ -96,7 +112,8 @@ namespace textis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = db.Category.Find(id);
+            Category category = m_CategoryRepository.GetSingle(id);
+            //Category category = db.Category.Find(id);
             if (category == null)
             {
                 return HttpNotFound();
@@ -109,18 +126,25 @@ namespace textis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Category category = db.Category.Find(id);
-            db.Category.Remove(category);
-            db.SaveChanges();
+            Category category = m_CategoryRepository.GetSingle(id);
+            //db.Category.Remove(category);
+            //db.SaveChanges();
+            if (category != null)
+            {
+                m_CategoryRepository.Delete(id);
+                m_CategoryRepository.Save();
+            }
+            else
+            {
+                return HttpNotFound();
+            }
+            
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
+            m_CategoryRepository.Dispose();
             base.Dispose(disposing);
         }
     }

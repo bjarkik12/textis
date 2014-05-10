@@ -3,14 +3,15 @@ using System.Collections.Generic;
 
 namespace textis.Repository
 {
-    interface IProjectRepository : IDisposable
+    interface IUpvoteRepository : IDisposable
     {
-        List<Project> GetAll();
-        Project GetSingle(int? id);
+        List<Upvote> GetAll();
+        Upvote GetSingle(int? id);
         //List<Project> GetBy();
-        void Create(Project project);
-        void Update(Project project);
+        void Create(Upvote upvote);
+        void Update(Upvote upvote);
         void Delete(int? id);
+        //void Dispose();
         //void Dispose(bool disposing);
         void Save();
         

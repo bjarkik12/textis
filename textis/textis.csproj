@@ -168,8 +168,11 @@
     </Compile>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Controllers\ProjectLineController.cs" />
+    <Compile Include="Controllers\UpvoteController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -182,6 +185,14 @@
       <DependentUpon>TextisModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\IProjectLineRepository.cs" />
+    <Compile Include="Repository\ProjectLineRepository.cs" />
+    <Compile Include="Repository\UpvoteRepository.cs" />
+    <Compile Include="Repository\CommentRepository.cs" />
+    <Compile Include="Repository\CategoryRepository.cs" />
+    <Compile Include="Repository\ICategoryRepository.cs" />
+    <Compile Include="Repository\IUpvoteRepository.cs" />
+    <Compile Include="Repository\ICommentRepository.cs" />
     <Compile Include="Repository\IProjectRepository.cs" />
     <Compile Include="Repository\ProjectRepository.cs" />
     <Compile Include="Startup.cs" />
@@ -224,7 +235,6 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\script_textis.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="TextisModel.edmx.sql" />
     <Content Include="Web.config" />
@@ -279,10 +289,25 @@
     <Content Include="Views\Category\Details.cshtml" />
     <Content Include="Views\Category\Edit.cshtml" />
     <Content Include="Views\Category\Index.cshtml" />
-    <Content Include="Views\Home\faq.cshtml" />
+    <Content Include="Views\Comment\Create.cshtml" />
+    <Content Include="Views\Comment\Delete.cshtml" />
+    <Content Include="Views\Comment\Details.cshtml" />
+    <Content Include="Views\Comment\Edit.cshtml" />
+    <Content Include="Views\Comment\Index.cshtml" />
+    <Content Include="Views\Upvote\Create.cshtml" />
+    <Content Include="Views\Upvote\Delete.cshtml" />
+    <Content Include="Views\Upvote\Details.cshtml" />
+    <Content Include="Views\Upvote\Edit.cshtml" />
+    <Content Include="Views\Upvote\Index.cshtml" />
+    <Content Include="Views\ProjectLine\Create.cshtml" />
+    <Content Include="Views\ProjectLine\Delete.cshtml" />
+    <Content Include="Views\ProjectLine\Details.cshtml" />
+    <Content Include="Views\ProjectLine\Edit.cshtml" />
+    <Content Include="Views\ProjectLine\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="DAL\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
