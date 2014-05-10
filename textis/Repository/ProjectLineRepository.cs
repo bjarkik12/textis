@@ -16,6 +16,15 @@ namespace textis.Repository
             return query.ToList();
         }
 
+        public List<ProjectLine> GetByProjectId(int? id)
+        {
+            IQueryable<ProjectLine> query = context.ProjectLine;
+            var query2 = (from x in query
+                          where x.ProjectId == id
+                          select x);
+            return query2.ToList();
+        }
+
         public void Create(ProjectLine projectLine)
         {
             context.ProjectLine.Add(projectLine);

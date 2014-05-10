@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using textis;
 using textis.Repository;
+using textis.ViewModel;
 
 namespace textis.Controllers
 {
@@ -15,8 +16,9 @@ namespace textis.Controllers
     {
         //private TextisModelContainer db = new TextisModelContainer();
 
-        IProjectRepository m_ProjectRepository;
-        ICategoryRepository m_CategoryRepository;
+        private IProjectRepository m_ProjectRepository;
+        private ICategoryRepository m_CategoryRepository;
+        private ProjectViewModel m_ProjectViewModel;
         //TextisModelContainer db;
         //private TextisModelContainer db;
 
@@ -25,6 +27,7 @@ namespace textis.Controllers
         {
             m_ProjectRepository = new ProjectRepository();
             m_CategoryRepository = new CategoryRepository();
+            m_ProjectViewModel = new ProjectViewModel();
             //db = new TextisModelContainer();
         }
 
@@ -95,6 +98,36 @@ namespace textis.Controllers
             return View(project);
         }
 
+        // GET: /Project/Create
+        public ActionResult Create2()
+        {
+            ViewBag.CategoryId = new SelectList(m_CategoryRepository.GetAll(), "Id", "Name");
+            return View();
+        }
+        
+        // POST: /Project/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create2([Bind(Include = "Id,User,Date,Name,Status,Url,CategoryId")] ProjectViewModel projectViewModel)
+        {
+            //Project m_ProjectCast = projectViewModel.CastViewModelToModel(m_ProjectCast);
+            Project project = new Project();
+
+            if (ModelState.IsValid)
+            {
+                project = projectViewModel.CastViewModelToModel();
+                m_ProjectRepository.Create(project);
+                m_ProjectRepository.Save();
+                //db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.CategoryId = new SelectList(m_CategoryRepository.GetAll(), "Id", "Name", projectViewModel.CategoryId);
+            return View(projectViewModel);
+        }
+
         // GET: /Project/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -111,6 +144,27 @@ namespace textis.Controllers
             ViewBag.CategoryId = new SelectList(m_CategoryRepository.GetAll(), "Id", "Name", project.CategoryId);
             return View(project);
         }
+
+        public ActionResult Edit2(int? id)
+        {
+
+            m_ProjectViewModel = new ProjectViewModel(m_ProjectRepository.GetSingle(id));
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            //Project project = db.Project.Find(id);
+            Project project = m_ProjectRepository.GetSingle(id);
+            if (project == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.CategoryId = new SelectList(m_CategoryRepository.GetAll(), "Id", "Name", project.CategoryId);
+            
+            return View(m_ProjectViewModel);
+        }
+
 
         // POST: /Project/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 

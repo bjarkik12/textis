@@ -214,6 +214,8 @@
     <Compile Include="Upvote.cs">
       <DependentUpon>TextisModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\ProjectLineViewModel.cs" />
+    <Compile Include="ViewModel\ProjectViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -304,6 +306,8 @@
     <Content Include="Views\ProjectLine\Details.cshtml" />
     <Content Include="Views\ProjectLine\Edit.cshtml" />
     <Content Include="Views\ProjectLine\Index.cshtml" />
+    <Content Include="Views\Project\Edit2.cshtml" />
+    <Content Include="Views\Project\Create2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
