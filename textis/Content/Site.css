@@ -18,7 +18,7 @@
 input,
 select,
 textarea {
-    max-width: 280px;
+    max-width: 70%;
 }
 
 /* styles for validation helpers */
@@ -40,7 +40,7 @@ input[type="checkbox"].input-validation-error {
 
 .validation-summary-errors {
     color: #b94a48;
-}
+C:\Users\Gunnhildur\Source\Repos\newtextis\textis\Views\Home\Index.cshtml}
 
 .validation-summary-valid {
     display: none;
@@ -57,6 +57,30 @@ h1{
 }
 
 .search_box #SearchString{
-    width: 40em;
+    width: 100%;
+    font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.search_box #search_string_button{
+    /*border:1px solid;*/
+    width:80px;
+    padding:5px 25px;
+    background: #0096fd;
+    border:1px solid #0096fd;
+    border-radius: 6px;
+    font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight:bold;
+}
+
+
+h2{
+    text-align: center;
+}
+
+h4{
+    color: #0096fd;
+}
+
+.instruction{
+    cursor: pointer;
+}

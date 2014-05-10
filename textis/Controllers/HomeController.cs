@@ -26,5 +26,12 @@ namespace textis.Controllers
 
             return View();
         }
+
+        public ActionResult faq()
+        {
+            ViewBag.Message = "Leiðbeiningar.";
+
+            return View();
+        }
     }
 }

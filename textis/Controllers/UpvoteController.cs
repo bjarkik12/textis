@@ -20,6 +20,17 @@ namespace textis.Controllers
         //TextisModelContainer db;
         //private TextisModelContainer db;
 
+        public string GetUsername()
+        {
+            if (Request.IsAuthenticated)
+            {
+                return User.Identity.Name;
+            }
+            else
+            {
+                return "Nafnlaus";
+            }
+        }
 
         public UpvoteController()
         {
@@ -67,10 +78,14 @@ namespace textis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include="Id,ProjectId,User,Date")] Upvote upvote)
         {
+            upvote.User = GetUsername();
+            upvote.Date = DateTime.Now;
+            
             if (ModelState.IsValid)
             {
                 //db.Upvote.Add(upvote);
                 //db.SaveChanges();
+                
                 m_UpvoteRepository.Create(upvote);
                 m_UpvoteRepository.Save();
                 return RedirectToAction("Index");
@@ -104,6 +119,9 @@ namespace textis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include="Id,ProjectId,User,Date")] Upvote upvote)
         {
+            upvote.User = GetUsername();
+            upvote.Date = DateTime.Now;
+            
             if (ModelState.IsValid)
             {
                 //db.Entry(upvote).State = EntityState.Modified;
