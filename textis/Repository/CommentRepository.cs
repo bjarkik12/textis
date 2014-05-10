@@ -16,6 +16,15 @@ namespace textis.Repository
             return query.ToList();
         }
 
+        public List<Comment> GetByProjectId(int? id)
+        {
+            IQueryable<Comment> query = context.Comment;
+            var query2 = (from x in query
+                          where x.ProjectId == id
+                          select x);
+            return query2.ToList();
+        }
+
         public void Create(Comment comment)
         {
             context.Comment.Add(comment);

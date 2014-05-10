@@ -19,8 +19,8 @@ namespace textis.ViewModel
         public string CategoryName { get; set; }
         public List<ProjectLineViewModel> SourceProjectLines { get; set; }
         public List<ProjectLineViewModel> DestinationProjectLines { get; set; }
-        
-        public List<Comment> CommentLines{ get; set; }
+        public List<CommentViewModel> CommentLines{ get; set; }
+
         public List<Upvote> UpvoteLines { get; set; }
 
         public ProjectViewModel()
@@ -31,6 +31,7 @@ namespace textis.ViewModel
         public ProjectViewModel(Project project)
         {
             ProjectLineRepository m_ProjectLine = new ProjectLineRepository();
+            CommentRepository m_Comment = new CommentRepository();
             Id = project.Id;
             User = project.User;
             Date = project.Date;
@@ -41,6 +42,7 @@ namespace textis.ViewModel
             //CategoryName = "bull";
             SourceProjectLines = new List<ProjectLineViewModel>();
             DestinationProjectLines = new List<ProjectLineViewModel>();
+            CommentLines = new List<CommentViewModel>();
 
             foreach(ProjectLine x in m_ProjectLine.GetByProjectId(Id) )
             {
@@ -56,6 +58,11 @@ namespace textis.ViewModel
                 {
                     DestinationProjectLines.Add(new ProjectLineViewModel(x));
                 }
+            }
+
+            foreach (Comment x in m_Comment.GetByProjectId(Id))
+            {
+                CommentLines.Add(new CommentViewModel(x));
             }
 
         }
