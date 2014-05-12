@@ -18,7 +18,11 @@ namespace textis.Controllers
 
         private IProjectRepository m_ProjectRepository;
         private ICategoryRepository m_CategoryRepository;
+        private ICommentRepository m_CommentRepository;
+        private IUpvoteRepository m_UpvoteRepository;
+        private IProjectLineRepository m_ProjectLineRepository;
         private ProjectViewModel m_ProjectViewModel;
+        private List<ProjectViewModel> m_ProjectViewModelList;
         //TextisModelContainer db;
         //private TextisModelContainer db;
 
@@ -39,6 +43,10 @@ namespace textis.Controllers
             m_ProjectRepository = new ProjectRepository();
             m_CategoryRepository = new CategoryRepository();
             m_ProjectViewModel = new ProjectViewModel();
+            m_ProjectViewModelList = new List<ProjectViewModel>();
+            m_CommentRepository = new CommentRepository();
+            m_UpvoteRepository = new UpvoteRepository();
+            m_ProjectLineRepository = new ProjectLineRepository();
             //db = new TextisModelContainer();
         }
 
@@ -55,7 +63,13 @@ namespace textis.Controllers
                 project = project.Where(s => s.Name.Contains(searchString));
             }
 
-            return View(project.ToList());
+            foreach (Project x in project.ToList())
+            {
+                ProjectViewModel projectViewModel = new ProjectViewModel(x);
+                m_ProjectViewModelList.Add(projectViewModel);
+            }
+
+            return View(m_ProjectViewModelList);
         }
         // public ActionResult Index()
        // {
@@ -80,6 +94,7 @@ namespace textis.Controllers
             {
                 return HttpNotFound();
             }
+
             return View(new ProjectViewModel (project));
         }
 
@@ -144,9 +159,9 @@ namespace textis.Controllers
             if (ModelState.IsValid)
             {
                 Project project = new Project();
+                project = projectViewModel.CastViewModelToModel();
                 projectViewModel.User = GetUsername();
                 projectViewModel.Date = DateTime.Now;
-                project = projectViewModel.CastViewModelToModel();
                 m_ProjectRepository.Update(project);
                 m_ProjectRepository.Save();
                 return RedirectToAction("Index");
@@ -168,7 +183,7 @@ namespace textis.Controllers
             {
                 return HttpNotFound();
             }
-            return View(project);
+            return View(new ProjectViewModel (project));
         }
 
         // POST: /Project/Delete/5
@@ -182,6 +197,44 @@ namespace textis.Controllers
             Project project = m_ProjectRepository.GetSingle(id);
             if (project != null)
             {
+                IEnumerable<Comment> m_CommentQuery = new List<Comment>();
+                m_CommentQuery = (from x in m_CommentRepository.GetAll()
+                              where x.ProjectId == id
+                              select x);
+
+                foreach (Comment comment in m_CommentQuery)
+                {
+                   m_CommentRepository.Delete(comment.Id);
+                }
+
+                m_CommentRepository.Save();
+
+                IEnumerable<Upvote> m_UpvoteQuery = new List<Upvote>();
+                m_UpvoteQuery = (from x in m_UpvoteRepository.GetAll()
+                                  where x.ProjectId == id
+                                  select x);
+
+                foreach (Upvote upvote in m_UpvoteQuery)
+                {
+                    if (upvote != null)
+                    {
+                        m_UpvoteRepository.Delete(upvote.Id);
+                    }
+                }
+
+                m_UpvoteRepository.Save();
+
+                IEnumerable<ProjectLine> m_ProjectLineQuery = new List<ProjectLine>();
+                m_ProjectLineQuery = (from x in m_ProjectLineRepository.GetAll()
+                                 where x.ProjectId == id
+                                 select x);
+
+                foreach (ProjectLine projectLine in m_ProjectLineQuery)
+                {
+                    m_ProjectLineRepository.Delete(projectLine.Id);
+                }
+
+                m_ProjectLineRepository.Save();
                 m_ProjectRepository.Delete(id);
                 m_ProjectRepository.Save();
             }

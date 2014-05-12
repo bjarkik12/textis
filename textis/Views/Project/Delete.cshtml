@@ -1,4 +1,4 @@
-﻿@model textis.Project
+﻿@model textis.ViewModel.ProjectViewModel
 
 @{
     ViewBag.Title = "Delete";
@@ -52,11 +52,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Category.Name)
+            @Html.DisplayNameFor(model => model.CategoryName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Category.Name)
+            @Html.DisplayFor(model => model.CategoryName)
         </dd>
 
     </dl>

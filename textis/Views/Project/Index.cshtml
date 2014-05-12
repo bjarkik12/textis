@@ -1,4 +1,4 @@
-﻿@model IEnumerable<textis.Project>
+﻿@model IEnumerable<textis.ViewModel.ProjectViewModel>
 
 @{
     ViewBag.Title = "Index";
@@ -36,7 +36,7 @@
             @Html.DisplayNameFor(model => model.Url)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Category.Name)
+            @Html.DisplayNameFor(model => model.Name)
         </th>
         <th></th>
     </tr>
@@ -59,7 +59,7 @@
             @Html.DisplayFor(modelItem => item.Url)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Category.Name)
+            @Html.DisplayFor(modelItem => item.CategoryName)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

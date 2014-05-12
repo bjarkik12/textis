@@ -8,14 +8,16 @@ using System.Web;
 using System.Web.Mvc;
 using textis;
 using textis.Repository;
+using textis.ViewModel;
 
 namespace textis.Controllers
 {
     public class ProjectLineController : Controller
     {
        // private TextisModelContainer db = new TextisModelContainer();
-        IProjectLineRepository m_ProjectLineRepository;
-        IProjectRepository m_ProjectRepository;
+        private IProjectLineRepository m_ProjectLineRepository;
+        private IProjectRepository m_ProjectRepository;
+        private List<ProjectLineViewModel> m_ProjectLineViewModelList;
         //TextisModelContainer db;
         //private TextisModelContainer db;
 
@@ -35,15 +37,18 @@ namespace textis.Controllers
         {
             m_ProjectLineRepository = new ProjectLineRepository();
             m_ProjectRepository = new ProjectRepository();
+            m_ProjectLineViewModelList = new List<ProjectLineViewModel>();
             //db = new TextisModelContainer();
         }
         // GET: /ProjectLine/
         public ActionResult Index()
         {
-           // var projectline = db.ProjectLine.Include(p => p.Project);
-            //return View(projectline.ToList());
-            var projectLine = m_ProjectLineRepository.GetAll();
-            return View(projectLine.ToList());
+            foreach (ProjectLine x in m_ProjectLineRepository.GetAll().ToList())
+            {
+                ProjectLineViewModel projectLineViewModel = new ProjectLineViewModel(x);
+                m_ProjectLineViewModelList.Add(projectLineViewModel);
+            }
+            return View(m_ProjectLineViewModelList);            
         }
 
         // GET: /ProjectLine/Details/5
@@ -60,7 +65,7 @@ namespace textis.Controllers
             {
                 return HttpNotFound();
             }
-            return View(projectLine);
+            return View(new ProjectLineViewModel(projectLine));
         }
 
         // GET: /ProjectLine/Create
@@ -75,8 +80,10 @@ namespace textis.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Id,ProjectId,User,TimeFrom,TimeTo,TextLine1,TextLine2,Date,Language")] ProjectLine projectLine)
+        public ActionResult Create([Bind(Include="Id,ProjectId,User,TimeFrom,TimeTo,TextLine1,TextLine2,Date,Language")] ProjectLineViewModel projectLineViewModel)
         {
+            ProjectLine projectLine = new ProjectLine();
+            projectLine = projectLineViewModel.CastViewModelToModel();
             projectLine.User = GetUsername();
             projectLine.Date = DateTime.Now;
 
@@ -89,8 +96,8 @@ namespace textis.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", projectLine.ProjectId);
-            return View(projectLine);
+            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", projectLineViewModel.ProjectId);
+            return View(projectLineViewModel);
         }
 
         // GET: /ProjectLine/Edit/5

@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using textis;
 using textis.Repository;
 using textis.HelpFunction;
+using textis.ViewModel;
 
 namespace textis.Controllers
 {
@@ -18,6 +19,7 @@ namespace textis.Controllers
 
         ICommentRepository m_CommentRepository;
         IProjectRepository m_ProjectRepository;
+        private List<CommentViewModel> m_CommentViewModelList;
 
         //ICommentRepository m_DataBase;
         //TextisModelContainer db;
@@ -39,6 +41,7 @@ namespace textis.Controllers
         {
             m_CommentRepository = new CommentRepository();
             m_ProjectRepository = new ProjectRepository();
+            m_CommentViewModelList = new List<CommentViewModel>();
             //db = new TextisModelContainer();
         }
 
@@ -46,10 +49,19 @@ namespace textis.Controllers
         // GET: /Comment/
         public ActionResult Index()
         {
+            foreach (Comment x in m_CommentRepository.GetAll().ToList())
+            {
+                CommentViewModel commentViewModel = new CommentViewModel(x);
+                m_CommentViewModelList.Add(commentViewModel);
+            }
+            return View(m_CommentViewModelList);            
+
+            
+            
             //var comment = db.Comment.Include(c => c.Project);
             //return View(comment.ToList());
-            var comment = m_CommentRepository.GetAll();
-            return View(comment.ToList());
+            //var comment = m_CommentRepository.GetAll();
+            //return View(comment.ToList());
         }
 
         // GET: /Comment/Details/5
@@ -65,7 +77,7 @@ namespace textis.Controllers
             {
                 return HttpNotFound();
             }
-            return View(comment);
+            return View(new CommentViewModel(comment));
         }
 
         // GET: /Comment/Create
@@ -80,8 +92,10 @@ namespace textis.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Id,ProjectId,Text,User,Date")] Comment comment)
+        public ActionResult Create([Bind(Include="Id,ProjectId,Text,User,Date")] CommentViewModel commentViewModel)
         {
+            Comment comment = new Comment();
+            comment = commentViewModel.CastViewModelToModel();
             comment.User = GetUsername();
             comment.Date = DateTime.Now;
 
@@ -96,8 +110,8 @@ namespace textis.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", comment.ProjectId);
-            return View(comment);
+            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", commentViewModel.ProjectId);
+            return View(commentViewModel);
         }
 
         // GET: /Comment/Edit/5
@@ -114,7 +128,7 @@ namespace textis.Controllers
                 return HttpNotFound();
             }
             ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", comment.ProjectId);
-            return View(comment);
+            return View(new CommentViewModel(comment));
         }
 
         // POST: /Comment/Edit/5
@@ -122,19 +136,22 @@ namespace textis.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,ProjectId,Text,User,Date")] Comment comment)
+        public ActionResult Edit([Bind(Include="Id,ProjectId,Text,User,Date,ProjectName")] CommentViewModel commentViewModel)
         {
             if (ModelState.IsValid)
             {
                 //db.Entry(comment).State = EntityState.Modified;
                 //db.SaveChanges();
+                Comment comment = new Comment();
+                comment = commentViewModel.CastViewModelToModel();
                 comment.User = GetUsername();
+                comment.Date = DateTime.Now;
                 m_CommentRepository.Update(comment);
                 m_CommentRepository.Save();
                 return RedirectToAction("Index");
             }
-            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", comment.ProjectId);
-            return View(comment);
+            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", commentViewModel.ProjectId);
+            return View(commentViewModel);
         }
 
         // GET: /Comment/Delete/5
@@ -150,7 +167,7 @@ namespace textis.Controllers
             {
                 return HttpNotFound();
             }
-            return View(comment);
+            return View(new CommentViewModel(comment));
         }
 
         // POST: /Comment/Delete/5

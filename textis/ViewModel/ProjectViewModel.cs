@@ -43,12 +43,11 @@ namespace textis.ViewModel
             Url = project.Url;
             CategoryId = project.CategoryId;
             UpvoteCount = 0;
-            //CategoryName = "bull";
+            CategoryName = project.Category.Name;
             SourceProjectLines = new List<ProjectLineViewModel>();
             DestinationProjectLines = new List<ProjectLineViewModel>();
             CommentLines = new List<CommentViewModel>();
             UpvoteLines = new List<UpvoteViewModel>();
-
 
             foreach(ProjectLine x in m_ProjectLine.GetByProjectId(Id) )
             {
@@ -89,9 +88,25 @@ namespace textis.ViewModel
             m_project.Status = Status;
             m_project.Url = Url;
             m_project.CategoryId = CategoryId;
+            //m_project.Category.Name = CategoryName;
             
             return m_project;
         }
+
+        //public ProjectViewModel CastModelToViewModel(Project project)
+        //{
+        //    ProjectViewModel m_ProjectViewModel= new ProjectViewModel(project);
+        //    Id = project.Id;
+        //    User = project.User;
+        //    Date = project.Date;
+        //    Name = project.Name;
+        //    Status = project.Status;
+        //    Url = project.Url;
+        //    CategoryId = project.CategoryId;
+        //    CategoryName = project.Category.Name;
+        //    return m_ProjectViewModel;
+
+        //}
 
     }
 }
