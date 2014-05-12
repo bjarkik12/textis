@@ -7,6 +7,7 @@ namespace textis.Repository
     {
         List<Upvote> GetAll();
         Upvote GetSingle(int? id);
+        List<Upvote> GetByProjectId(int? id);
         //List<Project> GetBy();
         void Create(Upvote upvote);
         void Update(Upvote upvote);

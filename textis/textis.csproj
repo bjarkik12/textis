@@ -218,6 +218,7 @@
     <Compile Include="ViewModel\CommentViewModel.cs" />
     <Compile Include="ViewModel\ProjectLineViewModel.cs" />
     <Compile Include="ViewModel\ProjectViewModel.cs" />
+    <Compile Include="ViewModel\UpvoteViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />

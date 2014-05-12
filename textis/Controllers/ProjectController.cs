@@ -159,26 +159,6 @@ namespace textis.Controllers
             return View(project);
         }
 
-        public ActionResult Edit2(int? id)
-        {
-
-            m_ProjectViewModel = new ProjectViewModel(m_ProjectRepository.GetSingle(id));
-
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            //Project project = db.Project.Find(id);
-            Project project = m_ProjectRepository.GetSingle(id);
-            if (project == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.CategoryId = new SelectList(m_CategoryRepository.GetAll(), "Id", "Name", project.CategoryId);
-            
-            return View(m_ProjectViewModel);
-        }
-
 
         // POST: /Project/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -202,6 +182,51 @@ namespace textis.Controllers
             return View(project);
         }
 
+        // GET: /Project/Edit2/5
+        public ActionResult Edit2(int? id)
+        {
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            m_ProjectViewModel = new ProjectViewModel(m_ProjectRepository.GetSingle(id));
+
+            //Project project = db.Project.Find(id);
+            Project project = m_ProjectRepository.GetSingle(id);
+            if (project == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.CategoryId = new SelectList(m_CategoryRepository.GetAll(), "Id", "Name", project.CategoryId);
+
+            return View(m_ProjectViewModel);
+        }
+
+        // POST: /Project/Edit2/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit2([Bind(Include = "Id,User,Date,Name,Status,Url,CategoryId")] ProjectViewModel projectViewModel)
+        {
+            projectViewModel.User = GetUsername();
+            projectViewModel.Date = DateTime.Now;
+            Project project = new Project();
+
+            if (ModelState.IsValid)
+            {
+                project = projectViewModel.CastViewModelToModel();
+                //db.Entry(project).State = EntityState.Modified;
+                m_ProjectRepository.Update(project);
+                m_ProjectRepository.Save();
+                //db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            ViewBag.CategoryId = new SelectList(m_CategoryRepository.GetAll(), "Id", "Name", project.CategoryId);
+            return View(project);
+        }
         // GET: /Project/Delete/5
         public ActionResult Delete(int? id)
         {

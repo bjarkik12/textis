@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using textis.Repository;
 using textis.ViewModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace textis.ViewModel
 {
@@ -12,16 +13,17 @@ namespace textis.ViewModel
         public int Id { get; set; }
         public string User { get; set; }
         public DateTime Date { get; set; }
+        [Required (ErrorMessage = "Vinsamlegast fyllið inn titil myndefnis")]
         public string Name { get; set; }
         public string Status { get; set; }
         public string Url { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public int UpvoteCount { get; set; }
         public List<ProjectLineViewModel> SourceProjectLines { get; set; }
         public List<ProjectLineViewModel> DestinationProjectLines { get; set; }
         public List<CommentViewModel> CommentLines{ get; set; }
-
-        public List<Upvote> UpvoteLines { get; set; }
+        public List<UpvoteViewModel> UpvoteLines { get; set; }
 
         public ProjectViewModel()
         {
@@ -32,6 +34,7 @@ namespace textis.ViewModel
         {
             ProjectLineRepository m_ProjectLine = new ProjectLineRepository();
             CommentRepository m_Comment = new CommentRepository();
+            UpvoteRepository m_Upvote = new UpvoteRepository();
             Id = project.Id;
             User = project.User;
             Date = project.Date;
@@ -39,10 +42,13 @@ namespace textis.ViewModel
             Status = project.Status;
             Url = project.Url;
             CategoryId = project.CategoryId;
+            UpvoteCount = 0;
             //CategoryName = "bull";
             SourceProjectLines = new List<ProjectLineViewModel>();
             DestinationProjectLines = new List<ProjectLineViewModel>();
             CommentLines = new List<CommentViewModel>();
+            UpvoteLines = new List<UpvoteViewModel>();
+
 
             foreach(ProjectLine x in m_ProjectLine.GetByProjectId(Id) )
             {
@@ -63,6 +69,12 @@ namespace textis.ViewModel
             foreach (Comment x in m_Comment.GetByProjectId(Id))
             {
                 CommentLines.Add(new CommentViewModel(x));
+            }
+
+            foreach (Upvote x in m_Upvote.GetByProjectId(Id))
+            {
+                UpvoteCount += 1;
+                UpvoteLines.Add(new UpvoteViewModel(x));
             }
 
         }

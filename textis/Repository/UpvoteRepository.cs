@@ -24,6 +24,15 @@ namespace textis.Repository
             //context.SaveChanges();
         }
 
+        public List<Upvote> GetByProjectId(int? id)
+        {
+            IQueryable<Upvote> query = context.Upvote;
+            var query2 = (from x in query
+                          where x.ProjectId == id
+                          select x);
+            return query2.ToList();
+        }
+
         public Upvote GetSingle(int? id)
         {
             var query = this.GetAll().FirstOrDefault(x => x.Id == id);
