@@ -17,14 +17,14 @@ namespace textis.Models
         public string OldPassword { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "Lykilorðið verður að vera a.m.k. {2} stafir.", MinimumLength = 8)]
         [DataType(DataType.Password)]
         [Display(Name = "Nýtt lykilorð")]
         public string NewPassword { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "Staðfestið nýtt lykilorð")]
-        [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+        [Compare("NewPassword", ErrorMessage = "Ekki rétt lykilorð.")]
         public string ConfirmPassword { get; set; }
     }
 
