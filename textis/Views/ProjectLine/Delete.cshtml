@@ -1,4 +1,4 @@
-﻿@model textis.ProjectLine
+﻿@model textis.ViewModel.ProjectLineViewModel
 
 @{
     ViewBag.Title = "Delete";
@@ -68,11 +68,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Project.User)
+            @Html.DisplayNameFor(model => model.ProjectUser)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Project.User)
+            @Html.DisplayFor(model => model.ProjectUser)
         </dd>
 
     </dl>

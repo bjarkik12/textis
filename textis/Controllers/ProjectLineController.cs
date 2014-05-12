@@ -114,7 +114,7 @@ namespace textis.Controllers
                 return HttpNotFound();
             }
             ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", projectLine.ProjectId);
-            return View(projectLine);
+            return View(new ProjectLineViewModel(projectLine));
         }
 
         // POST: /ProjectLine/Edit/5
@@ -122,22 +122,20 @@ namespace textis.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,ProjectId,User,TimeFrom,TimeTo,TextLine1,TextLine2,Date,Language")] ProjectLine projectLine)
+        public ActionResult Edit([Bind(Include="Id,ProjectId,User,TimeFrom,TimeTo,TextLine1,TextLine2,Date,Language")] ProjectLineViewModel projectLineViewModel)
         {
-            projectLine.User = GetUsername();
-            projectLine.Date = DateTime.Now;
-
             if (ModelState.IsValid)
             {
-                //db.Entry(projectline).State = EntityState.Modified;
-                //db.SaveChanges();
-                
+                ProjectLine projectLine = new ProjectLine();
+                projectLine = projectLineViewModel.CastViewModelToModel();
+                projectLine.User = GetUsername();
+                projectLine.Date = DateTime.Now;
                 m_ProjectLineRepository.Update(projectLine);
-                m_ProjectLineRepository.Save();
-                return RedirectToAction("Index");
+                m_ProjectRepository.Save();
+                return RedirectToAction("Index");               
             }
-            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", projectLine.ProjectId);
-            return View(projectLine);
+            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", projectLineViewModel.ProjectId);
+            return View(projectLineViewModel);
         }
 
         // GET: /ProjectLine/Delete/5
@@ -153,7 +151,7 @@ namespace textis.Controllers
             {
                 return HttpNotFound();
             }
-            return View(projectLine);
+            return View(new ProjectLineViewModel (projectLine));
         }
 
         // POST: /ProjectLine/Delete/5
@@ -161,9 +159,7 @@ namespace textis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            //ProjectLine projectline = db.ProjectLine.Find(id);
-            //db.ProjectLine.Remove(projectline);
-            //db.SaveChanges();
+            
             ProjectLine projectLine = m_ProjectLineRepository.GetSingle(id);
             if (projectLine != null)
             {

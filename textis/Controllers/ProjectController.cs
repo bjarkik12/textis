@@ -161,8 +161,8 @@ namespace textis.Controllers
             {
                 Project project = new Project();
                 project = projectViewModel.CastViewModelToModel();
-                projectViewModel.User = GetUsername();
-                projectViewModel.Date = DateTime.Now;
+                project.User = GetUsername();
+                project.Date = DateTime.Now;
                 m_ProjectRepository.Update(project);
                 m_ProjectRepository.Save();
                 return RedirectToAction("Index");
