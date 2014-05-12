@@ -31,13 +31,13 @@ namespace textis.ViewModel
             return m_category;
         }
 
-        public CategoryViewModel CastModelToViewModel(Category category)
-        {
-            CategoryViewModel m_categoryViewModel = new CategoryViewModel(category);
-            Id = category.Id;
-            Name = category.Name;
-            return m_categoryViewModel;
-        }
+        //public CategoryViewModel CastModelToViewModel(Category category)
+        //{
+        //    CategoryViewModel m_categoryViewModel = new CategoryViewModel(category);
+        //    Id = category.Id;
+        //    Name = category.Name;
+        //    return m_categoryViewModel;
+        //}
 
 
     }

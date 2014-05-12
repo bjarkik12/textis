@@ -14,9 +14,9 @@ namespace textis.Controllers
 {
     public class CategoryController : Controller
     {
-        ICategoryRepository m_CategoryRepository;
+        private ICategoryRepository m_CategoryRepository;
         private CategoryViewModel m_CategoryViewModel;
-        List<CategoryViewModel> m_CategoryViewModelList;
+        private List<CategoryViewModel> m_CategoryViewModelList;
         //IProjectRepository m_ProjectRepository;
         //private TextisModelContainer db = new TextisModelContainer();
 
@@ -34,12 +34,10 @@ namespace textis.Controllers
         {
             foreach (Category x in m_CategoryRepository.GetAll().ToList())
             {
-                CategoryViewModel categoryViewModel = new CategoryViewModel();
-                categoryViewModel.CastModelToViewModel(x);
+                CategoryViewModel categoryViewModel = new CategoryViewModel(x);
                 m_CategoryViewModelList.Add(categoryViewModel);
             }
-            return View(m_CategoryViewModelList);
-            //return View(m_CategoryRepository.GetAll().ToList());
+            return View(m_CategoryViewModelList);            
         }
 
         // GET: /Category/Details/5
@@ -50,13 +48,11 @@ namespace textis.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Category category = m_CategoryRepository.GetSingle(id);
-            CategoryViewModel categoryViewModel = new CategoryViewModel();
-            categoryViewModel.CastModelToViewModel(category);
-            if (categoryViewModel == null)
+            if (category == null)
             {
                 return HttpNotFound();
             }
-            return View(categoryViewModel);
+            return View(new CategoryViewModel(category));
         }
 
         // GET: /Category/Create
@@ -72,10 +68,9 @@ namespace textis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include="Id,Name")] CategoryViewModel categoryViewModel)
         {
-            Category category = new Category();
-
             if (ModelState.IsValid)
             {
+                Category category = new Category();
                 category = categoryViewModel.CastViewModelToModel();
                 m_CategoryRepository.Create(category);
                 //db.SaveChanges();
@@ -95,8 +90,7 @@ namespace textis.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Category category = m_CategoryRepository.GetSingle(id);
-            CategoryViewModel categoryViewModel = new CategoryViewModel();
-            categoryViewModel.CastModelToViewModel(category);
+            CategoryViewModel categoryViewModel = new CategoryViewModel(category);
             if (categoryViewModel == null)
             {
                 return HttpNotFound();
@@ -115,9 +109,7 @@ namespace textis.Controllers
             {
                 Category category = new Category();
                 category = categoryViewModel.CastViewModelToModel();
-                //db.Entry(category).State = EntityState.Modified;
                 m_CategoryRepository.Update(category);
-                //db.SaveChanges();
                 m_CategoryRepository.Save();
 
                 return RedirectToAction("Index");
@@ -133,9 +125,7 @@ namespace textis.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Category category = m_CategoryRepository.GetSingle(id);
-            CategoryViewModel categoryViewModel = new CategoryViewModel();
-            categoryViewModel.CastModelToViewModel(category);
-            //Category category = db.Category.Find(id);
+            CategoryViewModel categoryViewModel = new CategoryViewModel(category);
             if (categoryViewModel == null)
             {
                 return HttpNotFound();
@@ -149,8 +139,6 @@ namespace textis.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Category category = m_CategoryRepository.GetSingle(id);
-            //db.Category.Remove(category);
-            //db.SaveChanges();
             if (category != null)
             {
                 m_CategoryRepository.Delete(id);
