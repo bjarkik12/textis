@@ -9,6 +9,7 @@ namespace textis.ViewModel
     {
         public int Id { get; set; }
         public int ProjectId { get; set; }
+        public string ProjectName { get; set; }
         public String User { get; set; }
         public String Text { get; set; }
         public DateTime Date { get; set; }
@@ -21,7 +22,8 @@ namespace textis.ViewModel
         public CommentViewModel( Comment comment )
         {
             Id = comment.Id;
-            ProjectId = comment.ProjectId;
+            ProjectId = comment.Project.Id;
+            ProjectName = comment.Project.Name;
             User = comment.User;
             Text = comment.Text;
             Date = comment.Date;

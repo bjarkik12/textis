@@ -183,7 +183,7 @@ namespace textis.Controllers
             {
                 return HttpNotFound();
             }
-            return View(project);
+            return View(new ProjectViewModel (project));
         }
 
         // POST: /Project/Delete/5

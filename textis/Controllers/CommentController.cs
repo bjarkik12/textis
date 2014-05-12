@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using textis;
 using textis.Repository;
 using textis.HelpFunction;
+using textis.ViewModel;
 
 namespace textis.Controllers
 {
@@ -18,7 +19,7 @@ namespace textis.Controllers
 
         ICommentRepository m_CommentRepository;
         IProjectRepository m_ProjectRepository;
-
+        private List<CommentViewModel> m_CommentViewModelList;
 
         //ICommentRepository m_DataBase;
         //TextisModelContainer db;
@@ -40,6 +41,7 @@ namespace textis.Controllers
         {
             m_CommentRepository = new CommentRepository();
             m_ProjectRepository = new ProjectRepository();
+            m_CommentViewModelList = new List<CommentViewModel>();
             //db = new TextisModelContainer();
         }
 
@@ -47,10 +49,19 @@ namespace textis.Controllers
         // GET: /Comment/
         public ActionResult Index()
         {
+            foreach (Comment x in m_CommentRepository.GetAll().ToList())
+            {
+                CommentViewModel commentViewModel = new CommentViewModel(x);
+                m_CommentViewModelList.Add(commentViewModel);
+            }
+            return View(m_CommentViewModelList);            
+
+            
+            
             //var comment = db.Comment.Include(c => c.Project);
             //return View(comment.ToList());
-            var comment = m_CommentRepository.GetAll();
-            return View(comment.ToList());
+            //var comment = m_CommentRepository.GetAll();
+            //return View(comment.ToList());
         }
 
         // GET: /Comment/Details/5
