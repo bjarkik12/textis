@@ -36,14 +36,11 @@ namespace textis.Controllers
         {
             m_UpvoteRepository = new UpvoteRepository();
             m_ProjectRepository = new ProjectRepository();
-            //db = new TextisModelContainer();
         }
 
         // GET: /Upvote/
         public ActionResult Index()
         {
-           // var upvote = db.Upvote.Include(u => u.Project);
-           // return View(upvote.ToList());
             var comment = m_UpvoteRepository.GetAll();
             return View(comment.ToList());
         }
@@ -55,7 +52,7 @@ namespace textis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //Upvote upvote = db.Upvote.Find(id);
+
             Upvote upvote = m_UpvoteRepository.GetSingle(id);
             if (upvote == null)
             {
@@ -82,10 +79,7 @@ namespace textis.Controllers
             upvote.Date = DateTime.Now;
             
             if (ModelState.IsValid)
-            {
-                //db.Upvote.Add(upvote);
-                //db.SaveChanges();
-                
+            {               
                 m_UpvoteRepository.Create(upvote);
                 m_UpvoteRepository.Save();
                 return RedirectToAction("Index");
@@ -102,7 +96,7 @@ namespace textis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //Upvote upvote = db.Upvote.Find(id);
+
             Upvote upvote = m_UpvoteRepository.GetSingle(id);
             if (upvote == null)
             {
@@ -124,8 +118,6 @@ namespace textis.Controllers
             
             if (ModelState.IsValid)
             {
-                //db.Entry(upvote).State = EntityState.Modified;
-                //db.SaveChanges();
                 m_UpvoteRepository.Update(upvote);
                 m_UpvoteRepository.Save();
                 return RedirectToAction("Index");
@@ -141,7 +133,7 @@ namespace textis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //Upvote upvote = db.Upvote.Find(id);
+
             Upvote upvote = m_UpvoteRepository.GetSingle(id);
             if (upvote == null)
             {
@@ -155,9 +147,6 @@ namespace textis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            //Upvote upvote = db.Upvote.Find(id);
-            //db.Upvote.Remove(upvote);
-            //db.SaveChanges();
             Upvote upvote = m_UpvoteRepository.GetSingle(id);
             if(upvote != null)
             {

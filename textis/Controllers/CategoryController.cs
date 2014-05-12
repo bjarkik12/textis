@@ -17,16 +17,12 @@ namespace textis.Controllers
         private ICategoryRepository m_CategoryRepository;
         private CategoryViewModel m_CategoryViewModel;
         private List<CategoryViewModel> m_CategoryViewModelList;
-        //IProjectRepository m_ProjectRepository;
-        //private TextisModelContainer db = new TextisModelContainer();
 
         public CategoryController()
         {
             m_CategoryRepository = new CategoryRepository();
             m_CategoryViewModel = new CategoryViewModel();
             m_CategoryViewModelList = new List<CategoryViewModel>();
-            //m_ProjectRepository = new ProjectRepository();
-            //db = new TextisModelContainer();
         }
 
         // GET: /Category/
@@ -73,7 +69,6 @@ namespace textis.Controllers
                 Category category = new Category();
                 category = categoryViewModel.CastViewModelToModel();
                 m_CategoryRepository.Create(category);
-                //db.SaveChanges();
                 m_CategoryRepository.Save();
 
                 return RedirectToAction("Index");
@@ -89,12 +84,15 @@ namespace textis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Category category = m_CategoryRepository.GetSingle(id);
             CategoryViewModel categoryViewModel = new CategoryViewModel(category);
+
             if (categoryViewModel == null)
             {
                 return HttpNotFound();
             }
+
             return View(categoryViewModel);
         }
 
@@ -111,9 +109,9 @@ namespace textis.Controllers
                 category = categoryViewModel.CastViewModelToModel();
                 m_CategoryRepository.Update(category);
                 m_CategoryRepository.Save();
-
                 return RedirectToAction("Index");
             }
+
             return View(categoryViewModel);
         }
 
@@ -124,12 +122,15 @@ namespace textis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Category category = m_CategoryRepository.GetSingle(id);
             CategoryViewModel categoryViewModel = new CategoryViewModel(category);
+
             if (categoryViewModel == null)
             {
                 return HttpNotFound();
             }
+
             return View(categoryViewModel);
         }
 
@@ -139,11 +140,13 @@ namespace textis.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Category category = m_CategoryRepository.GetSingle(id);
+
             if (category != null)
             {
                 m_CategoryRepository.Delete(id);
                 m_CategoryRepository.Save();
             }
+
             else
             {
                 return HttpNotFound();

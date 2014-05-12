@@ -15,8 +15,6 @@ namespace textis.Controllers
 {
     public class ProjectController : Controller
     {
-        //private TextisModelContainer db = new TextisModelContainer();
-
         private IProjectRepository m_ProjectRepository;
         private ICategoryRepository m_CategoryRepository;
         private ICommentRepository m_CommentRepository;
@@ -24,8 +22,6 @@ namespace textis.Controllers
         private IProjectLineRepository m_ProjectLineRepository;
         private ProjectViewModel m_ProjectViewModel;
         private List<ProjectViewModel> m_ProjectViewModelList;
-        //TextisModelContainer db;
-        //private TextisModelContainer db;
 
         public string GetUsername()
         {
@@ -48,11 +44,7 @@ namespace textis.Controllers
             m_CommentRepository = new CommentRepository();
             m_UpvoteRepository = new UpvoteRepository();
             m_ProjectLineRepository = new ProjectLineRepository();
-            //db = new TextisModelContainer();
         }
-
-        // GET: /Project/
-
 
         public ActionResult Index(string searchString)
         {
@@ -72,14 +64,6 @@ namespace textis.Controllers
 
             return View(m_ProjectViewModelList);
         }
-        // public ActionResult Index()
-       // {
-            
-            
-            //var project = db.Project.Include(p => p.Category);
-            //var project = m_ProjectRepository.GetAll();
-         //   return View(project.ToList());
-       // }
 
         // GET: /Project/Details/5
         
@@ -113,8 +97,6 @@ namespace textis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,User,Date,Name,Status,Url,CategoryId")] ProjectViewModel projectViewModel)
         {
-            //Project m_ProjectCast = projectViewModel.CastViewModelToModel(m_ProjectCast);
- 
             if (ModelState.IsValid)
             {
                 Project project = new Project();
@@ -138,8 +120,7 @@ namespace textis.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            //Project project = db.Project.Find(id);
-            Project project = m_ProjectRepository.GetSingle(id); //Afhverju erum við að búa þessa til?
+            Project project = m_ProjectRepository.GetSingle(id);
             if (project == null)
             {
                 return HttpNotFound();
@@ -170,7 +151,6 @@ namespace textis.Controllers
 
             ViewBag.CategoryId = new SelectList(m_CategoryRepository.GetAll(), "Id", "Name", projectViewModel.CategoryId);
             return View(projectViewModel);
-
         }
 
         [HttpPost]
@@ -214,9 +194,6 @@ namespace textis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            //Project project = db.Project.Find(id);
-            //db.Project.Remove(project);
-            //db.SaveChanges();
             Project project = m_ProjectRepository.GetSingle(id);
             if (project != null)
             {
@@ -271,7 +248,10 @@ namespace textis.Controllers
         protected override void Dispose(bool disposing)
         {
             m_ProjectRepository.Dispose();
-            //m_ProjectRepository.Dispose();
+            m_CategoryRepository.Dispose();
+            m_CommentRepository.Dispose();
+            m_UpvoteRepository.Dispose();
+            m_ProjectLineRepository.Dispose();
             base.Dispose(disposing);
         }
     }

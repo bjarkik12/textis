@@ -15,22 +15,16 @@ namespace textis.Controllers
 {
     public class CommentController : Controller
     {
-        //private TextisModelContainer db = new TextisModelContainer();
-
         ICommentRepository m_CommentRepository;
         IProjectRepository m_ProjectRepository;
         private List<CommentViewModel> m_CommentViewModelList;
-
-        //ICommentRepository m_DataBase;
-        //TextisModelContainer db;
-        //private TextisModelContainer db;
-
 
         public string GetUsername(){
             if (Request.IsAuthenticated)
             {
                 return User.Identity.Name;
             }
+
             else
             {
                 return "Nafnlaus";
@@ -42,9 +36,7 @@ namespace textis.Controllers
             m_CommentRepository = new CommentRepository();
             m_ProjectRepository = new ProjectRepository();
             m_CommentViewModelList = new List<CommentViewModel>();
-            //db = new TextisModelContainer();
         }
-
 
         // GET: /Comment/
         public ActionResult Index()
@@ -54,14 +46,8 @@ namespace textis.Controllers
                 CommentViewModel commentViewModel = new CommentViewModel(x);
                 m_CommentViewModelList.Add(commentViewModel);
             }
-            return View(m_CommentViewModelList);            
 
-            
-            
-            //var comment = db.Comment.Include(c => c.Project);
-            //return View(comment.ToList());
-            //var comment = m_CommentRepository.GetAll();
-            //return View(comment.ToList());
+            return View(m_CommentViewModelList);            
         }
 
         // GET: /Comment/Details/5
@@ -71,7 +57,7 @@ namespace textis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //Comment comment = db.Comment.Find(id);
+
             Comment comment = m_CommentRepository.GetSingle(id);
             if (comment == null)
             {
@@ -100,10 +86,7 @@ namespace textis.Controllers
             comment.Date = DateTime.Now;
 
             if (ModelState.IsValid)
-            {
-                //db.Comment.Add(comment);
-                //db.SaveChanges();
-                
+            {                
                 m_CommentRepository.Create(comment);
                 m_CommentRepository.Save();
 
@@ -121,7 +104,6 @@ namespace textis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //Comment comment = db.Comment.Find(id);
             Comment comment = m_CommentRepository.GetSingle(id);
             if (comment == null)
             {
@@ -140,8 +122,6 @@ namespace textis.Controllers
         {
             if (ModelState.IsValid)
             {
-                //db.Entry(comment).State = EntityState.Modified;
-                //db.SaveChanges();
                 Comment comment = new Comment();
                 comment = commentViewModel.CastViewModelToModel();
                 comment.User = GetUsername();
@@ -161,7 +141,6 @@ namespace textis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //Comment comment = db.Comment.Find(id);
             Comment comment = m_CommentRepository.GetSingle(id);
             if (comment == null)
             {
@@ -175,9 +154,6 @@ namespace textis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            //Comment comment = db.Comment.Find(id);
-            //db.Comment.Remove(comment);
-            //db.SaveChanges();
             Comment comment = m_CommentRepository.GetSingle(id);
             if (comment != null)
             {
