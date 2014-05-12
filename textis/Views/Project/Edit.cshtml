@@ -57,6 +57,12 @@
     </div>
 }
 
+@using (Html.BeginForm("Upload", "Project", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input type='file' name='file' id='file' />
+    <input type="submit" value="Upload" />
+}
+
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>

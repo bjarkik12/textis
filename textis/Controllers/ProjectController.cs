@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -171,6 +172,28 @@ namespace textis.Controllers
             return View(projectViewModel);
 
         }
+
+        [HttpPost]
+        public ActionResult Upload(HttpPostedFileBase file)
+        {
+            // Verify that the user selected a file
+            if (file != null && file.ContentLength > 0)
+            {
+                // extract only the fielname
+                var fileName = Path.GetFileName(file.FileName);
+                // store the file inside ~/App_Data/uploads folder
+                var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);
+                file.SaveAs(path);
+            }
+            // add code here - read each line in file
+            // create lines in ProjectLines (both EN and IS)
+            // delete file
+
+            // We should not redirect to Index - rather to Edit/?  - but how do we get the correct ID ?
+            return RedirectToAction("Index");
+           
+        }
+
         // GET: /Project/Delete/5
         public ActionResult Delete(int? id)
         {
