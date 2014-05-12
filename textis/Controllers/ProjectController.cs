@@ -159,9 +159,9 @@ namespace textis.Controllers
             if (ModelState.IsValid)
             {
                 Project project = new Project();
+                project = projectViewModel.CastViewModelToModel();
                 projectViewModel.User = GetUsername();
                 projectViewModel.Date = DateTime.Now;
-                project = projectViewModel.CastViewModelToModel();
                 m_ProjectRepository.Update(project);
                 m_ProjectRepository.Save();
                 return RedirectToAction("Index");

@@ -28,5 +28,16 @@ namespace textis.ViewModel
             Text = comment.Text;
             Date = comment.Date;
         }
+
+        public Comment CastViewModelToModel()
+        {
+            Comment m_comment = new Comment();
+            m_comment.Id = Id;
+            m_comment.User = User;
+            m_comment.Date = Date;
+            m_comment.ProjectId = ProjectId;
+            m_comment.Text = Text;
+            return m_comment;
+        }
     }
 }
