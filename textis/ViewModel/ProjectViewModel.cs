@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using textis.Repository;
@@ -10,8 +11,10 @@ namespace textis.ViewModel
     public class ProjectViewModel
     {
         public int Id { get; set; }
+        [Required, Display(Name = "Notandi")]
         public string User { get; set; }
         public DateTime Date { get; set; }
+        [Required, Display(Name = "Nafn")]
         public string Name { get; set; }
         public string Status { get; set; }
         public string Url { get; set; }

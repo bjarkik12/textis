@@ -34,8 +34,8 @@ namespace textis.ViewModel
         public CategoryViewModel CastModelToViewModel(Category category)
         {
             CategoryViewModel m_categoryViewModel = new CategoryViewModel(category);
-            m_categoryViewModel.Id = category.Id;
-            m_categoryViewModel.Name = category.Name;
+            Id = category.Id;
+            Name = category.Name;
             return m_categoryViewModel;
         }
 

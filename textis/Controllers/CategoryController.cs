@@ -16,6 +16,7 @@ namespace textis.Controllers
     {
         ICategoryRepository m_CategoryRepository;
         private CategoryViewModel m_CategoryViewModel;
+        List<CategoryViewModel> m_CategoryViewModelList;
         //IProjectRepository m_ProjectRepository;
         //private TextisModelContainer db = new TextisModelContainer();
 
@@ -23,6 +24,7 @@ namespace textis.Controllers
         {
             m_CategoryRepository = new CategoryRepository();
             m_CategoryViewModel = new CategoryViewModel();
+            m_CategoryViewModelList = new List<CategoryViewModel>();
             //m_ProjectRepository = new ProjectRepository();
             //db = new TextisModelContainer();
         }
@@ -30,7 +32,14 @@ namespace textis.Controllers
         // GET: /Category/
         public ActionResult Index()
         {
-            return View(m_CategoryRepository.GetAll().ToList());
+            foreach (Category x in m_CategoryRepository.GetAll().ToList())
+            {
+                CategoryViewModel categoryViewModel = new CategoryViewModel();
+                categoryViewModel.CastModelToViewModel(x);
+                m_CategoryViewModelList.Add(categoryViewModel);
+            }
+            return View(m_CategoryViewModelList);
+            //return View(m_CategoryRepository.GetAll().ToList());
         }
 
         // GET: /Category/Details/5
@@ -86,11 +95,13 @@ namespace textis.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Category category = m_CategoryRepository.GetSingle(id);
-            if (category == null)
+            CategoryViewModel categoryViewModel = new CategoryViewModel();
+            categoryViewModel.CastModelToViewModel(category);
+            if (categoryViewModel == null)
             {
                 return HttpNotFound();
             }
-            return View(category);
+            return View(categoryViewModel);
         }
 
         // POST: /Category/Edit/5
@@ -98,10 +109,12 @@ namespace textis.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,Name")] Category category)
+        public ActionResult Edit([Bind(Include="Id,Name")] CategoryViewModel categoryViewModel)
         {
             if (ModelState.IsValid)
             {
+                Category category = new Category();
+                category = categoryViewModel.CastViewModelToModel();
                 //db.Entry(category).State = EntityState.Modified;
                 m_CategoryRepository.Update(category);
                 //db.SaveChanges();
@@ -109,7 +122,7 @@ namespace textis.Controllers
 
                 return RedirectToAction("Index");
             }
-            return View(category);
+            return View(categoryViewModel);
         }
 
         // GET: /Category/Delete/5
@@ -120,12 +133,14 @@ namespace textis.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Category category = m_CategoryRepository.GetSingle(id);
+            CategoryViewModel categoryViewModel = new CategoryViewModel();
+            categoryViewModel.CastModelToViewModel(category);
             //Category category = db.Category.Find(id);
-            if (category == null)
+            if (categoryViewModel == null)
             {
                 return HttpNotFound();
             }
-            return View(category);
+            return View(categoryViewModel);
         }
 
         // POST: /Category/Delete/5
