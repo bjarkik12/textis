@@ -11,7 +11,7 @@
     });
 });
 
-$("#link").click(function() {
-    alert("test");
-});
+//$("#link").click(function() {
+//    alert("test");
+//});
 
