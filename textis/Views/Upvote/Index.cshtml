@@ -1,24 +1,24 @@
-﻿@model IEnumerable<textis.Upvote>
+﻿@model IEnumerable<textis.ViewModel.UpvoteViewModel>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Yfirlit";
 }
 
-<h2>Index</h2>
+<h2>Yfirlit</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Stofna nýtt", "Create")
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.User)
+            Notandi
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Date)
+            Dagsetning
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Project.Name)
+            Myndefni
         </th>
         <th></th>
     </tr>
@@ -32,12 +32,12 @@
             @Html.DisplayFor(modelItem => item.Date)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Project.Name)
+            @Html.DisplayFor(modelItem => item.ProjectName)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Breyta", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Nánar", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Eyða", "Delete", new { id=item.Id })
         </td>
     </tr>
 }

@@ -21,7 +21,6 @@ namespace textis.Repository
         public void Create(Upvote upvote)
         {
             context.Upvote.Add(upvote);
-            //context.SaveChanges();
         }
 
         public List<Upvote> GetByProjectId(int? id)
@@ -42,14 +41,12 @@ namespace textis.Repository
         public void Update(Upvote upvote)
         {
             context.Entry(upvote).State = EntityState.Modified;
-            //context.SaveChanges();
         }
 
         public void Delete(int? id)
         {
             Upvote upvote = this.GetSingle(id);
             context.Upvote.Remove(upvote);
-            //context.SaveChanges();
         }
 
         public void Save()

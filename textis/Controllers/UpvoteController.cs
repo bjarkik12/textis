@@ -8,17 +8,15 @@ using System.Web;
 using System.Web.Mvc;
 using textis;
 using textis.Repository;
+using textis.ViewModel;
 
 namespace textis.Controllers
 {
     public class UpvoteController : Controller
     {
-        //private TextisModelContainer db = new TextisModelContainer();
         IUpvoteRepository m_UpvoteRepository;
         IProjectRepository m_ProjectRepository;
-
-        //TextisModelContainer db;
-        //private TextisModelContainer db;
+        List<UpvoteViewModel> m_UpvoteViewModelList;
 
         public string GetUsername()
         {
@@ -36,13 +34,19 @@ namespace textis.Controllers
         {
             m_UpvoteRepository = new UpvoteRepository();
             m_ProjectRepository = new ProjectRepository();
+            m_UpvoteViewModelList = new List<UpvoteViewModel>();
         }
 
         // GET: /Upvote/
         public ActionResult Index()
         {
-            var comment = m_UpvoteRepository.GetAll();
-            return View(comment.ToList());
+            foreach (Upvote x in m_UpvoteRepository.GetAll().ToList())
+            {
+                UpvoteViewModel upvoteViewModel = new UpvoteViewModel(x);
+                m_UpvoteViewModelList.Add(upvoteViewModel);
+            }
+
+            return View(m_UpvoteViewModelList);    
         }
 
         // GET: /Upvote/Details/5
@@ -58,7 +62,7 @@ namespace textis.Controllers
             {
                 return HttpNotFound();
             }
-            return View(upvote);
+            return View(new UpvoteViewModel (upvote));
         }
 
         // GET: /Upvote/Create
@@ -73,20 +77,21 @@ namespace textis.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Id,ProjectId,User,Date")] Upvote upvote)
-        {
-            upvote.User = GetUsername();
-            upvote.Date = DateTime.Now;
-            
+        public ActionResult Create([Bind(Include="Id,ProjectId,User,Date")] UpvoteViewModel upvoteViewModel)
+        {            
             if (ModelState.IsValid)
-            {               
+            {
+                Upvote upvote = new Upvote();
+                upvote = upvoteViewModel.CastViewModelToModel();
+                upvote.User = GetUsername();
+                upvote.Date = DateTime.Now;
                 m_UpvoteRepository.Create(upvote);
                 m_UpvoteRepository.Save();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", upvote.ProjectId);
-            return View(upvote);
+            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", upvoteViewModel.ProjectId);
+            return View(upvoteViewModel);
         }
 
         // GET: /Upvote/Edit/5
@@ -103,7 +108,7 @@ namespace textis.Controllers
                 return HttpNotFound();
             }
             ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", upvote.ProjectId);
-            return View(upvote);
+            return View(new UpvoteViewModel(upvote));
         }
 
         // POST: /Upvote/Edit/5
@@ -111,19 +116,20 @@ namespace textis.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,ProjectId,User,Date")] Upvote upvote)
-        {
-            upvote.User = GetUsername();
-            upvote.Date = DateTime.Now;
-            
+        public ActionResult Edit([Bind(Include="Id,ProjectId,User,Date")] UpvoteViewModel upvoteViewModel)
+        {          
             if (ModelState.IsValid)
             {
+                Upvote upvote = new Upvote();
+                upvote = upvoteViewModel.CastViewModelToModel();
+                upvote.User = GetUsername();
+                upvote.Date = DateTime.Now;
                 m_UpvoteRepository.Update(upvote);
                 m_UpvoteRepository.Save();
                 return RedirectToAction("Index");
             }
-            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", upvote.ProjectId);
-            return View(upvote);
+            ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", upvoteViewModel.ProjectId);
+            return View(upvoteViewModel);
         }
 
         // GET: /Upvote/Delete/5
@@ -139,7 +145,8 @@ namespace textis.Controllers
             {
                 return HttpNotFound();
             }
-            return View(upvote);
+
+            return View(new UpvoteViewModel (upvote));
         }
 
         // POST: /Upvote/Delete/5
@@ -153,10 +160,12 @@ namespace textis.Controllers
                 m_UpvoteRepository.Delete(id);
                 m_UpvoteRepository.Save();
             }
+
             else
             {
                 return HttpNotFound();
             }
+
             return RedirectToAction("Index");
         }
 

@@ -1,4 +1,4 @@
-﻿@model textis.Upvote
+﻿@model textis.ViewModel.UpvoteViewModel
 
 @{
     ViewBag.Title = "Details";
@@ -27,11 +27,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Project.User)
+            @Html.DisplayNameFor(model => model.ProjectName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Project.User)
+            @Html.DisplayFor(model => model.ProjectName)
         </dd>
 
     </dl>
