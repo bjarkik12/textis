@@ -8,18 +8,21 @@ using System.Web;
 using System.Web.Mvc;
 using textis;
 using textis.Repository;
+using textis.ViewModel;
 
 namespace textis.Controllers
 {
     public class CategoryController : Controller
     {
         ICategoryRepository m_CategoryRepository;
+        private CategoryViewModel m_CategoryViewModel;
         //IProjectRepository m_ProjectRepository;
         //private TextisModelContainer db = new TextisModelContainer();
 
         public CategoryController()
         {
             m_CategoryRepository = new CategoryRepository();
+            m_CategoryViewModel = new CategoryViewModel();
             //m_ProjectRepository = new ProjectRepository();
             //db = new TextisModelContainer();
         }
@@ -38,11 +41,13 @@ namespace textis.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Category category = m_CategoryRepository.GetSingle(id);
-            if (category == null)
+            CategoryViewModel categoryViewModel = new CategoryViewModel();
+            categoryViewModel.CastModelToViewModel(category);
+            if (categoryViewModel == null)
             {
                 return HttpNotFound();
             }
-            return View(category);
+            return View(categoryViewModel);
         }
 
         // GET: /Category/Create
@@ -56,11 +61,13 @@ namespace textis.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Id,Name")] Category category)
+        public ActionResult Create([Bind(Include="Id,Name")] CategoryViewModel categoryViewModel)
         {
+            Category category = new Category();
 
             if (ModelState.IsValid)
             {
+                category = categoryViewModel.CastViewModelToModel();
                 m_CategoryRepository.Create(category);
                 //db.SaveChanges();
                 m_CategoryRepository.Save();
@@ -68,7 +75,7 @@ namespace textis.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(category);
+            return View(categoryViewModel);
         }
 
         // GET: /Category/Edit/5

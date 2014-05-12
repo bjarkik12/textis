@@ -215,6 +215,7 @@
     <Compile Include="Upvote.cs">
       <DependentUpon>TextisModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\CategoryViewModel.cs" />
     <Compile Include="ViewModel\CommentViewModel.cs" />
     <Compile Include="ViewModel\ProjectLineViewModel.cs" />
     <Compile Include="ViewModel\ProjectViewModel.cs" />
