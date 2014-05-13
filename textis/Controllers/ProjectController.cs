@@ -320,7 +320,7 @@ namespace textis.Controllers
             int j = 1; //Line numbers to be printed
             string time;
             //all print lines collected in a array
-            string[] linesToPrint = new string[1500];
+            string[] linesToPrint = new string[10000];
 
             foreach(ProjectLine line in projectToDownload)
             {
