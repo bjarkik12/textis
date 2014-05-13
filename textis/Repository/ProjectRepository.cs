@@ -19,7 +19,7 @@ namespace textis.Repository
         public void Create(Project project)
         {
             context.Project.Add(project);
-            //context.SaveChanges();
+            
         }
 
         public Project GetSingle(int? id)

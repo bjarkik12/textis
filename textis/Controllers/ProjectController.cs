@@ -46,26 +46,7 @@ namespace textis.Controllers
             m_ProjectLineRepository = new ProjectLineRepository();
         }
 
-        //public ActionResult Index(string searchString)
-        //{
-        //    var project = from m in m_ProjectRepository.GetAll()
-        //                  select m;
-
-        //    if (!String.IsNullOrEmpty(searchString))
-        //    {
-        //        project = project.Where(s => s.Name.Contains(searchString));
-        //    }
-
-        //    foreach (Project x in project.ToList())
-        //    {
-        //        ProjectViewModel projectViewModel = new ProjectViewModel(x);
-        //        m_ProjectViewModelList.Add(projectViewModel);
-        //    }
-
-        //    return View(m_ProjectViewModelList);
-        //}
-
-                public ActionResult Index(string category, string searchString)
+        public ActionResult Index(string category, string searchString)
         {
             var categoryList = new List<string>();
 
@@ -135,6 +116,7 @@ namespace textis.Controllers
                 Project project = new Project();
                 projectViewModel.User = GetUsername();
                 projectViewModel.Date = DateTime.Now;
+                projectViewModel.Status = "Stofnað";
                 project = projectViewModel.CastViewModelToModel();
                 m_ProjectRepository.Create(project);
                 m_ProjectRepository.Save();
@@ -183,6 +165,10 @@ namespace textis.Controllers
             }
 
             ViewBag.CategoryId = new SelectList(m_CategoryRepository.GetAll(), "Id", "Name", projectViewModel.CategoryId);
+
+            //string[] arrStatusList = { "Stofnað", "Í vinnslu", "Tilbúið" };
+            //ViewBag.StatusList = new SelectList(arrStatusList, "Status", projectViewModel.Status);
+
             return View(projectViewModel);
         }
 
