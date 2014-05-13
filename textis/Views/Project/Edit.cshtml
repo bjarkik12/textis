@@ -64,6 +64,12 @@
     @Html.HiddenFor(m => m.Id)
 }
 
+@using (Html.BeginForm("DownloadFile", "Project", FormMethod.Post, new { enctype = "multipart/form-data", id = Model.Id }))
+{
+    <input type="submit" name="Submit" id="Submit" value="Download" />
+    @Html.HiddenFor(m => m.Id)
+}
+
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
