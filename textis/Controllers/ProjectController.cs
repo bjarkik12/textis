@@ -154,24 +154,80 @@ namespace textis.Controllers
         }
 
         [HttpPost]
-        public ActionResult Upload(HttpPostedFileBase file)
+        public ActionResult Upload(HttpPostedFileBase file, int id)
         {
+            ProjectLineRepository m_ProjectLineRepository = new ProjectLineRepository();
             // Verify that the user selected a file
             if (file != null && file.ContentLength > 0)
             {
                 // extract only the fielname
                 var fileName = Path.GetFileName(file.FileName);
+                //var x = Path.GetExtension(file.FileName); Check if file is .srt ???
                 // store the file inside ~/App_Data/uploads folder
                 var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);
                 file.SaveAs(path);
+
+                StreamReader streamUpload = new StreamReader(path);
+                string fileLine = "";
+                string timeCapsule;
+                string fakeYear = "1/1/2000 ";
+                string fakeDot = ".";
+  
+                while (fileLine != null)
+                {
+
+                    ProjectLine line = new ProjectLine();
+
+                    fileLine = streamUpload.ReadLine(); //This is the line number which we will not use
+                    fileLine = streamUpload.ReadLine(); //now myLine is holding the time
+                    //Now we need to get the timestring to the correct format before parsing it to DateTime
+                    timeCapsule = fakeYear + fileLine.Substring(0, 8) + fakeDot + fileLine.Substring(9, 3);
+                    line.TimeFrom = Convert.ToDateTime(timeCapsule);
+                    timeCapsule = fakeYear + fileLine.Substring(17, 8) + fakeDot + fileLine.Substring(26, 3);
+                    line.TimeTo = Convert.ToDateTime(timeCapsule);
+
+                    //we are sure to have at least one line
+                    fileLine = streamUpload.ReadLine();
+                    line.TextLine1 = fileLine;
+
+                    //there may or may not be a second line
+                    fileLine = streamUpload.ReadLine();
+
+                    if (fileLine != "" && fileLine != null)
+                    {
+                        line.TextLine2 = fileLine;
+                        fileLine = streamUpload.ReadLine();
+                    }
+                    //just in case there are more lines that we cannot handle
+                    while (fileLine != "" && fileLine != null)
+                    {
+                        fileLine = streamUpload.ReadLine();
+                    }
+
+                    line.Date = DateTime.Now;
+                    line.User = GetUsername();
+                    line.Language = "EN";
+                    line.ProjectId = id;
+
+                    //The parallel Icelandic text:
+                    ProjectLine lineIcelandic = new ProjectLine();
+                    lineIcelandic.ProjectId = line.ProjectId;
+                    lineIcelandic.Language = "IS";
+                    lineIcelandic.TimeFrom = line.TimeFrom;
+                    lineIcelandic.TimeTo = line.TimeTo;
+
+                    m_ProjectLineRepository.Create(line);
+                    m_ProjectLineRepository.Create(lineIcelandic);
+                }
+
+
+                streamUpload.Close();
+                m_ProjectLineRepository.Save();
+                System.IO.File.Delete(path);
             }
-            // add code here - read each line in file
-            // create lines in ProjectLines (both EN and IS)
-            // delete file
 
             // We should not redirect to Index - rather to Edit/?  - but how do we get the correct ID ?
-            return RedirectToAction("Index");
-           
+            return RedirectToAction("Edit", new { id = id });
         }
 
         // GET: /Project/Delete/5
