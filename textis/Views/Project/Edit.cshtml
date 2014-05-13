@@ -31,13 +31,13 @@
                 @Html.DropDownListFor(model => model.Status, new SelectList(
                 new List<Object>
                 {
-                    new { value = 0, text = "Stofnað" },
-                    new { value = 1, text = "Í vinnslu" },
-                    new { value = 2, text = "Tilbúið" },
+                    new { value = "Stofnað", text = "Stofnað" },
+                    new { value = "Í vinnslu", text = "Í vinnslu" },
+                    new { value = "Tilbúið", text = "Tilbúið" },
                 },
                 "value",
                 "text",
-                0))
+                "Stofnað"))
                 @Html.ValidationMessageFor(model => model.Status)
             </div>
         </div>
