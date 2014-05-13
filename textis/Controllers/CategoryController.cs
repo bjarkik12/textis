@@ -12,6 +12,7 @@ using textis.ViewModel;
 
 namespace textis.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CategoryController : Controller
     {
         private ICategoryRepository m_CategoryRepository;
