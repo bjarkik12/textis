@@ -9,6 +9,36 @@
             $("span", this).toggleClass("glyphicon glyphicon-chevron-up glyphicon glyphicon-chevron-down");
         });
     });
+
+    $("#Button").click(function () {
+        var comment = { "Text": $("#Text").val(), "ProjectId": $("#Id").val() };
+
+        console.log(comment);
+        $.ajax({
+            type: "POST",
+            url: "/Comment/AddComment/",
+            data: comment,
+            dataType: "json",
+            success: function (data) {
+                function ConvertStringToJSDate(dt) {
+                    var dtE = /^\/Date\((-?[0-9]+)\)\/$/.exec(dt);
+                    if (dtE) {
+                        var dt = new Date(parseInt(dtE[1], 10));
+                        return dt;
+                    }
+                    return null;
+                }
+                for (var i = 0; i < data.length; i++) {
+                    data[i].Date = ConvertStringToJSDate(data[i].Date);
+                }
+                $("#Text").val("");
+                $("#CommentUl").empty();
+                $("#CommentUl").loadTemplate($("#commentTemplate"), data);
+
+            }
+        })
+
+    });
 });
 
 //$("#link").click(function() {

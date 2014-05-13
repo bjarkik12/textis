@@ -438,5 +438,6 @@ namespace textis.Controllers
             m_ProjectLineRepository.Dispose();
             base.Dispose(disposing);
         }
+        
     }
 }

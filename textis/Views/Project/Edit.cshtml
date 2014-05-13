@@ -70,9 +70,55 @@
     @Html.HiddenFor(m => m.Id)
 }
 
+<ul id="CommentUl" class="list-group" style="max-width: 560px;">
+    @foreach (var item in Model.CommentLines)
+    {
+
+        <li class="list-group-item">
+            <p>
+                <span class="glyphicon glyphicon-user"></span>
+                <span class="text-primary">@Html.DisplayFor(modelItem => item.User)</span>
+                <span>@Html.DisplayFor(modelItem => item.Text)</span>
+
+            </p>
+            <p>
+                <span class="text-muted">@item.Date.ToString("dd. MMMM HH:mm") - </span>
+     
+            </p>
+
+        </li>
+    }
+
+</ul>
+<div class="form-horizontal">
+    <label class="sr-only" for="Text">Comment</label>
+    <textarea class="form-control" rows="3" id="Text" name="Text"></textarea>
+    @Html.HiddenFor(model => model.Id)
+    <button type="submit" class="btn btn-primary" id="Button">Send</button>
+</div>
+
+<script type="text/html" id="commentTemplate">
+  
+    <li class="list-group-item">
+        <p>
+            <span class="glyphicon glyphicon-user"></span>
+            <span class="text-primary" data-content="User"></span>
+            <span data-content="Text"></span>
+        </p>
+        <p>
+            <span class="text-muted" data-content="Date"></span>
+            
+        </p>
+
+    </li>
+
+   
+</script>
+
 <div>
     @Html.ActionLink("Aftur í skrá", "Index")
 </div>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
