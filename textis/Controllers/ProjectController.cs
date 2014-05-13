@@ -46,14 +46,28 @@ namespace textis.Controllers
             m_ProjectLineRepository = new ProjectLineRepository();
         }
 
-        public ActionResult Index(string searchString)
+        public ActionResult Index(string category, string searchString)
         {
+            var categoryList = new List<string>();
+
+            var categoryQuery = from n in m_ProjectRepository.GetAll()
+                                orderby n.Category.Name
+                                select n.Category.Name;
+
+            categoryList.AddRange(categoryQuery.Distinct());
+            ViewBag.category = new SelectList(categoryList);
+
             var project = from m in m_ProjectRepository.GetAll()
                           select m;
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                project = project.Where(s => s.Name.Contains(searchString));
+                project = project.Where(s => s.Name.ToLower().Contains(searchString.ToLower()));
+            }
+
+            if (!string.IsNullOrEmpty(category))
+            {
+                project = project.Where(x => x.Category.Name == category);
             }
 
             foreach (Project x in project.ToList())
@@ -102,6 +116,7 @@ namespace textis.Controllers
                 Project project = new Project();
                 projectViewModel.User = GetUsername();
                 projectViewModel.Date = DateTime.Now;
+                projectViewModel.Status = "Stofnað";
                 project = projectViewModel.CastViewModelToModel();
                 m_ProjectRepository.Create(project);
                 m_ProjectRepository.Save();
@@ -150,6 +165,10 @@ namespace textis.Controllers
             }
 
             ViewBag.CategoryId = new SelectList(m_CategoryRepository.GetAll(), "Id", "Name", projectViewModel.CategoryId);
+
+            //string[] arrStatusList = { "Stofnað", "Í vinnslu", "Tilbúið" };
+            //ViewBag.StatusList = new SelectList(arrStatusList, "Status", projectViewModel.Status);
+
             return View(projectViewModel);
         }
 

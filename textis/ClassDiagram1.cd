@@ -87,14 +87,14 @@
   <Class Name="textis.Controllers.CategoryController" Collapsed="true">
     <Position X="10.75" Y="2.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAiABAACAAAAAAAAAAAEAAEACAAEAAAAAAAA=</HashCode>
+      <HashCode>AAAACAAAAiABAACAAAAAAAAAAAEAAEACAAEEAAAAAAA=</HashCode>
       <FileName>Controllers\CategoryController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="textis.Controllers.CommentController" Collapsed="true">
     <Position X="5.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAACABQACAAAAAAAAAAAUAAEACAAEAAAAAAAA=</HashCode>
+      <HashCode>AQAQAAAAACABQACAAAAAAAAAAAUAAEACAAEAAAAAAAA=</HashCode>
       <FileName>Controllers\CommentController.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -108,21 +108,21 @@
   <Class Name="textis.Controllers.ProjectController" Collapsed="true">
     <Position X="10.75" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAiABAACAAAAAAAAAAAUAAEACAAEAAAAAAAA=</HashCode>
+      <HashCode>AQAAAAAAAiABQACBAgAAAAgAAAUAAEACAAEAAAABCAA=</HashCode>
       <FileName>Controllers\ProjectController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="textis.Controllers.ProjectLineController" Collapsed="true">
     <Position X="3.75" Y="5.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAACABAACBAAAAAAAAAAUAAEACAAEAAAAAAAA=</HashCode>
+      <HashCode>AQAAAAAAACABAACBAAAIAAAAAAUAAEACAAEAAAAAAAA=</HashCode>
       <FileName>Controllers\ProjectLineController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="textis.Controllers.UpvoteController" Collapsed="true">
     <Position X="7.25" Y="6.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAACABAACAAgAAAAAAAAUAAEACAAEAAAAAAAA=</HashCode>
+      <HashCode>AQAAAAAAACABAAGAAgAAAAAAAAUAAEACAAEAAAAAAAA=</HashCode>
       <FileName>Controllers\UpvoteController.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -179,7 +179,7 @@
   <Class Name="textis.Repository.CommentRepository" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="7.25" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAYCAIAAACAAAAAAAAAAAAAAAAEAAEAAAgAAAAAAAgA=</HashCode>
+      <HashCode>AAYCAIAAACAAAAAAAAAAAAAAAAEAAEAAAgAIAAAAAgA=</HashCode>
       <FileName>Repository\CommentRepository.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -187,7 +187,7 @@
   <Class Name="textis.Repository.ProjectLineRepository" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="5.5" Y="5.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAYCAIAAACAAAAAAAAAAAAAAAAEAAEAAAgAAAAAAAgA=</HashCode>
+      <HashCode>AAYCAIAAACAAAAAAAAAAAAAAAAEAAEAAAgAIAAAAAgA=</HashCode>
       <FileName>Repository\ProjectLineRepository.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -203,7 +203,7 @@
   <Class Name="textis.Repository.UpvoteRepository" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="9" Y="6.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAYCAIAAACAAAAAAAAAAAAAAAAEAAEAAAgAAAAAAAgA=</HashCode>
+      <HashCode>AAYCAIAAACAAAAAAAAAAAAAAAAEAAEAAAgAIAAAAAgA=</HashCode>
       <FileName>Repository\UpvoteRepository.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -218,14 +218,14 @@
   <Interface Name="textis.Repository.ICommentRepository" Collapsed="true">
     <Position X="3.75" Y="7.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAIAAAAAAAAAAAAAAAAAAAAEAAEAAAgAAAAAAAgA=</HashCode>
+      <HashCode>AAQAAIAAAAAAAAAAAAAAAAAAAAEAAEAAAgAIAAAAAgA=</HashCode>
       <FileName>Repository\ICommentRepository.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="textis.Repository.IProjectLineRepository" Collapsed="true">
     <Position X="5.5" Y="7.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAIAAAAAAAAAAAAAAAAAAAAEAAEAAAgAAAAAAAgA=</HashCode>
+      <HashCode>AAQAAIAAAAAAAAAAAAAAAAAAAAEAAEAAAgAIAAAAAgA=</HashCode>
       <FileName>Repository\IProjectLineRepository.cs</FileName>
     </TypeIdentifier>
   </Interface>
@@ -239,7 +239,7 @@
   <Interface Name="textis.Repository.IUpvoteRepository" Collapsed="true">
     <Position X="9" Y="7.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAIAAAAAAAAAAAAAAAAAAAAEAAEAAAgAAAAAAAgA=</HashCode>
+      <HashCode>AAQAAIAAAAAAAAAAAAAAAAAAAAEAAEAAAgAIAAAAAgA=</HashCode>
       <FileName>Repository\IUpvoteRepository.cs</FileName>
     </TypeIdentifier>
   </Interface>

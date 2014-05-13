@@ -28,7 +28,16 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Status, "Staða", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Status)
+                @Html.DropDownListFor(model => model.Status, new SelectList(
+                new List<Object>
+                {
+                    new { value = 0, text = "Stofnað" },
+                    new { value = 1, text = "Í vinnslu" },
+                    new { value = 2, text = "Tilbúið" },
+                },
+                "value",
+                "text",
+                0))
                 @Html.ValidationMessageFor(model => model.Status)
             </div>
         </div>
