@@ -4,14 +4,14 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>Nánar</h2>
 
 <div>
     <h4>ProjectLine</h4>
 	<hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.User)
+            @Html.LabelFor(model => model.User, "Notandi")
         </dt>
 
         <dd>
@@ -19,7 +19,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.TimeFrom)
+            @Html.LabelFor(model => model.TimeFrom, "Tími frá")
         </dt>
 
         <dd>
@@ -27,7 +27,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.TimeTo)
+            @Html.LabelFor(model => model.TimeTo, "Tími til")
         </dt>
 
         <dd>
@@ -35,7 +35,15 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.TextLine1)
+            @Html.LabelFor(model => model.TextLine1, "Lína 1")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TextLine1)
+        </dd>
+
+        <dt>
+            @Html.LabelFor(model => model.TextLine2, "Lína 2")
         </dt>
 
         <dd>
@@ -43,15 +51,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.TextLine1)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TextLine2)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Date)
+            @Html.LabelFor(model => model.Date, "Dagsetning")
         </dt>
 
         <dd>
@@ -59,7 +59,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Language)
+            @Html.LabelFor(model => model.Language, "Tungumál")
         </dt>
 
         <dd>
@@ -67,7 +67,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ProjectUser)
+            @Html.LabelFor(model => model.ProjectUser, "Beytti síðast")
         </dt>
 
         <dd>
@@ -76,7 +76,7 @@
 
     </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<div>
+    @Html.ActionLink("Breyta", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Aftur í lista", "Index")
+</div>

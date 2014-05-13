@@ -4,7 +4,7 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
+<h2>Breyta</h2>
 
 
 @using (Html.BeginForm())
@@ -12,13 +12,13 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>Upvote</h4>
+        <h4>Mæla með</h4>
         <hr />
         @Html.ValidationSummary(true)
         @Html.HiddenFor(model => model.Id)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ProjectId, "ProjectId", new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ProjectId, "Myndefni", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("ProjectId", String.Empty)
                 @Html.ValidationMessageFor(model => model.ProjectId)
@@ -26,31 +26,24 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.User, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.User, "Notandi", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.User)
                 @Html.ValidationMessageFor(model => model.User)
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Date, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Date)
-                @Html.ValidationMessageFor(model => model.Date)
-            </div>
-        </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Vista" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Aftur í lista", "Index")
 </div>
 
 @section Scripts {

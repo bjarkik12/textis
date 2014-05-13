@@ -18,7 +18,7 @@
         @Html.HiddenFor(model => model.Id)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ProjectId, "ProjectId", new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ProjectId, "Mynefni", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("ProjectId", String.Empty)
                 @Html.ValidationMessageFor(model => model.ProjectId)
@@ -34,7 +34,7 @@
         </div>*@
 
         <div class="form-group">
-            @Html.LabelFor(model => model.TimeFrom, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.TimeFrom, "Tími frá", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.TimeFrom)
                 @Html.ValidationMessageFor(model => model.TimeFrom)
@@ -42,7 +42,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.TimeTo, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.TimeTo, "Tími til", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.TimeTo)
                 @Html.ValidationMessageFor(model => model.TimeTo)
@@ -50,7 +50,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.TextLine1, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.TextLine1, "Lína 1", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.TextLine1)
                 @Html.ValidationMessageFor(model => model.TextLine1)
@@ -58,23 +58,17 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.TextLine2, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.TextLine2, "Lína 2", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.TextLine2)
                 @Html.ValidationMessageFor(model => model.TextLine2)
             </div>
         </div>
 
-        @*<div class="form-group">
-            @Html.LabelFor(model => model.Date, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Date)
-                @Html.ValidationMessageFor(model => model.Date)
-            </div>
-        </div>*@
+  
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Language, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Language, "Tungumál", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Language)
                 @Html.ValidationMessageFor(model => model.Language)
@@ -83,14 +77,14 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Vista" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Aftur í lista", "Index")
 </div>
 
 @section Scripts {
