@@ -81,7 +81,7 @@ namespace textis.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                project = project.Where(s => s.Name.Contains(searchString));
+                project = project.Where(s => s.Name.ToLower().Contains(searchString.ToLower()));
             }
 
             if (!string.IsNullOrEmpty(category))
