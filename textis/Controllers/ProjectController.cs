@@ -46,26 +46,7 @@ namespace textis.Controllers
             m_ProjectLineRepository = new ProjectLineRepository();
         }
 
-        //public ActionResult Index(string searchString)
-        //{
-        //    var project = from m in m_ProjectRepository.GetAll()
-        //                  select m;
-
-        //    if (!String.IsNullOrEmpty(searchString))
-        //    {
-        //        project = project.Where(s => s.Name.Contains(searchString));
-        //    }
-
-        //    foreach (Project x in project.ToList())
-        //    {
-        //        ProjectViewModel projectViewModel = new ProjectViewModel(x);
-        //        m_ProjectViewModelList.Add(projectViewModel);
-        //    }
-
-        //    return View(m_ProjectViewModelList);
-        //}
-
-                public ActionResult Index(string category, string searchString)
+        public ActionResult Index(string category, string searchString)
         {
             var categoryList = new List<string>();
 
@@ -135,6 +116,7 @@ namespace textis.Controllers
                 Project project = new Project();
                 projectViewModel.User = GetUsername();
                 projectViewModel.Date = DateTime.Now;
+                projectViewModel.Status = "Stofnað";
                 project = projectViewModel.CastViewModelToModel();
                 m_ProjectRepository.Create(project);
                 m_ProjectRepository.Save();
@@ -183,16 +165,35 @@ namespace textis.Controllers
             }
 
             ViewBag.CategoryId = new SelectList(m_CategoryRepository.GetAll(), "Id", "Name", projectViewModel.CategoryId);
+
+            //string[] arrStatusList = { "Stofnað", "Í vinnslu", "Tilbúið" };
+            //ViewBag.StatusList = new SelectList(arrStatusList, "Status", projectViewModel.Status);
+
             return View(projectViewModel);
         }
 
         [HttpPost]
         public ActionResult Upload(HttpPostedFileBase file, int id)
         {
+            // Todo:
+            // Allow only .srt files
+            // Error handling: try/cacth for corrupt or wrong files
             //ProjectLineRepository m_ProjectLineRepository = new ProjectLineRepository();
             // Verify that the user selected a file
             if (file != null && file.ContentLength > 0)
             {
+                //Get rid of previous text lines, if there are any
+                var projectToUpload = from x in m_ProjectLineRepository.GetByProjectId(id)
+                                      select x;
+
+                if (projectToUpload != null)
+                {
+                    foreach (ProjectLine x in projectToUpload)
+                    {
+                        m_ProjectLineRepository.Delete(x.Id);
+                    }
+                }
+
                 // extract only the fielname
                 var fileName = Path.GetFileName(file.FileName);
                 //var x = Path.GetExtension(file.FileName); Check if file is .srt ???
@@ -200,6 +201,7 @@ namespace textis.Controllers
                 var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);
                 file.SaveAs(path);
 
+                //Various vaiables
                 StreamReader streamUpload = new StreamReader(path);
                 string fileLine = "";
                 string timeCapsule;
@@ -255,7 +257,7 @@ namespace textis.Controllers
                     //there may or may not be a second line
                     fileLine = linesOfUpload[i++];
 
-                    if (fileLine != "" && i >= numberOfLines)
+                    if (fileLine != "")
                     {
                         line.TextLine2 = fileLine;
                         fileLine = linesOfUpload[i++];
@@ -318,7 +320,7 @@ namespace textis.Controllers
             int j = 1; //Line numbers to be printed
             string time;
             //all print lines collected in a array
-            string[] linesToPrint = new string[1500];
+            string[] linesToPrint = new string[10000];
 
             foreach(ProjectLine line in projectToDownload)
             {
@@ -343,13 +345,13 @@ namespace textis.Controllers
                 j++;
             }
 
+            //create and store a file
             var project = m_ProjectRepository.GetSingle(id);
             string fileName = project.Name + ".srt";
-
             var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);
-            
             System.IO.File.WriteAllLines(path, linesToPrint);
 
+            //send the new file to the user
             Response.ContentType = "application/octet-stream";
             Response.AppendHeader("content-disposition", "attachment;filename=" + fileName);
             Response.TransmitFile(path);
