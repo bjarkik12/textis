@@ -173,5 +173,22 @@ namespace textis.Controllers
             m_ProjectRepository.Dispose();
             base.Dispose(disposing);
         }
+
+        [HttpPost]
+        public ActionResult AddComment(FormCollection formData)
+        {
+            Comment comment = new Comment();
+            var tempid = Int32.Parse(formData["ProjectId"]);
+
+            comment.Text = formData["Text"];
+            comment.User = GetUsername();
+            comment.Date = DateTime.Now;
+            comment.ProjectId = tempid;
+
+            m_CommentRepository.Create(comment);
+            m_CommentRepository.Save();
+
+            return Json(m_CommentRepository.GetByProjectId(tempid), JsonRequestBehavior.AllowGet);
+        }
     }
 }
