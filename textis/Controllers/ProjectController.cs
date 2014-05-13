@@ -193,14 +193,35 @@ namespace textis.Controllers
                 string fakeDot = ".";
                 DateTime fakeNow = DateTime.Now;
                 string fakeUser = GetUsername();
-  
-                while (fileLine != null)
+
+                //to gain speed the file is stored in an array and the stream is closed
+                string[] linesOfUpload = System.IO.File.ReadAllLines(path);
+                int numberOfLines = linesOfUpload.Length;
+                streamUpload.Close();
+                System.IO.File.Delete(path);
+
+                //This is working too slow but WHY !!!???
+                //Need to clean up -> too many if (break)
+                for(int i = 0; i < numberOfLines; )
                 {
+                    fileLine = linesOfUpload[i++]; //This is the line number (which we will not use)
+
+                    //in case the file has extra empty lines
+                    if (fileLine == "" || i >= numberOfLines)
+                    {
+                        while (fileLine == "")
+                        {
+                            if (i >= numberOfLines)
+                            {
+                                break;
+                            }
+                            fileLine = linesOfUpload[i++];   
+                        }
+                    }
 
                     ProjectLine line = new ProjectLine();
 
-                    fileLine = streamUpload.ReadLine(); //This is the line number which we will not use
-                    fileLine = streamUpload.ReadLine(); //now myLine is holding the time
+                    fileLine = linesOfUpload[i++]; //now myLine is holding the time
                     //Now we need to get the timestring to the correct format before parsing it to DateTime
                     timeCapsule = fakeYear + fileLine.Substring(0, 8) + fakeDot + fileLine.Substring(9, 3);
                     line.TimeFrom = Convert.ToDateTime(timeCapsule);
@@ -208,21 +229,39 @@ namespace textis.Controllers
                     line.TimeTo = Convert.ToDateTime(timeCapsule);
 
                     //we are sure to have at least one line
-                    fileLine = streamUpload.ReadLine();
+                    fileLine = linesOfUpload[i++];
                     line.TextLine1 = fileLine;
 
-                    //there may or may not be a second line
-                    fileLine = streamUpload.ReadLine();
+                    //in case it was the last line
+                    if (i >= numberOfLines)
+                    {
+                        break;
+                    }
 
-                    if (fileLine != "" && fileLine != null)
+                    //there may or may not be a second line
+                    fileLine = linesOfUpload[i++];
+
+                    if (fileLine != "" && i >= numberOfLines)
                     {
                         line.TextLine2 = fileLine;
-                        fileLine = streamUpload.ReadLine();
+                        fileLine = linesOfUpload[i++];
                     }
-                    //just in case there are more lines that we cannot handle
-                    while (fileLine != "" && fileLine != null)
+
+                    //again in case it was the last line
+                    if (i >= numberOfLines)
                     {
-                        fileLine = streamUpload.ReadLine();
+                        break;
+                    }
+
+                    //just in case there are more lines that we cannot handle
+                    while (fileLine != "" && i < numberOfLines)
+                    {
+                        fileLine = linesOfUpload[i++];
+
+                        if (i >= numberOfLines)
+                        {
+                            break;
+                        }
                     }
 
                     line.Date = fakeNow;
@@ -243,13 +282,65 @@ namespace textis.Controllers
                     m_ProjectLineRepository.Create(lineIcelandic);
                 }
 
-
-                streamUpload.Close();
                 m_ProjectLineRepository.Save();
-                System.IO.File.Delete(path);
             }
 
-            // We should not redirect to Index - rather to Edit/?  - but how do we get the correct ID ?
+            return RedirectToAction("Edit", new { id = id });
+        }
+
+        [HttpPost]
+        public ActionResult DownloadFile(int? id)
+        {
+            //var projectToDownload = m_ProjectLineRepository.GetByProjectId(id);
+            //projectToDownload = projectToDownload.Where(x => x.Language == "IS");
+            var projectToDownload = from x in m_ProjectLineRepository.GetByProjectId(id)
+                                    where x.Language == "IS"
+                                    orderby x.TimeFrom ascending
+                                    select x;
+               
+           // ProjectLine line = new ProjectLine();
+
+            int i = 0; // array locaton
+            int j = 1; //Line numbers to be printed
+            string time;
+            //all print lines collected in a array
+            string[] linesToPrint = new string[1500];
+
+            foreach(ProjectLine line in projectToDownload)
+            {
+                linesToPrint[i++] = j.ToString(); //The number line
+
+                //Time to-from line
+                time = line.TimeFrom.ToString("HH:mm:ss,fff") + " --> ";
+                time = time + line.TimeFrom.ToString("HH:mm:ss,fff");
+                linesToPrint[i++] = time;
+
+                //first text line
+                linesToPrint[i++] = line.TextLine1;
+
+                if (line.TextLine2 != null)
+                {   
+                    //second text line
+                    linesToPrint[i++] = line.TextLine2;
+                }
+
+                linesToPrint[i++] = "";
+
+                j++;
+            }
+
+            var project = m_ProjectRepository.GetSingle(id);
+            string fileName = project.Name + ".srt";
+
+            var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);
+            
+            System.IO.File.WriteAllLines(path, linesToPrint);
+
+            Response.ContentType = "application/octet-stream";
+            Response.AppendHeader("content-disposition", "attachment;filename=" + fileName);
+            Response.TransmitFile(path);
+            Response.End();
+
             return RedirectToAction("Edit", new { id = id });
         }
 
