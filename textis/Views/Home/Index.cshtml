@@ -4,12 +4,12 @@
 
 <div class="jumbotron">
     <h1>textis</h1>
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("Index", "Project", FormMethod.Get))
     {
         <div class="search_box">
+            @Html.DropDownList("category", "Allir flokkar")
             @Html.TextBox("SearchString", "", new { placeholder = "Titill myndar" })
             <input id="search_string_button" type="submit" value="Leita" />
         </div>
-    }    
+    }
 </div>
-

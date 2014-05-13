@@ -46,14 +46,47 @@ namespace textis.Controllers
             m_ProjectLineRepository = new ProjectLineRepository();
         }
 
-        public ActionResult Index(string searchString)
+        //public ActionResult Index(string searchString)
+        //{
+        //    var project = from m in m_ProjectRepository.GetAll()
+        //                  select m;
+
+        //    if (!String.IsNullOrEmpty(searchString))
+        //    {
+        //        project = project.Where(s => s.Name.Contains(searchString));
+        //    }
+
+        //    foreach (Project x in project.ToList())
+        //    {
+        //        ProjectViewModel projectViewModel = new ProjectViewModel(x);
+        //        m_ProjectViewModelList.Add(projectViewModel);
+        //    }
+
+        //    return View(m_ProjectViewModelList);
+        //}
+
+                public ActionResult Index(string category, string searchString)
         {
+            var categoryList = new List<string>();
+
+            var categoryQuery = from n in m_ProjectRepository.GetAll()
+                                orderby n.Category.Name
+                                select n.Category.Name;
+
+            categoryList.AddRange(categoryQuery.Distinct());
+            ViewBag.category = new SelectList(categoryList);
+
             var project = from m in m_ProjectRepository.GetAll()
                           select m;
 
             if (!String.IsNullOrEmpty(searchString))
             {
                 project = project.Where(s => s.Name.Contains(searchString));
+            }
+
+            if (!string.IsNullOrEmpty(category))
+            {
+                project = project.Where(x => x.Category.Name == category);
             }
 
             foreach (Project x in project.ToList())
