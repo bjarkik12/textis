@@ -84,3 +84,8 @@ h4{
 .instruction{
     cursor: pointer;
 }
+
+#text_request{
+    padding: 1em;
+    font-size: 20px;
+}
