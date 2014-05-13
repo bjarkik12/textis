@@ -57,10 +57,11 @@
     </div>
 }
 
-@using (Html.BeginForm("Upload", "Project", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Upload", "Project", FormMethod.Post, new { enctype = "multipart/form-data", id = Model.Id }))
 {
     <input type='file' name='file' id='file' />
     <input type="submit" value="Sækja" />
+    @Html.HiddenFor(m => m.Id)
 }
 
 <div>
