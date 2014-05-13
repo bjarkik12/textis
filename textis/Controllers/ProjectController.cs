@@ -156,10 +156,25 @@ namespace textis.Controllers
         [HttpPost]
         public ActionResult Upload(HttpPostedFileBase file, int id)
         {
+            // Todo:
+            // Allow only .srt files
+            // Error handling: try/cacth for corrupt or wrong files
             //ProjectLineRepository m_ProjectLineRepository = new ProjectLineRepository();
             // Verify that the user selected a file
             if (file != null && file.ContentLength > 0)
             {
+                //Get rid of previous text lines, if there are any
+                var projectToUpload = from x in m_ProjectLineRepository.GetByProjectId(id)
+                                      select x;
+
+                if (projectToUpload != null)
+                {
+                    foreach (ProjectLine x in projectToUpload)
+                    {
+                        m_ProjectLineRepository.Delete(x.Id);
+                    }
+                }
+
                 // extract only the fielname
                 var fileName = Path.GetFileName(file.FileName);
                 //var x = Path.GetExtension(file.FileName); Check if file is .srt ???
@@ -167,6 +182,7 @@ namespace textis.Controllers
                 var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);
                 file.SaveAs(path);
 
+                //Various vaiables
                 StreamReader streamUpload = new StreamReader(path);
                 string fileLine = "";
                 string timeCapsule;
@@ -222,7 +238,7 @@ namespace textis.Controllers
                     //there may or may not be a second line
                     fileLine = linesOfUpload[i++];
 
-                    if (fileLine != "" && i >= numberOfLines)
+                    if (fileLine != "")
                     {
                         line.TextLine2 = fileLine;
                         fileLine = linesOfUpload[i++];
@@ -310,13 +326,13 @@ namespace textis.Controllers
                 j++;
             }
 
+            //create and store a file
             var project = m_ProjectRepository.GetSingle(id);
             string fileName = project.Name + ".srt";
-
             var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);
-            
             System.IO.File.WriteAllLines(path, linesToPrint);
 
+            //send the new file to the user
             Response.ContentType = "application/octet-stream";
             Response.AppendHeader("content-disposition", "attachment;filename=" + fileName);
             Response.TransmitFile(path);
