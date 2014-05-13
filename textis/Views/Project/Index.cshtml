@@ -4,10 +4,10 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Yfirlit</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Búa til nýtt", "Create")
 </p>
 
     @using (Html.BeginForm("Index", "Project", FormMethod.Get)){
@@ -21,22 +21,22 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.User)
+            Notandi
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Date)
+            Dagsetning
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            Myndefni
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Status)
+            Staða
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Url)
+            Vefslóð
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            Flokkur
         </th>
         <th></th>
     </tr>
@@ -62,9 +62,9 @@
             @Html.DisplayFor(modelItem => item.CategoryName)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Breyta", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Nánar", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Eyða", "Delete", new { id=item.Id })
         </td>
     </tr>
 }

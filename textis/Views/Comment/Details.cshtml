@@ -4,14 +4,14 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>Nánar</h2>
 
 <div>
-    <h4>Comment</h4>
+    <h4>Athugasemd</h4>
 	<hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Text)
+            @Html.LabelFor(model => model.Text, "Athugasemd")
         </dt>
 
         <dd>
@@ -19,7 +19,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.User)
+            @Html.LabelFor(model => model.User, "Notandi")
         </dt>
 
         <dd>
@@ -27,16 +27,17 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Date)
+            @Html.LabelFor(model => model.Date, "Dagsetning")
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Date)
         </dd>
+    
 
     </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<div>
+    @Html.ActionLink("Breyta", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Aftur í lista", "Index")
+</div>
