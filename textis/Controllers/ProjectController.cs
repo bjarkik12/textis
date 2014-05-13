@@ -356,6 +356,7 @@ namespace textis.Controllers
             Response.AppendHeader("content-disposition", "attachment;filename=" + fileName);
             Response.TransmitFile(path);
             Response.End();
+            System.IO.File.Delete(path);
 
             return RedirectToAction("Edit", new { id = id });
         }
