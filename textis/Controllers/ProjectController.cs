@@ -156,7 +156,7 @@ namespace textis.Controllers
         [HttpPost]
         public ActionResult Upload(HttpPostedFileBase file, int id)
         {
-            ProjectLineRepository m_ProjectLineRepository = new ProjectLineRepository();
+            //ProjectLineRepository m_ProjectLineRepository = new ProjectLineRepository();
             // Verify that the user selected a file
             if (file != null && file.ContentLength > 0)
             {
@@ -172,6 +172,8 @@ namespace textis.Controllers
                 string timeCapsule;
                 string fakeYear = "1/1/2000 ";
                 string fakeDot = ".";
+                DateTime fakeNow = DateTime.Now;
+                string fakeUser = GetUsername();
   
                 while (fileLine != null)
                 {
@@ -204,8 +206,8 @@ namespace textis.Controllers
                         fileLine = streamUpload.ReadLine();
                     }
 
-                    line.Date = DateTime.Now;
-                    line.User = GetUsername();
+                    line.Date = fakeNow;
+                    line.User = fakeUser;
                     line.Language = "EN";
                     line.ProjectId = id;
 
@@ -215,6 +217,8 @@ namespace textis.Controllers
                     lineIcelandic.Language = "IS";
                     lineIcelandic.TimeFrom = line.TimeFrom;
                     lineIcelandic.TimeTo = line.TimeTo;
+                    lineIcelandic.Date = fakeNow;
+                    lineIcelandic.User = fakeUser;
 
                     m_ProjectLineRepository.Create(line);
                     m_ProjectLineRepository.Create(lineIcelandic);
