@@ -23,6 +23,7 @@ namespace textis.Controllers
         private ProjectViewModel m_ProjectViewModel;
         private List<ProjectViewModel> m_ProjectViewModelList;
 
+ 
         public string GetUsername()
         {
             if (Request.IsAuthenticated)
@@ -44,6 +45,69 @@ namespace textis.Controllers
             m_CommentRepository = new CommentRepository();
             m_UpvoteRepository = new UpvoteRepository();
             m_ProjectLineRepository = new ProjectLineRepository();
+        }
+
+        /// <summary>
+        /// Populate ProjectViewModel with related data (lines for comment, upvotes and lines)
+        /// </summary>
+        /// <param name="projectViewModel"></param>
+        /// <returns>ProjectViewModel</returns>
+        private ProjectViewModel PopulateProjectViewModel(ProjectViewModel projectViewModel)
+        {
+            projectViewModel.CommentLines = (from item in m_CommentRepository.GetByProjectId(projectViewModel.Id)
+                                             select new CommentViewModel
+                                             {
+                                                 Id = item.Id,
+                                                 Date = item.Date,
+                                                 ProjectId = item.ProjectId,
+                                                 ProjectName = item.Project.Name,
+                                                 Text = item.Text,
+                                                 User = item.User
+                                             }).ToList();
+
+            projectViewModel.UpvoteLines = (from item in m_UpvoteRepository.GetByProjectId(projectViewModel.Id)
+                                            select new UpvoteViewModel
+                                            {
+                                                Id = item.Id,
+                                                Date = item.Date,
+                                                ProjectId = item.ProjectId,
+                                                User = item.User,
+                                                ProjectName = item.Project.Name
+                                            }).ToList();
+            projectViewModel.UpvoteCount = projectViewModel.UpvoteLines.Count();
+
+            projectViewModel.SourceProjectLines = (from item in m_ProjectLineRepository.GetByProjectId(projectViewModel.Id)
+                                                   select new ProjectLineViewModel
+                                                   {
+                                                       Id = item.Id,
+                                                       Date = item.Date,
+                                                       Language = item.Language,
+                                                       ProjectId = item.ProjectId,
+                                                       ProjectName = item.Project.Name,
+                                                       ProjectUser = item.Project.User,
+                                                       TextLine1 = item.TextLine1,
+                                                       TextLine2 = item.TextLine2,
+                                                       TimeFrom = item.TimeFrom,
+                                                       TimeTo = item.TimeTo,
+                                                       User = item.User
+                                                   }).Where(m => m.Language == "EN").ToList();
+
+            projectViewModel.DestinationProjectLines = (from item in m_ProjectLineRepository.GetByProjectId(projectViewModel.Id)
+                                                        select new ProjectLineViewModel
+                                                        {
+                                                            Id = item.Id,
+                                                            Date = item.Date,
+                                                            Language = item.Language,
+                                                            ProjectId = item.ProjectId,
+                                                            ProjectName = item.Project.Name,
+                                                            ProjectUser = item.Project.User,
+                                                            TextLine1 = item.TextLine1,
+                                                            TextLine2 = item.TextLine2,
+                                                            TimeFrom = item.TimeFrom,
+                                                            TimeTo = item.TimeTo,
+                                                            User = item.User
+                                                        }).Where(m => m.Language == "IS").ToList();
+            return projectViewModel;
         }
 
         public ActionResult Index(string category, string searchString)
@@ -73,8 +137,13 @@ namespace textis.Controllers
             foreach (Project x in project.ToList())
             {
                 ProjectViewModel projectViewModel = new ProjectViewModel(x);
+
+                // add related information to projectViewModel (commentlines, upvotelines, projectlines, etc)
+                projectViewModel = PopulateProjectViewModel(projectViewModel);
+
                 m_ProjectViewModelList.Add(projectViewModel);
             }
+
 
             return View(m_ProjectViewModelList);
         }
@@ -94,7 +163,12 @@ namespace textis.Controllers
                 return HttpNotFound();
             }
 
-            return View(new ProjectViewModel (project));
+            ProjectViewModel projectViewModel = new ProjectViewModel(project);
+
+            // add related information to projectViewModel (commentlines, upvotelines, projectlines, etc)
+            projectViewModel = PopulateProjectViewModel(projectViewModel);
+
+            return View(projectViewModel);
         }
 
         // GET: /Project/Create
@@ -117,9 +191,11 @@ namespace textis.Controllers
                 projectViewModel.User = GetUsername();
                 projectViewModel.Date = DateTime.Now;
                 projectViewModel.Status = "Stofnað";
+
                 project = projectViewModel.CastViewModelToModel();
                 m_ProjectRepository.Create(project);
                 m_ProjectRepository.Save();
+
                 return RedirectToAction("Index");
             }
 
@@ -141,9 +217,13 @@ namespace textis.Controllers
                 return HttpNotFound();
             }
 
-            m_ProjectViewModel = new ProjectViewModel(m_ProjectRepository.GetSingle(id));
+            ProjectViewModel projectViewModel = new ProjectViewModel(project);
+            // add related information to projectViewModel (commentlines, upvotelines, projectlines, etc)
+            projectViewModel = PopulateProjectViewModel(projectViewModel);
+
+            // SelectList for Category
             ViewBag.CategoryId = new SelectList(m_CategoryRepository.GetAll(), "Id", "Name", project.CategoryId);
-            return View(m_ProjectViewModel);
+            return View(projectViewModel);
         }
 
         // POST: /Project/Edit/5
