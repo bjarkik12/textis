@@ -13,13 +13,13 @@ namespace textis.Tests.Controllers
     public class HomeControllerTest
     {
         [TestMethod]
-        public void Index()
+        public void Index(string category, string search)
         {
             // Arrange
             HomeController controller = new HomeController();
 
             // Act
-            ViewResult result = controller.Index() as ViewResult;
+            ViewResult result = controller.Index(category, search) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);

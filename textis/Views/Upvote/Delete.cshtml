@@ -4,15 +4,15 @@
     ViewBag.Title = "Delete";
 }
 
-<h2>Delete</h2>
+<h2>Eyða meðmælum</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Ertu viss um að þú viljir eyða þessum meðmælum?</h3>
 <div>
-    <h4>Upvote</h4>
+    <h4>Mæla með</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.User)
+            @Html.LabelFor(model => model.User, "Notandi")
         </dt>
 
         <dd>
@@ -20,7 +20,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Date)
+            @Html.LabelFor(model => model.Date, "Dagsetning")
         </dt>
 
         <dd>
@@ -28,7 +28,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ProjectName)
+            @Html.LabelFor(model => model.ProjectName, "Myndefni")
         </dt>
 
         <dd>
@@ -41,8 +41,8 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <input type="submit" value="Eyða" class="btn btn-default" /> |
+            @Html.ActionLink("Aftur í lista", "Index")
         </div>
     }
 </div>

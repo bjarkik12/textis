@@ -4,15 +4,15 @@
     ViewBag.Title = "Delete";
 }
 
-<h2>Delete</h2>
+<h2>Eyða athugasemd</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<!--<h3>Are you sure you want to delete this?</h3>-->
 <div>
-    <h4>Comment</h4>
+    <h4>Eyða athugasemd</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Text)
+            @Html.LabelFor(model => model.Text, "Athugasemd")
         </dt>
 
         <dd>
@@ -20,7 +20,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.User)
+            @Html.LabelFor(model => model.User, "Notandi")
         </dt>
 
         <dd>
@@ -28,12 +28,13 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Date)
+            @Html.LabelFor(model => model.Date, "Dagsetning")
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Date)
         </dd>
+        
 
     </dl>
 
@@ -41,8 +42,8 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <input type="submit" value="Eyða" class="btn btn-default" /> |
+            @Html.ActionLink("Aftur í lista", "Index")
         </div>
     }
 </div>
