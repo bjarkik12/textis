@@ -13,7 +13,6 @@ namespace textis.ViewModel
         public string ProjectName { get; set; }
         public String User { get; set; }
         [DataType(DataType.MultilineText)]
-        [Required(ErrorMessage = "Ekki mögulegt að senda tóma athugasemd")]
         public String Text { get; set; }
         public DateTime Date { get; set; }
 
