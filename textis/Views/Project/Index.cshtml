@@ -4,14 +4,6 @@
     ViewBag.Title = "Index";
 }
 
-
-
-    @*@using (Html.BeginForm("Index", "Project", FormMethod.Get)){
-    <p>
-        Title: @Html.TextBox("SearchString") <br />
-        <input type="submit" value="Leita" />
-    </p>
-    }*@
 <div class="jumbotron">
     <h1>textis</h1>
     @using (Html.BeginForm("Index", "Project", FormMethod.Get))
@@ -25,65 +17,60 @@
             </p>
         </div>
     }
-    
 </div>
 
-    <table class="table">
-        <tr>
-            <th>
-                Myndefni
-            </th>
-            <th>
-                Notandi
-            </th>
-            <th>
-                Dagsetning
-            </th>
-            @*<th>
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Notandi", "Index", new { sortOrder = ViewBag.userSort, category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
+        </th>
+        <th>
+            @Html.ActionLink("Dagsetning", "Index", new { sortOrder = ViewBag.dateSort, category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
+        </th>
+        <th>
+            @Html.ActionLink("Titill", "Index", new { sortOrder = ViewBag.nameSort, category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
+        </th>
+        <th>
+            @Html.ActionLink("Staða", "Index", new { sortOrder = ViewBag.statusSort, category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
+        </th>
+        @*<th>
                 Vefslóð
             </th>*@
-            <th>
-                Flokkur
-            </th>
-            <th>
-                Staða
-            </th>
-@if (User.Identity.IsAuthenticated) { 
-            <th></th>
-}
-        </tr>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>                    
-                    @using (Html.BeginForm("DownloadFileFromIndex", "Project", FormMethod.Post, new { enctype = "multipart/form-data", id = item.Id }))
-                    {
-                        @Html.ActionLink(item.Name, "DownloadFileFromIndex", new { id = item.Id })             
-                       
-                    }                   
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.User)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Date)
-                </td>
-                @*<td>
+        <th>
+            @Html.ActionLink("Flokkur", "Index", new { sortOrder = ViewBag.categorySort, category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.User)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            @*<td>
                     @Html.DisplayFor(modelItem => item.Url)
                 </td>*@
-                <td>
-                    @Html.DisplayFor(modelItem => item.CategoryName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-@if (User.Identity.IsAuthenticated) { 
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryName)
+            </td>
+
+            @if (User.Identity.IsAuthenticated)
+            {
                 <td>
                     @Html.ActionLink("Breyta", "Edit", new { id = item.Id }) |
                     @Html.ActionLink("Nánar", "Details", new { id = item.Id }) |
                     @Html.ActionLink("Eyða", "Delete", new { id = item.Id })
                 </td>
-}
-            </tr>
-        }
-    </table>
+            }
+        </tr>
+    }
+</table>
