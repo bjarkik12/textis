@@ -8,12 +8,20 @@
     <h2>@Html.DisplayFor(model => model.Name)</h2>
     <center> @Html.DisplayFor(model => model.CategoryName) || @Html.DisplayFor(model => model.User)</center>
     <hr />
-
+</div>
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
         @Html.HiddenFor(model => model.Id)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, "Nafn myndefnis", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+    </div>
 
         <div class="subtitle_display">
             <div id="subtitle_en">
@@ -55,17 +63,24 @@
             <div id="subtitle_is">
                 <span class="edit_header">Íslenskur texti</span><br />
                 <table class="edit_table">
+                    @{ int index = 0; }
                     @foreach (var item in Model.DestinationProjectLines)
                     {
                         <tr>
-                            <td>Lína #1: @Html.TextBoxFor(modelItem => item.TextLine1, new { @class = "edit_textline" })</td>
+                            <td>Lína #1: @Html.TextBox(string.Format("DestinationProjectLines[{0}].TextLine1", index), item.TextLine1, new { @class = "edit_textline" }) </td>
                         </tr>
                         <tr>
-                            <td>Lína #2: @Html.TextBoxFor(modelItem => item.TextLine2, new { @class = "edit_textline" })</td>
+                            <td>Lína #2: @Html.TextBox(string.Format("DestinationProjectLines[{0}].TextLine2", index), item.TextLine2, new { @class = "edit_textline" })
+                            @Html.Hidden(string.Format("DestinationProjectLines[{0}].Id", index), item.Id) 
+                            @Html.Hidden(string.Format("DestinationProjectLines[{0}].TimeFrom", index), item.TimeFrom)
+                            @Html.Hidden(string.Format("DestinationProjectLines[{0}].TimeTo", index), item.TimeTo)
+                            @Html.Hidden(string.Format("DestinationProjectLines[{0}].ProjectId", index), item.ProjectId)
+                            @Html.Hidden(string.Format("DestinationProjectLines[{0}].Language", index), item.Language)</td>
                         </tr>
                         <tr>
                             <td><br /></td>
                         </tr>
+                        index++;
                     }
                 </table>
             </div>

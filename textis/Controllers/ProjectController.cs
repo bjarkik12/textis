@@ -232,7 +232,7 @@ namespace textis.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,User,Date,Name,Status,Url,CategoryId")] ProjectViewModel projectViewModel)
+        public ActionResult Edit([Bind(Include = "Id,User,Date,Name,Status,Url,CategoryId,DestinationProjectLines, SourceProjectLines")] ProjectViewModel projectViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -240,9 +240,30 @@ namespace textis.Controllers
                 project = projectViewModel.CastViewModelToModel();
                 project.User = GetUsername();
                 project.Date = DateTime.Now;
+
+
+                foreach (ProjectLineViewModel x in projectViewModel.DestinationProjectLines)
+                {
+                    ProjectLine projectLine = new ProjectLine();
+                    projectLine.Id = x.Id;
+                    projectLine.Language = x.Language;
+                    projectLine.ProjectId = x.ProjectId;
+                    projectLine.TimeFrom = x.TimeFrom;
+                    projectLine.TimeTo = x.TimeTo;
+                    projectLine.TextLine1 = x.TextLine1;
+                    projectLine.TextLine2 = x.TextLine2;
+
+                    projectLine.Date = project.Date;
+                    projectLine.User = project.User;
+                    m_ProjectLineRepository.Update(projectLine);
+                }
+
+                m_ProjectLineRepository.Save();
+
                 m_ProjectRepository.Update(project);
                 m_ProjectRepository.Save();
-                return RedirectToAction("Index");
+
+                return RedirectToAction("Edit", new {id = projectViewModel.Id});
             }
 
             ViewBag.CategoryId = new SelectList(m_CategoryRepository.GetAll(), "Id", "Name", projectViewModel.CategoryId);
