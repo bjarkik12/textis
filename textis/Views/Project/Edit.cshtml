@@ -68,15 +68,20 @@
 
 @using (Html.BeginForm("Upload", "Project", FormMethod.Post, new { enctype = "multipart/form-data", id = Model.Id }))
 {
-    <input type='file' name='file' id='file' />
-    <input type="submit" value="Sækja" />
-    @Html.HiddenFor(m => m.Id)
+    if (User.Identity.IsAuthenticated)
+    {
+        <div>
+            <input type='file' name='file' id='file' />
+            <input type="submit" value="Sækja" />
+            @Html.HiddenFor(m => m.Id)
+        </div>
+    }
 }
 
 @using (Html.BeginForm("DownloadFile", "Project", FormMethod.Post, new { enctype = "multipart/form-data", id = Model.Id }))
 {
-    <input type="submit" name="Submit" id="Submit" value="Download" />
-    @Html.HiddenFor(m => m.Id)
+    <input type="submit" name="Submit" id="Submit" value="Sækja skrá" />
+    @Html.HiddenFor(m => m.Id)        
 }
 
 <ul id="CommentUl" class="list-group" style="max-width: 560px;">
@@ -88,13 +93,10 @@
                 <span class="glyphicon glyphicon-user"></span>
                 <span class="text-primary">@Html.DisplayFor(modelItem => item.User)</span>
                 <span>@Html.DisplayFor(modelItem => item.Text)</span>
-
             </p>
             <p>
-                <span class="text-muted">@item.Date.ToString("dd. MMMM HH:mm") - </span>
-     
+                <span class="text-muted">@item.Date.ToString("dd. MMMM HH:mm") - </span>    
             </p>
-
         </li>
     }
 
@@ -110,8 +112,7 @@
     </div>
 }
 
-<script type="text/html" id="commentTemplate">
-  
+<script type="text/html" id="commentTemplate"> 
     <li class="list-group-item">
         <p>
             <span class="glyphicon glyphicon-user"></span>
@@ -119,13 +120,9 @@
             <span data-content="Text"></span>
         </p>
         <p>
-            <span class="text-muted" data-content="Date"></span>
-            
+            <span class="text-muted" data-content="Date"></span>            
         </p>
-
-    </li>
-
-   
+    </li>   
 </script>
 
 <div>

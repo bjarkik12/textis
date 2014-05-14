@@ -31,16 +31,13 @@
     <table class="table">
         <tr>
             <th>
+                Myndefni
+            </th>
+            <th>
                 Notandi
             </th>
             <th>
                 Dagsetning
-            </th>
-            <th>
-                Myndefni
-            </th>
-            <th>
-                Staða
             </th>
             @*<th>
                 Vefslóð
@@ -48,22 +45,28 @@
             <th>
                 Flokkur
             </th>
+            <th>
+                Staða
+            </th>
+@if (User.Identity.IsAuthenticated) { 
             <th></th>
+}
         </tr>
         @foreach (var item in Model)
         {
             <tr>
+                <td>                    
+                    @using (Html.BeginForm("DownloadFileFromIndex", "Project", FormMethod.Post, new { enctype = "multipart/form-data", id = item.Id }))
+                    {
+                        @Html.ActionLink(item.Name, "DownloadFileFromIndex", new { id = item.Id })             
+                       
+                    }                   
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.User)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Date)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
                 </td>
                 @*<td>
                     @Html.DisplayFor(modelItem => item.Url)
@@ -72,10 +75,15 @@
                     @Html.DisplayFor(modelItem => item.CategoryName)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+@if (User.Identity.IsAuthenticated) { 
+                <td>
                     @Html.ActionLink("Breyta", "Edit", new { id = item.Id }) |
                     @Html.ActionLink("Nánar", "Details", new { id = item.Id }) |
                     @Html.ActionLink("Eyða", "Delete", new { id = item.Id })
                 </td>
+}
             </tr>
         }
     </table>
