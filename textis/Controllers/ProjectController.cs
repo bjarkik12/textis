@@ -175,21 +175,28 @@ namespace textis.Controllers
                     }
                 }
 
-                // extract only the fielname
+                // extract the fielname and add the save location
                 var fileName = Path.GetFileName(file.FileName);
-                //var x = Path.GetExtension(file.FileName); Check if file is .srt ???
-                // store the file inside ~/App_Data/uploads folder
-                var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);
+                var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);   
+                
+                //make sure the file format is ok
+                if (".srt" != Path.GetExtension(path))
+                {
+                    //ViewBag("Only .srt files allowed.");
+                    return RedirectToAction("Edit", new { id = id });
+                }
+
+                //save the file
                 file.SaveAs(path);
 
-                //Various vaiables
+                //Various variables
                 StreamReader streamUpload = new StreamReader(path);
                 string fileLine = "";
                 string timeCapsule;
                 string fakeYear = "1/1/2000 ";
                 string fakeDot = ".";
-                DateTime fakeNow = DateTime.Now;
-                string fakeUser = GetUsername();
+                DateTime timeNow = DateTime.Now;
+                string user = GetUsername();
 
                 //to gain speed the file is stored in an array and the stream is closed
                 string[] linesOfUpload = System.IO.File.ReadAllLines(path);
@@ -198,10 +205,10 @@ namespace textis.Controllers
                 System.IO.File.Delete(path);
 
                 //This is working too slow but WHY !!!???
-                //Need to clean up -> too many if (break)
+                //Need to clean up: too many if(x)->break;
                 for(int i = 0; i < numberOfLines; )
                 {
-                    fileLine = linesOfUpload[i++]; //This is the line number (which we will not use)
+                    fileLine = linesOfUpload[i++]; //This is the line number (which we will disregard)
 
                     //in case the file has extra empty lines
                     if (fileLine == "" || i >= numberOfLines)
@@ -218,7 +225,7 @@ namespace textis.Controllers
 
                     ProjectLine line = new ProjectLine();
 
-                    fileLine = linesOfUpload[i++]; //now myLine is holding the time
+                    fileLine = linesOfUpload[i++]; //now myLine is holding the time to and from
                     //Now we need to get the timestring to the correct format before parsing it to DateTime
                     timeCapsule = fakeYear + fileLine.Substring(0, 8) + fakeDot + fileLine.Substring(9, 3);
                     line.TimeFrom = Convert.ToDateTime(timeCapsule);
@@ -261,8 +268,8 @@ namespace textis.Controllers
                         }
                     }
 
-                    line.Date = fakeNow;
-                    line.User = fakeUser;
+                    line.Date = timeNow;
+                    line.User = user;
                     line.Language = "EN";
                     line.ProjectId = id;
 
@@ -272,8 +279,8 @@ namespace textis.Controllers
                     lineIcelandic.Language = "IS";
                     lineIcelandic.TimeFrom = line.TimeFrom;
                     lineIcelandic.TimeTo = line.TimeTo;
-                    lineIcelandic.Date = fakeNow;
-                    lineIcelandic.User = fakeUser;
+                    lineIcelandic.Date = timeNow;
+                    lineIcelandic.User = user;
 
                     m_ProjectLineRepository.Create(line);
                     m_ProjectLineRepository.Create(lineIcelandic);
