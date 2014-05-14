@@ -112,21 +112,23 @@ namespace textis.Controllers
         }
 
         public ActionResult Index(string category, string searchString, string sortOrder)
-        {            
-            ViewBag.userSort = String.IsNullOrEmpty(sortOrder) ? "User" : "";
-            ViewBag.dateSort = sortOrder == "Date" ? "date_desc" : "Date";
-            ViewBag.nameSort = String.IsNullOrEmpty(sortOrder) ? "Name" : "";
-            ViewBag.statusSort = String.IsNullOrEmpty(sortOrder) ? "Status" : "";
-            ViewBag.categorySort = String.IsNullOrEmpty(sortOrder) ? "Category" : "";
+        {  
+            //Table of projects: Get sort info from user decending or acending
+            ViewBag.userSort = String.IsNullOrEmpty(sortOrder) ? "User" : "user_descending";
+            ViewBag.dateSort = sortOrder == "Date" ? "Date" : "date_desc";
+            ViewBag.nameSort = String.IsNullOrEmpty(sortOrder) ? "Name" : "name_descending";
+            ViewBag.statusSort = String.IsNullOrEmpty(sortOrder) ? "Status" : "status_descending";
+            ViewBag.categorySort = String.IsNullOrEmpty(sortOrder) ? "Category" : "category_descending";
+
+            //If the user has selected a catecory or input a search string:
             ViewBag.categoryBag = category;
             ViewBag.searchBag = searchString;
-
-            var categoryList = new List<string>();
-
+            
             var categoryQuery = from n in m_ProjectRepository.GetAll()
                                 orderby n.Category.Name
                                 select n.Category.Name;
 
+            var categoryList = new List<string>();
             categoryList.AddRange(categoryQuery.Distinct());
             ViewBag.category = new SelectList(categoryList);
 
@@ -143,17 +145,16 @@ namespace textis.Controllers
                 project = project.Where(x => x.Category.Name == category);
             }
 
-    
-
-
+            //Sort projectlist, if nothing selected then newest first
             switch (sortOrder)
             {
                 case "User":
                     project = project.OrderBy(s => s.User);
                     break;
-                //case "user_des":
-                //    project = project.OrderByDescending(s => s.User);
-                case "date_desc":
+                case "user_descending":
+                    project = project.OrderByDescending(s => s.User);
+                    break;
+                case "date_descending":
                     project = project.OrderByDescending(s => s.Date);
                     break;
                 case "Date":
@@ -162,17 +163,26 @@ namespace textis.Controllers
                 case "Name":
                     project = project.OrderBy(s => s.Name);
                     break;
-                case "name_des":
+                case "name_descending":
                     project = project.OrderByDescending(s => s.Name);
                     break;
                 case "Status":
                     project = project.OrderBy(s => s.Status);
                     break;
+                case "status_descending":
+                    project = project.OrderByDescending(s => s.Status);
+                    break;
                 case "Category":
                     project = project.OrderBy(s => s.Category.Name);
                     break;
+                case "category_descending":
+                    project = project.OrderByDescending(s => s.Category.Name);
+                    break;
                 default:
-                    project = project.OrderBy(s => s.Name);
+                    if (sortOrder == null)
+                    {
+                       project = project.OrderBy(s => s.Date); 
+                    }
                     break;
             }
 
@@ -185,7 +195,6 @@ namespace textis.Controllers
 
                 m_ProjectViewModelList.Add(projectViewModel);
             }
-
 
             return View(m_ProjectViewModelList);
         }

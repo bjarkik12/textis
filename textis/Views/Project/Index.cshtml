@@ -33,19 +33,19 @@
             @Html.ActionLink("Notandi", "Index", new { sortOrder = ViewBag.userSort, category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
         </th>
         <th>
-            @Html.ActionLink("Dagsetning", "Index", new { sortOrder = ViewBag.dateSort, category = ViewBag.categoryBag })
+            @Html.ActionLink("Dagsetning", "Index", new { sortOrder = ViewBag.dateSort, category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
         </th>
         <th>
-            @Html.ActionLink("Titill", "Index", new { sortOrder = ViewBag.nameSort, category = ViewBag.categoryBag })
+            @Html.ActionLink("Titill", "Index", new { sortOrder = ViewBag.nameSort, category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
         </th>
         <th>
-            @Html.ActionLink("Staða", "Index", new { sortOrder = ViewBag.statusSort, category = ViewBag.categoryBag })
+            @Html.ActionLink("Staða", "Index", new { sortOrder = ViewBag.statusSort, category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
         </th>
         @*<th>
                 Vefslóð
             </th>*@
         <th>
-            @Html.ActionLink("Flokkur", "Index", new { sortOrder = ViewBag.categorySort, category = ViewBag.categoryBag })
+            @Html.ActionLink("Flokkur", "Index", new { sortOrder = ViewBag.categorySort, category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
         </th>
         <th></th>
     </tr>
