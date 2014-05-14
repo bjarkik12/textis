@@ -23,6 +23,7 @@ namespace textis.Controllers
         private ProjectViewModel m_ProjectViewModel;
         private List<ProjectViewModel> m_ProjectViewModelList;
 
+ 
         public string GetUsername()
         {
             if (Request.IsAuthenticated)
@@ -46,7 +47,70 @@ namespace textis.Controllers
             m_ProjectLineRepository = new ProjectLineRepository();
         }
 
-        public ActionResult Index(string category, string searchString, string sortOrder)
+        /// <summary>
+        /// Populate ProjectViewModel with related data (lines for comment, upvotes and lines)
+        /// </summary>
+        /// <param name="projectViewModel"></param>
+        /// <returns>ProjectViewModel</returns>
+        private ProjectViewModel PopulateProjectViewModel(ProjectViewModel projectViewModel)
+        {
+            projectViewModel.CommentLines = (from item in m_CommentRepository.GetByProjectId(projectViewModel.Id)
+                                             select new CommentViewModel
+                                             {
+                                                 Id = item.Id,
+                                                 Date = item.Date,
+                                                 ProjectId = item.ProjectId,
+                                                 ProjectName = item.Project.Name,
+                                                 Text = item.Text,
+                                                 User = item.User
+                                             }).ToList();
+
+            projectViewModel.UpvoteLines = (from item in m_UpvoteRepository.GetByProjectId(projectViewModel.Id)
+                                            select new UpvoteViewModel
+                                            {
+                                                Id = item.Id,
+                                                Date = item.Date,
+                                                ProjectId = item.ProjectId,
+                                                User = item.User,
+                                                ProjectName = item.Project.Name
+                                            }).ToList();
+            projectViewModel.UpvoteCount = projectViewModel.UpvoteLines.Count();
+
+            projectViewModel.SourceProjectLines = (from item in m_ProjectLineRepository.GetByProjectId(projectViewModel.Id)
+                                                   select new ProjectLineViewModel
+                                                   {
+                                                       Id = item.Id,
+                                                       Date = item.Date,
+                                                       Language = item.Language,
+                                                       ProjectId = item.ProjectId,
+                                                       ProjectName = item.Project.Name,
+                                                       ProjectUser = item.Project.User,
+                                                       TextLine1 = item.TextLine1,
+                                                       TextLine2 = item.TextLine2,
+                                                       TimeFrom = item.TimeFrom,
+                                                       TimeTo = item.TimeTo,
+                                                       User = item.User
+                                                   }).Where(m => m.Language == "EN").ToList();
+
+            projectViewModel.DestinationProjectLines = (from item in m_ProjectLineRepository.GetByProjectId(projectViewModel.Id)
+                                                        select new ProjectLineViewModel
+                                                        {
+                                                            Id = item.Id,
+                                                            Date = item.Date,
+                                                            Language = item.Language,
+                                                            ProjectId = item.ProjectId,
+                                                            ProjectName = item.Project.Name,
+                                                            ProjectUser = item.Project.User,
+                                                            TextLine1 = item.TextLine1,
+                                                            TextLine2 = item.TextLine2,
+                                                            TimeFrom = item.TimeFrom,
+                                                            TimeTo = item.TimeTo,
+                                                            User = item.User
+                                                        }).Where(m => m.Language == "IS").ToList();
+            return projectViewModel;
+        }
+
+        public ActionResult Index(string category, string searchString)
         {
             var categoryList = new List<string>();
 
@@ -70,56 +134,22 @@ namespace textis.Controllers
                 project = project.Where(x => x.Category.Name == category);
             }
 
-            //tilraun          
-            ViewBag.userSort = String.IsNullOrEmpty(sortOrder) ? "User" : "";
-            ViewBag.dateSort = sortOrder == "Date" ? "date_desc" : "Date";
-            ViewBag.nameSort = String.IsNullOrEmpty(sortOrder) ? "Name" : "";
-            ViewBag.statusSort = String.IsNullOrEmpty(sortOrder) ? "Status" : "";
-            ViewBag.categorySort = String.IsNullOrEmpty(sortOrder) ? "Category" : "";
-
-            switch (sortOrder)
-            {
-                case "User":
-                    project = project.OrderBy(s => s.User);
-                    break;
-                //case "user_des":
-                //    project = project.OrderByDescending(s => s.User);
-                //    break;
-                case "date_desc":
-                    project = project.OrderByDescending(s => s.Date);
-                    break;
-                case "Date":
-                    project = project.OrderBy(s => s.Date);
-                    break;
-                case "Name":
-                    project = project.OrderBy(s => s.Name);
-                    break;
-                case "name_des":
-                    project = project.OrderByDescending(s => s.Name);
-                    break;
-                case "Status":
-                    project = project.OrderBy(s => s.Status);
-                    break;
-                case "Category":
-                    project = project.OrderBy(s => s.Category.Name);
-                    break;
-                default:
-                    project = project.OrderBy(s => s.Name);
-                    break;
-            }
-
             foreach (Project x in project.ToList())
             {
                 ProjectViewModel projectViewModel = new ProjectViewModel(x);
+
+                // add related information to projectViewModel (commentlines, upvotelines, projectlines, etc)
+                projectViewModel = PopulateProjectViewModel(projectViewModel);
+
                 m_ProjectViewModelList.Add(projectViewModel);
             }
+
 
             return View(m_ProjectViewModelList);
         }
 
         // GET: /Project/Details/5
-        
-        
+
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -132,7 +162,12 @@ namespace textis.Controllers
                 return HttpNotFound();
             }
 
-            return View(new ProjectViewModel (project));
+            ProjectViewModel projectViewModel = new ProjectViewModel(project);
+
+            // add related information to projectViewModel (commentlines, upvotelines, projectlines, etc)
+            projectViewModel = PopulateProjectViewModel(projectViewModel);
+
+            return View(projectViewModel);
         }
 
         // GET: /Project/Create
@@ -155,9 +190,11 @@ namespace textis.Controllers
                 projectViewModel.User = GetUsername();
                 projectViewModel.Date = DateTime.Now;
                 projectViewModel.Status = "Stofnað";
+
                 project = projectViewModel.CastViewModelToModel();
                 m_ProjectRepository.Create(project);
                 m_ProjectRepository.Save();
+
                 return RedirectToAction("Index");
             }
 
@@ -179,9 +216,13 @@ namespace textis.Controllers
                 return HttpNotFound();
             }
 
-            m_ProjectViewModel = new ProjectViewModel(m_ProjectRepository.GetSingle(id));
+            ProjectViewModel projectViewModel = new ProjectViewModel(project);
+            // add related information to projectViewModel (commentlines, upvotelines, projectlines, etc)
+            projectViewModel = PopulateProjectViewModel(projectViewModel);
+
+            // SelectList for Category
             ViewBag.CategoryId = new SelectList(m_CategoryRepository.GetAll(), "Id", "Name", project.CategoryId);
-            return View(m_ProjectViewModel);
+            return View(projectViewModel);
         }
 
         // POST: /Project/Edit/5
@@ -214,10 +255,8 @@ namespace textis.Controllers
         public ActionResult Upload(HttpPostedFileBase file, int id)
         {
             // Todo:
-            // Allow only .srt files
-            // Error handling: try/cacth for corrupt or wrong files
-            //ProjectLineRepository m_ProjectLineRepository = new ProjectLineRepository();
-            // Verify that the user selected a file
+            // Send user some friendly error messages
+
             if (file != null && file.ContentLength > 0)
             {
                 //Get rid of previous text lines, if there are any
@@ -232,21 +271,28 @@ namespace textis.Controllers
                     }
                 }
 
-                // extract only the fielname
+                // extract the fielname and add the save location
                 var fileName = Path.GetFileName(file.FileName);
-                //var x = Path.GetExtension(file.FileName); Check if file is .srt ???
-                // store the file inside ~/App_Data/uploads folder
-                var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);
+                var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);   
+                
+                //make sure the file format is ok
+                if (".srt" != Path.GetExtension(path))
+                {
+                    //Need to send add some message to notify the user
+                    return RedirectToAction("Edit", new { id = id });
+                }
+
+                //save the file
                 file.SaveAs(path);
 
-                //Various vaiables
+                //Various variables
                 StreamReader streamUpload = new StreamReader(path);
                 string fileLine = "";
                 string timeCapsule;
                 string fakeYear = "1/1/2000 ";
                 string fakeDot = ".";
-                DateTime fakeNow = DateTime.Now;
-                string fakeUser = GetUsername();
+                DateTime timeNow = DateTime.Now;
+                string user = GetUsername();
 
                 //to gain speed the file is stored in an array and the stream is closed
                 string[] linesOfUpload = System.IO.File.ReadAllLines(path);
@@ -254,89 +300,98 @@ namespace textis.Controllers
                 streamUpload.Close();
                 System.IO.File.Delete(path);
 
-                //This is working too slow but WHY !!!???
-                //Need to clean up -> too many if (break)
-                for(int i = 0; i < numberOfLines; )
+                try
                 {
-                    fileLine = linesOfUpload[i++]; //This is the line number (which we will not use)
-
-                    //in case the file has extra empty lines
-                    if (fileLine == "" || i >= numberOfLines)
+                    //This is working too slow but WHY !!!???
+                    //Need to clean up: too many if(x)->break;
+                    for (int i = 0; i < numberOfLines; )
                     {
-                        while (fileLine == "")
+                        fileLine = linesOfUpload[i++]; //This is the line number (which we will disregard)
+
+                        //in case the file has extra empty lines
+                        if (fileLine == "" || i >= numberOfLines)
                         {
-                            if (i >= numberOfLines)
+                            while (fileLine == "")
                             {
-                                break;
+                                if (i >= numberOfLines)
+                                {
+                                    break;
+                                }
+                                fileLine = linesOfUpload[i++];
                             }
-                            fileLine = linesOfUpload[i++];   
                         }
-                    }
 
-                    ProjectLine line = new ProjectLine();
+                        ProjectLine line = new ProjectLine();
 
-                    fileLine = linesOfUpload[i++]; //now myLine is holding the time
-                    //Now we need to get the timestring to the correct format before parsing it to DateTime
-                    timeCapsule = fakeYear + fileLine.Substring(0, 8) + fakeDot + fileLine.Substring(9, 3);
-                    line.TimeFrom = Convert.ToDateTime(timeCapsule);
-                    timeCapsule = fakeYear + fileLine.Substring(17, 8) + fakeDot + fileLine.Substring(26, 3);
-                    line.TimeTo = Convert.ToDateTime(timeCapsule);
+                        fileLine = linesOfUpload[i++]; //now myLine is holding the time to and from
+                        //Now we need to get the timestring to the correct format before parsing it to DateTime
+                        timeCapsule = fakeYear + fileLine.Substring(0, 8) + fakeDot + fileLine.Substring(9, 3);
+                        line.TimeFrom = Convert.ToDateTime(timeCapsule);
+                        timeCapsule = fakeYear + fileLine.Substring(17, 8) + fakeDot + fileLine.Substring(26, 3);
+                        line.TimeTo = Convert.ToDateTime(timeCapsule);
 
-                    //we are sure to have at least one line
-                    fileLine = linesOfUpload[i++];
-                    line.TextLine1 = fileLine;
-
-                    //in case it was the last line
-                    if (i >= numberOfLines)
-                    {
-                        break;
-                    }
-
-                    //there may or may not be a second line
-                    fileLine = linesOfUpload[i++];
-
-                    if (fileLine != "")
-                    {
-                        line.TextLine2 = fileLine;
+                        //we are sure to have at least one line
                         fileLine = linesOfUpload[i++];
-                    }
+                        line.TextLine1 = fileLine;
 
-                    //again in case it was the last line
-                    if (i >= numberOfLines)
-                    {
-                        break;
-                    }
-
-                    //just in case there are more lines that we cannot handle
-                    while (fileLine != "" && i < numberOfLines)
-                    {
-                        fileLine = linesOfUpload[i++];
-
+                        //in case it was the last line
                         if (i >= numberOfLines)
                         {
                             break;
                         }
+
+                        //there may or may not be a second line
+                        fileLine = linesOfUpload[i++];
+
+                        if (fileLine != "")
+                        {
+                            line.TextLine2 = fileLine;
+                            fileLine = linesOfUpload[i++];
+                        }
+
+                        //again in case it was the last line
+                        if (i >= numberOfLines)
+                        {
+                            break;
+                        }
+
+                        //just in case there are more lines that we cannot handle
+                        while (fileLine != "" && i < numberOfLines)
+                        {
+                            fileLine = linesOfUpload[i++];
+
+                            if (i >= numberOfLines)
+                            {
+                                break;
+                            }
+                        }
+
+                        line.Date = timeNow;
+                        line.User = user;
+                        line.Language = "EN";
+                        line.ProjectId = id;
+
+                        //The parallel Icelandic text:
+                        ProjectLine lineIcelandic = new ProjectLine();
+                        lineIcelandic.ProjectId = line.ProjectId;
+                        lineIcelandic.Language = "IS";
+                        lineIcelandic.TimeFrom = line.TimeFrom;
+                        lineIcelandic.TimeTo = line.TimeTo;
+                        lineIcelandic.Date = timeNow;
+                        lineIcelandic.User = user;
+
+                        m_ProjectLineRepository.Create(line);
+                        m_ProjectLineRepository.Create(lineIcelandic);
                     }
 
-                    line.Date = fakeNow;
-                    line.User = fakeUser;
-                    line.Language = "EN";
-                    line.ProjectId = id;
+                    m_ProjectLineRepository.Save();
 
-                    //The parallel Icelandic text:
-                    ProjectLine lineIcelandic = new ProjectLine();
-                    lineIcelandic.ProjectId = line.ProjectId;
-                    lineIcelandic.Language = "IS";
-                    lineIcelandic.TimeFrom = line.TimeFrom;
-                    lineIcelandic.TimeTo = line.TimeTo;
-                    lineIcelandic.Date = fakeNow;
-                    lineIcelandic.User = fakeUser;
-
-                    m_ProjectLineRepository.Create(line);
-                    m_ProjectLineRepository.Create(lineIcelandic);
                 }
-
-                m_ProjectLineRepository.Save();
+                catch (Exception)
+                {
+                    // we need to add some error message to user
+                    return RedirectToAction("Edit", new { id = id });
+                }
             }
 
             return RedirectToAction("Edit", new { id = id });
@@ -345,19 +400,19 @@ namespace textis.Controllers
         [HttpPost]
         public ActionResult DownloadFile(int? id)
         {
-            //var projectToDownload = m_ProjectLineRepository.GetByProjectId(id);
-            //projectToDownload = projectToDownload.Where(x => x.Language == "IS");
+            // Todo:
+            // Only allow download if data has been entered or file marked ready
+
+            //Get all the lines from server and order them by time
             var projectToDownload = from x in m_ProjectLineRepository.GetByProjectId(id)
                                     where x.Language == "IS"
                                     orderby x.TimeFrom ascending
                                     select x;
-               
-           // ProjectLine line = new ProjectLine();
 
             int i = 0; // array locaton
             int j = 1; //Line numbers to be printed
             string time;
-            //all print lines collected in a array
+            //all print lines collected in an array
             string[] linesToPrint = new string[10000];
 
             foreach(ProjectLine line in projectToDownload)
@@ -383,17 +438,20 @@ namespace textis.Controllers
                 j++;
             }
 
-            //create and store a file
+            //create and store a .srt file
             var project = m_ProjectRepository.GetSingle(id);
             string fileName = project.Name + ".srt";
             var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);
             System.IO.File.WriteAllLines(path, linesToPrint);
 
             //send the new file to the user
+            //( As seen on youtube: www.youtube.com/watch?v=-EH1zptSmdQ )
             Response.ContentType = "application/octet-stream";
             Response.AppendHeader("content-disposition", "attachment;filename=" + fileName);
             Response.TransmitFile(path);
             Response.End();
+
+            //clean up, we have no more use for that file
             System.IO.File.Delete(path);
 
             return RedirectToAction("Edit", new { id = id });
