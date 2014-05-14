@@ -40,7 +40,7 @@ input[type="checkbox"].input-validation-error {
 
 .validation-summary-errors {
     color: #b94a48;
-C:\Users\Gunnhildur\Source\Repos\newtextis\textis\Views\Home\Index.cshtml}
+}
 
 .validation-summary-valid {
     display: none;
@@ -72,7 +72,6 @@ h1{
     font-weight:bold;
 }
 
-
 h2{
     text-align: center;
 }
@@ -88,4 +87,86 @@ h4{
 #text_request{
     padding: 1em;
     font-size: 20px;
+}
+
+.subsection_edit_page{
+    width: auto;
+}
+
+.subtitle_display{
+    align-items: center;
+    text-align: center;
+    align-content: center;
+    border: 0px solid black;
+    height: 500px;
+    width: 1140px;
+    overflow:auto;
+}
+
+.subtitle_display div{
+    height: auto;
+	width: auto;
+	border: 0px solid black;
+	display:inline-block;
+}
+
+#subtitle_en{
+    /*background-color: #FF0000;*/
+}
+
+#subtitle_is{
+    /*background-color: #0000FF;*/
+}
+
+#subtitle_time{
+    /*background-color: #FFD700;*/
+}
+
+.edit_textline{
+    width: 410px;
+}
+
+.edit_timeline{
+    width: 110px;
+}
+
+.edit_header{
+    font-weight: bold;
+}
+
+.bleh{
+    width: auto;
+}
+
+.subtitle_tools{
+    border: 0px solid black;
+    margin: 10px;
+    
+}
+.subtitle_tools div{
+    text-align: center;
+    margin:0 auto;
+    width: 200px;
+    border: 0px solid black;
+    display: inline-block;
+}
+
+.subtitle_tools #edit_upload{
+    width: 300px;
+}
+
+.button{
+    color: white;
+    width:auto;
+    background: #0096fd;
+    border:1px solid #0096fd;
+    border-radius: 6px;
+    font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight:bold;
+}
+
+.comment_section{
+    border:0px solid black;
+    margin: auto;
+    margin-top: 50px;
 }

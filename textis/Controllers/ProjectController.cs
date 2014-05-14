@@ -88,7 +88,9 @@ namespace textis.Controllers
                                                        TextLine1 = item.TextLine1,
                                                        TextLine2 = item.TextLine2,
                                                        TimeFrom = item.TimeFrom,
+                                                       TimeFromString = item.TimeFrom.ToString("HH:mm:ss:fff"),
                                                        TimeTo = item.TimeTo,
+                                                       TimeToString = item.TimeTo.ToString("HH:mm:ss:fff"),
                                                        User = item.User
                                                    }).Where(m => m.Language == "EN").ToList();
 
