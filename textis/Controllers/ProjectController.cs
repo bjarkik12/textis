@@ -46,7 +46,7 @@ namespace textis.Controllers
             m_ProjectLineRepository = new ProjectLineRepository();
         }
 
-        public ActionResult Index(string category, string searchString)
+        public ActionResult Index(string category, string searchString, string sortOrder)
         {
             var categoryList = new List<string>();
 
@@ -68,6 +68,44 @@ namespace textis.Controllers
             if (!string.IsNullOrEmpty(category))
             {
                 project = project.Where(x => x.Category.Name == category);
+            }
+
+            //tilraun          
+            ViewBag.userSort = String.IsNullOrEmpty(sortOrder) ? "User" : "";
+            ViewBag.dateSort = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewBag.nameSort = String.IsNullOrEmpty(sortOrder) ? "Name" : "";
+            ViewBag.statusSort = String.IsNullOrEmpty(sortOrder) ? "Status" : "";
+            ViewBag.categorySort = String.IsNullOrEmpty(sortOrder) ? "Category" : "";
+
+            switch (sortOrder)
+            {
+                case "User":
+                    project = project.OrderBy(s => s.User);
+                    break;
+                //case "user_des":
+                //    project = project.OrderByDescending(s => s.User);
+                //    break;
+                case "date_desc":
+                    project = project.OrderByDescending(s => s.Date);
+                    break;
+                case "Date":
+                    project = project.OrderBy(s => s.Date);
+                    break;
+                case "Name":
+                    project = project.OrderBy(s => s.Name);
+                    break;
+                case "name_des":
+                    project = project.OrderByDescending(s => s.Name);
+                    break;
+                case "Status":
+                    project = project.OrderBy(s => s.Status);
+                    break;
+                case "Category":
+                    project = project.OrderBy(s => s.Category.Name);
+                    break;
+                default:
+                    project = project.OrderBy(s => s.Name);
+                    break;
             }
 
             foreach (Project x in project.ToList())

@@ -31,22 +31,22 @@
     <table class="table">
         <tr>
             <th>
-                Notandi
+                @Html.ActionLink("Notandi", "Index", new { sortOrder = ViewBag.userSort })
             </th>
             <th>
-                Dagsetning
+                @Html.ActionLink("Dagsetning", "Index", new { sortOrder = ViewBag.dateSort })
             </th>
             <th>
-                Myndefni
+                @Html.ActionLink("Titill", "Index", new { sortOrder = ViewBag.nameSort })
             </th>
             <th>
-                Staða
+                @Html.ActionLink("Staða", "Index", new { sortOrder = ViewBag.statusSort })
             </th>
             @*<th>
                 Vefslóð
             </th>*@
             <th>
-                Flokkur
+                @Html.ActionLink("Flokkur", "Index", new { sortOrder = ViewBag.categorySort })
             </th>
             <th></th>
         </tr>
