@@ -14,7 +14,9 @@ namespace textis.ViewModel
         public String TextLine1 { get; set; }
         public String TextLine2 { get; set; }
         public DateTime TimeFrom { get; set; }
+        public string TimeFromString { get; set; }
         public DateTime TimeTo { get; set; }
+        public string TimeToString { get; set; }
         public String Language { get; set; }
         public DateTime Date { get; set; }
         public int Id { get; set; }
@@ -32,7 +34,9 @@ namespace textis.ViewModel
             TextLine1 = projectLine.TextLine1;
             TextLine2 = projectLine.TextLine2;
             TimeFrom = projectLine.TimeFrom;
+            TimeFromString = TimeFrom.ToString("HH:mm:ss:fff");
             TimeTo = projectLine.TimeTo;
+            TimeToString = TimeTo.ToString("HH:mm:ss:fff");
             Language = projectLine.Language;
             Date = projectLine.Date;
             Id = projectLine.Id;
