@@ -13,6 +13,7 @@ using textis.ViewModel;
 
 namespace textis.Controllers
 {
+    [Authorize]
     public class CommentController : Controller
     {
         ICommentRepository m_CommentRepository;

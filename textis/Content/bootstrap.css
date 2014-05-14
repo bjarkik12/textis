@@ -4385,7 +4385,7 @@ a.list-group-item.active > .badge,
 @media screen and (min-width: 768px) {
   .jumbotron {
     padding-top: 48px;
-    padding-bottom: 48px;
+    padding-bottom: 24px;
   }
   .container .jumbotron {
     padding-left: 60px;
