@@ -111,8 +111,16 @@ namespace textis.Controllers
             return projectViewModel;
         }
 
-        public ActionResult Index(string category, string searchString, string sortOrder, string currentFilter, int? page)
-        {
+        public ActionResult Index(string category, string searchString, string sortOrder)
+        {            
+            ViewBag.userSort = String.IsNullOrEmpty(sortOrder) ? "User" : "";
+            ViewBag.dateSort = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewBag.nameSort = String.IsNullOrEmpty(sortOrder) ? "Name" : "";
+            ViewBag.statusSort = String.IsNullOrEmpty(sortOrder) ? "Status" : "";
+            ViewBag.categorySort = String.IsNullOrEmpty(sortOrder) ? "Category" : "";
+            ViewBag.categoryBag = category;
+            ViewBag.searchBag = searchString;
+
             var categoryList = new List<string>();
 
             var categoryQuery = from n in m_ProjectRepository.GetAll()
@@ -135,12 +143,8 @@ namespace textis.Controllers
                 project = project.Where(x => x.Category.Name == category);
             }
 
-            ViewBag.currentSort = sortOrder;
-            ViewBag.userSort = String.IsNullOrEmpty(sortOrder) ? "User" : "";
-            ViewBag.dateSort = sortOrder == "Date" ? "date_desc" : "Date";
-            ViewBag.nameSort = String.IsNullOrEmpty(sortOrder) ? "Name" : "";
-            ViewBag.statusSort = String.IsNullOrEmpty(sortOrder) ? "Status" : "";
-            ViewBag.categorySort = String.IsNullOrEmpty(sortOrder) ? "Category" : "";
+    
+
 
             switch (sortOrder)
             {

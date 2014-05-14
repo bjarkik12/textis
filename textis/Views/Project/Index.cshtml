@@ -6,7 +6,7 @@
 
 
 
-    @*@using (Html.BeginForm("Index", "Project", FormMethod.Get)){
+@*@using (Html.BeginForm("Index", "Project", FormMethod.Get)){
     <p>
         Title: @Html.TextBox("SearchString") <br />
         <input type="submit" value="Leita" />
@@ -25,57 +25,56 @@
             </p>
         </div>
     }
-    
 </div>
 
-    <table class="table">
-        <tr>
-            <th>
-                @Html.ActionLink("Notandi", "Index", new { sortOrder = ViewBag.userSort })
-            </th>
-            <th>
-                @Html.ActionLink("Dagsetning", "Index", new { sortOrder = ViewBag.dateSort })
-            </th>
-            <th>
-                @Html.ActionLink("Titill", "Index", new { sortOrder = ViewBag.nameSort })
-            </th>
-            <th>
-                @Html.ActionLink("Staða", "Index", new { sortOrder = ViewBag.statusSort })
-            </th>
-            @*<th>
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Notandi", "Index", new { sortOrder = ViewBag.userSort, category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
+        </th>
+        <th>
+            @Html.ActionLink("Dagsetning", "Index", new { sortOrder = ViewBag.dateSort, category = ViewBag.categoryBag })
+        </th>
+        <th>
+            @Html.ActionLink("Titill", "Index", new { sortOrder = ViewBag.nameSort, category = ViewBag.categoryBag })
+        </th>
+        <th>
+            @Html.ActionLink("Staða", "Index", new { sortOrder = ViewBag.statusSort, category = ViewBag.categoryBag })
+        </th>
+        @*<th>
                 Vefslóð
             </th>*@
-            <th>
-                @Html.ActionLink("Flokkur", "Index", new { sortOrder = ViewBag.categorySort })
-            </th>
-            <th></th>
-        </tr>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.User)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Date)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-                @*<td>
+        <th>
+            @Html.ActionLink("Flokkur", "Index", new { sortOrder = ViewBag.categorySort, category = ViewBag.categoryBag })
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.User)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            @*<td>
                     @Html.DisplayFor(modelItem => item.Url)
                 </td>*@
-                <td>
-                    @Html.DisplayFor(modelItem => item.CategoryName)
-                </td>
-                <td>
-                    @Html.ActionLink("Breyta", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Nánar", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Eyða", "Delete", new { id = item.Id })
-                </td>
-            </tr>
-        }
-    </table>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryName)
+            </td>
+            <td>
+                @Html.ActionLink("Breyta", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Nánar", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Eyða", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+</table>
