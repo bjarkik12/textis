@@ -175,21 +175,45 @@ namespace textis.Controllers
             base.Dispose(disposing);
         }
 
+
+        //public IEnumerable<Comment> GetComments(int id)
+        //{
+        //    var result = from c in m_CommentRepository.GetByProjectId(id)
+        //                 orderby c.Date ascending
+        //                 select c;
+        //    return result;
+        //}
+
+        public IEnumerable<CommentViewModel> GetComments(int id)
+        {
+            //var result = from c in m_CommentRepository.GetByProjectId(id)
+            //             orderby c.Date ascending
+            //             select c;
+            List<CommentViewModel> tempList = new List<CommentViewModel>();
+            //foreach (Comment tempComment in result)
+            foreach (Comment tempComment in m_CommentRepository.GetByProjectId(id))
+            {
+                tempList.Add(new CommentViewModel(tempComment));
+            }
+            return tempList;
+        }
+
         [HttpPost]
         public ActionResult AddComment(FormCollection formData)
         {
             Comment comment = new Comment();
             var tempid = Int32.Parse(formData["ProjectId"]);
-
+            //Id,ProjectId,Text,User,Date
+            comment.ProjectId = tempid;
             comment.Text = formData["Text"];
             comment.User = GetUsername();
             comment.Date = DateTime.Now;
-            comment.ProjectId = tempid;
 
             m_CommentRepository.Create(comment);
             m_CommentRepository.Save();
-
-            return Json(m_CommentRepository.GetByProjectId(tempid), JsonRequestBehavior.AllowGet);
+            //IEnumerable<Comment> test = GetComments(tempid);
+            return Json(GetComments(tempid), JsonRequestBehavior.AllowGet);
+            //return Json("status":"ok" , JsonRequestBehavior.AllowGet);
         }
     }
 }

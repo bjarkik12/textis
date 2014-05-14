@@ -13,13 +13,15 @@
     $("#Button").click(function () {
         var comment = { "Text": $("#Text").val(), "ProjectId": $("#Id").val() };
 
-        console.log(comment);
+        //console.log(comment);
         $.ajax({
             type: "POST",
             url: "/Comment/AddComment/",
             data: comment,
             dataType: "json",
             success: function (data) {
+                
+                console.log(data);
                 function ConvertStringToJSDate(dt) {
                     var dtE = /^\/Date\((-?[0-9]+)\)\/$/.exec(dt);
                     if (dtE) {
@@ -34,12 +36,19 @@
                 $("#Text").val("");
                 $("#CommentUl").empty();
                 $("#CommentUl").loadTemplate($("#commentTemplate"), data);
-
-            }
+            },
+            error: function (xhr, err) {
+                console.log("Error creating Comment");
+                // Note: just for debugging purposes!
+            alert("readyState: " + xhr.readyState +
+            "\nstatus: " + xhr.status);
+            alert("responseText: " + xhr.responseText);
+        }
         })
 
     });
 });
+
 
 //$("#link").click(function() {
 //    alert("test");

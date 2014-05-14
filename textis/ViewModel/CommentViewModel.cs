@@ -13,6 +13,7 @@ namespace textis.ViewModel
         public string ProjectName { get; set; }
         public String User { get; set; }
         [DataType(DataType.MultilineText)]
+        [Required(ErrorMessage = "Ekki mögulegt að senda tóma athugasemd")]
         public String Text { get; set; }
         public DateTime Date { get; set; }
 
@@ -24,8 +25,10 @@ namespace textis.ViewModel
         public CommentViewModel( Comment comment )
         {
             Id = comment.Id;
-            ProjectId = comment.Project.Id;
-            ProjectName = comment.Project.Name;
+            ProjectId = comment.ProjectId;
+            // these lines cause crash of comment posting...!
+            //ProjectId = comment.Project.Id;
+            //ProjectName = comment.Project.Name;
             User = comment.User;
             Text = comment.Text;
             Date = comment.Date;
