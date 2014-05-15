@@ -485,6 +485,11 @@ namespace textis.Controllers
                                     orderby x.TimeFrom ascending
                                     select x;
 
+            /*if (projectToDownload == null)
+            {
+                return RedirectToAction("Edit", new { id = id }); 
+            }*/
+
             int i = 0; // array locaton
             int j = 1; //Line numbers to be printed
             string time;
@@ -514,11 +519,26 @@ namespace textis.Controllers
                 j++;
             }
 
+            string[] printMaggiFeiti = new string[i + 1];
+            //In case the project has no saved lines
+            if (i == 0)
+            {
+                printMaggiFeiti[0] = "Því miður hafa smaladrengirnir okkar ekki komist í að þýða þessa mynd, því að litu bardagadvergarnir komu í veg fyrir það :(";
+            }
+            //If the project is not empty
+            else
+            {
+                 for (int k = 0; k < i; k++)
+			    {
+			        printMaggiFeiti[k] = linesToPrint[k];
+			    }
+            }
+       
             //create and store a .srt file
             var project = m_ProjectRepository.GetSingle(id);
             string fileName = project.Name + ".srt";
             var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);
-            System.IO.File.WriteAllLines(path, linesToPrint);
+            System.IO.File.WriteAllLines(path, printMaggiFeiti);
 
             //send the new file to the user
             //( As seen on youtube: www.youtube.com/watch?v=-EH1zptSmdQ )
@@ -530,11 +550,8 @@ namespace textis.Controllers
             //clean up, we have no more use for that file
             System.IO.File.Delete(path);
        
-            return RedirectToAction("Edit", new { id = id });
-            
+            return RedirectToAction("Edit", new { id = id }); 
         }
-
-
 
         // GET: /Project/Delete/5
         public ActionResult Delete(int? id)
