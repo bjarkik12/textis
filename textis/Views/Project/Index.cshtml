@@ -22,19 +22,19 @@
 <table class="table">
     <tr>
         <th>
+            @Html.ActionLink("Titill", "Index", new { sortOrder = "Name", category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
+        </th>
+        <th>
             @Html.ActionLink("Notandi", "Index", new { sortOrder = "User", category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
         </th>
         <th>
             @Html.ActionLink("Dagsetning", "Index", new { sortOrder = "Date", category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
         </th>
         <th>
-            @Html.ActionLink("Titill", "Index", new { sortOrder = "Name", category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
+            @Html.ActionLink("Flokkur", "Index", new { sortOrder = "Category", category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
         </th>
         <th>
             @Html.ActionLink("Staða", "Index", new { sortOrder = "Status", category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
-        </th>
-        <th>
-            @Html.ActionLink("Flokkur", "Index", new { sortOrder = "Category", category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
         </th>
         <th></th>
     </tr>
