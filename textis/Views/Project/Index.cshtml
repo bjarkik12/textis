@@ -12,12 +12,16 @@
             @Html.DropDownList("category", "Allir flokkar")
             @Html.TextBox("SearchString", "", new { placeholder = "Titill myndar", autofocus = "autofocus" })
             <input id="search_string_button" type="submit" value="Leita"/>
-            <p id="text_request">
-                Ég vil @Html.ActionLink("óska eftir texta", "Create") sem ég fann ekki.
-            </p>
         </div>
     }
 </div>
+@if (ViewBag.empty == "Empty")
+{
+    <div class="alert alert-info alert-dismissable">
+        <button type="button" class="close" aria-hidden="true">&times;</button>
+        <strong>Leitin skilaði engri niðurstöðu</strong> Var titillinn örugglega rétt sleginn inn? Eða viltu @Html.ActionLink("óska eftir texta", "Create") sem þú fannst ekki?
+    </div>
+}
 
 <table class="table" id="upvoteTable">
     <tr>
@@ -45,6 +49,7 @@
         <th>            
         </th>
     </tr>
+
     @foreach (var item in Model)
     {
         <tr>

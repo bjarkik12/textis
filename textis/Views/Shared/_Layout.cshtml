@@ -7,8 +7,6 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
    
- 
-
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -27,6 +25,7 @@
                     @*<li>@Html.ActionLink("Óska eftir texta", "Index", "Project")</li>*@
                     <li>@Html.ActionLink("Leiðbeiningar", "faq", "Home")</li>
                     <li>@Html.ActionLink("Hvað er textis?", "About", "Home")</li>
+                    <li>@Html.ActionLink("Óska eftir texta", "Create", "Project")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

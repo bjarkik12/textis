@@ -165,6 +165,12 @@ namespace textis.Controllers
                 project = project.Where(x => x.Category.Name == category);
             }
 
+            if (project.Count() == 0)
+            {
+                ViewBag.empty = "Empty";
+                return View(m_ProjectViewModelList);
+            }
+
             //Sort projectlist, if nothing selected then newest first
             switch (sortOrder)
             {
