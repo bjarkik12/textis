@@ -163,6 +163,16 @@ h4{
     font-weight:bold;
 }
 
+.button_red{
+    color: white;
+    width:auto;
+    padding:5px 25px;
+    background: red;
+    border:1px solid red;
+    border-radius: 6px;
+    font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight:bold;
+}
 .comment_section{
     border:0px solid black;
     margin: auto;
