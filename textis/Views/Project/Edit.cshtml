@@ -9,19 +9,25 @@
     <center> @Html.DisplayFor(model => model.CategoryName) || @Html.DisplayFor(model => model.User)</center>
     <hr />
 </div>
-    @using (Html.BeginForm())
+<div>
+    @Html.ActionLink("Til baka", "Index")
+</div>
+@{
+    if (Model.SourceProjectLines.Count == 0)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <span class="error_no_file">Vinsamlegast hlaðið inn textaskrá(.srt) skrá</span>
+            </div>
+        </div>
+    }
+    else { 
+    using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
         @Html.HiddenFor(model => model.Id)
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Name, "Nafn myndefnis", new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Name)
-            @Html.ValidationMessageFor(model => model.Name)
-        </div>
-    </div>
 
         <div class="subtitle_display">
             <div id="subtitle_en">
@@ -85,18 +91,13 @@
                 </table>
             </div>
         </div>
-        <div class="subtitle_tools">
-            <hr />
-            <div id="edit_upload">
-                @using (Html.BeginForm("Upload", "Project", FormMethod.Post, new { @class = "button", enctype = "multipart/form-data", id = Model.Id }))
-                {
-                    <input type='file' name='file' id='file' />
-                    <input class="button" type="submit" value="Senda inn" />
-                    @Html.HiddenFor(m => m.Id)
-                }
-            </div>
-            <div id="edit_status">
-                @Html.DropDownListFor(model => model.Status, new SelectList(
+    }
+}
+        <br />
+    <div class="row">
+        <div class="col-md-3">
+            <b>Staða: </b>
+            @Html.DropDownListFor(model => model.Status, new SelectList(
                 new List<Object>
                 {
                     new { value = "Stofnað", text = "Stofnað" },
@@ -106,27 +107,47 @@
                 "value",
                 "text",
                 "Stofnað"))
-                @Html.ValidationMessageFor(model => model.Status)
-            </div>
-            <div id="edit_category">
-                @Html.DropDownList("CategoryId", String.Empty)
-                @Html.ValidationMessageFor(model => model.CategoryId)
-            </div>
-            <div id="edit_download_link">
-                @using (Html.BeginForm("DownloadFile", "Project", FormMethod.Post, new { enctype = "multipart/form-data", id = Model.Id }))
-                {
-                    <input type="submit" class="button" name="Submit" id="Submit" value="Download" />
-                    @Html.HiddenFor(m => m.Id)
-                }
-            </div>
-            <div id="edit_save_button">
-                <input type="submit" class="button" value="Vista" />
-            </div>
+            @Html.ValidationMessageFor(model => model.Status)
+        </div>
+        <div class="col-md-3">
+            <b>Flokkur: </b>
+            @Html.DropDownList("CategoryId", "Velja flokk")
+            @Html.ValidationMessageFor(model => model.CategoryId)
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Name, "Titill: ", new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+        <div class="col-md-3">
+            <input type="submit" class="button" value="Vista" />
+        </div>
+    </div>
+    }
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            @using (Html.BeginForm("Upload", "Project", FormMethod.Post, new { @class = "", enctype = "multipart/form-data", id = Model.Id }))
+            {
+                <input type='file' name='file' id='file' />
+                <input class="button" type="submit" value="Senda inn" />
+                @Html.HiddenFor(m => m.Id)
+            }
         </div>
 
-
-    }
-    <div class="comment_section">
+        <div class="col-md-6">
+            @using (Html.BeginForm("DownloadFile", "Project", FormMethod.Post, new { enctype = "multipart/form-data", id = Model.Id }))
+            {
+                <br />
+                <input type="submit" class="button" name="Submit" id="Submit" value="Ná í Skrá" />
+                @Html.HiddenFor(m => m.Id)
+            }
+        </div>
+</div>
+<br />
+<hr />
+<h4>Athugasemdir</h4>
+    <div class="comment_section">   
         <ul id="CommentUl" class="list-group">
             @foreach (var item in Model.CommentLines)
             {
@@ -152,7 +173,7 @@
                 <label class="sr-only" for="Text">Comment</label>
                 <textarea class="form-control" rows="3" id="Text" name="Text"></textarea>
                 @Html.HiddenFor(model => model.Id)
-                <button type="submit" class="btn btn-primary" id="Button">Send</button>
+                <button type="submit" class="button" id="Button">Send</button>
             </div>
         }
 
@@ -174,11 +195,7 @@
 
         </script>
     </div>
-    <div>
-        @Html.ActionLink("Aftur í skrá", "Index")
-    </div>
-
-
+   
     @section Scripts {
         @Scripts.Render("~/bundles/jqueryval")
     }

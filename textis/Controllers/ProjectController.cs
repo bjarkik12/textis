@@ -21,8 +21,8 @@ namespace textis.Controllers
         private ICommentRepository m_CommentRepository;
         private IUpvoteRepository m_UpvoteRepository;
         private IProjectLineRepository m_ProjectLineRepository;
-        //ProjectViewModel m_ProjectViewModel = new ProjectViewModel();
-        //List<ProjectViewModel> m_ProjectViewModelList = new List<ProjectViewModel>();
+        //private ProjectViewModel m_ProjectViewModel;
+        //private List<ProjectViewModel> m_ProjectViewModelList;
 
  
         public string GetUsername()
@@ -59,6 +59,8 @@ namespace textis.Controllers
             m_UpvoteRepository = new UpvoteRepository();
             m_ProjectLineRepository = new ProjectLineRepository();
         }
+
+
 
         /// <summary>
         /// Populate ProjectViewModel with related data (lines for comment, upvotes and lines)
@@ -130,16 +132,19 @@ namespace textis.Controllers
             ProjectViewModel m_ProjectViewModel = new ProjectViewModel();
             List<ProjectViewModel> m_ProjectViewModelList = new List<ProjectViewModel>();
 
+            /*
             //Table of projects: Get sort info from user decending or acending
-            ViewBag.userSort = String.IsNullOrEmpty(sortOrder) ? "User" : "user_descending";
-            ViewBag.dateSort = sortOrder == "Date" ? "Date" : "date_desc";
-            ViewBag.nameSort = String.IsNullOrEmpty(sortOrder) ? "Name" : "name_descending";
-            ViewBag.statusSort = String.IsNullOrEmpty(sortOrder) ? "Status" : "status_descending";
-            ViewBag.categorySort = String.IsNullOrEmpty(sortOrder) ? "Category" : "category_descending";
-
+            ; // ? "User" : "user_descending";
+            ViewBag.nameSort = "Name";
+            ViewBag.statusSort = "Status"; 
+            ViewBag.categorySort = "Category"; 
+            ViewBag.dateSort = "Date"; 
+            ViewBag.userSort = "User";
+            */
             //If the user has selected a catecory or input a search string:
             ViewBag.categoryBag = category;
             ViewBag.searchBag = searchString;
+            ViewBag.userSort = sortOrder;
             
             var categoryQuery = from n in m_ProjectRepository.GetAll()
                                 orderby n.Category.Name
@@ -167,15 +172,16 @@ namespace textis.Controllers
             {
                 case "User":
                     project = project.OrderBy(s => s.User);
+                    //ViewBag.sortOrder = "user_descending";
                     break;
                 case "user_descending":
                     project = project.OrderByDescending(s => s.User);
                     break;
                 case "date_descending":
-                    project = project.OrderByDescending(s => s.Date);
+                    project = project.OrderBy(s => s.Date);
                     break;
                 case "Date":
-                    project = project.OrderBy(s => s.Date);
+                    project = project.OrderByDescending(s => s.Date);
                     break;
                 case "Name":
                     project = project.OrderBy(s => s.Name);
@@ -196,14 +202,11 @@ namespace textis.Controllers
                     project = project.OrderByDescending(s => s.Category.Name);
                     break;
                 default:
-                    if (sortOrder == null)
-                    {
-                       project = project.OrderBy(s => s.Date); 
-                    }
+                     project = project.OrderByDescending(s => s.Date); 
                     break;
             }
 
-            foreach (Project x in project.ToList())
+            foreach (Project x in project)
             {
                 ProjectViewModel projectViewModel = new ProjectViewModel(x);
 
@@ -499,6 +502,11 @@ namespace textis.Controllers
                                     orderby x.TimeFrom ascending
                                     select x;
 
+            /*if (projectToDownload == null)
+            {
+                return RedirectToAction("Edit", new { id = id }); 
+            }*/
+
             int i = 0; // array locaton
             int j = 1; //Line numbers to be printed
             string time;
@@ -528,11 +536,26 @@ namespace textis.Controllers
                 j++;
             }
 
+            string[] printMaggiFeiti = new string[i + 1];
+            //In case the project has no saved lines
+            if (i == 0)
+            {
+                printMaggiFeiti[0] = "Því miður hafa smaladrengirnir okkar ekki komist í að þýða þessa mynd, því að litu bardagadvergarnir komu í veg fyrir það :(";
+            }
+            //If the project is not empty
+            else
+            {
+                 for (int k = 0; k < i; k++)
+			    {
+			        printMaggiFeiti[k] = linesToPrint[k];
+			    }
+            }
+       
             //create and store a .srt file
             var project = m_ProjectRepository.GetSingle(id);
             string fileName = project.Name + ".srt";
             var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);
-            System.IO.File.WriteAllLines(path, linesToPrint);
+            System.IO.File.WriteAllLines(path, printMaggiFeiti);
 
             //send the new file to the user
             //( As seen on youtube: www.youtube.com/watch?v=-EH1zptSmdQ )
@@ -544,11 +567,8 @@ namespace textis.Controllers
             //clean up, we have no more use for that file
             System.IO.File.Delete(path);
        
-            return RedirectToAction("Edit", new { id = id });
-            
+            return RedirectToAction("Edit", new { id = id }); 
         }
-
-
 
         // GET: /Project/Delete/5
         public ActionResult Delete(int? id)
