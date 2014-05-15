@@ -15,13 +15,6 @@
         @Html.ValidationSummary(true)
         @Html.HiddenFor(model => model.Id)
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Name, "Nafn myndefnis", new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Name)
-            @Html.ValidationMessageFor(model => model.Name)
-        </div>
-    </div>
 
         <div class="subtitle_display">
             <div id="subtitle_en">
@@ -85,16 +78,7 @@
                 </table>
             </div>
         </div>
-        <div class="subtitle_tools">
-            <hr />
-            <div id="edit_upload">
-                @using (Html.BeginForm("Upload", "Project", FormMethod.Post, new { @class = "button", enctype = "multipart/form-data", id = Model.Id }))
-                {
-                    <input type='file' name='file' id='file' />
-                    <input class="button" type="submit" value="Senda inn" />
-                    @Html.HiddenFor(m => m.Id)
-                }
-            </div>
+  
             <div id="edit_status">
                 @Html.DropDownListFor(model => model.Status, new SelectList(
                 new List<Object>
@@ -112,20 +96,47 @@
                 @Html.DropDownList("CategoryId", String.Empty)
                 @Html.ValidationMessageFor(model => model.CategoryId)
             </div>
-            <div id="edit_download_link">
-                @using (Html.BeginForm("DownloadFile", "Project", FormMethod.Post, new { enctype = "multipart/form-data", id = Model.Id }))
-                {
-                    <input type="submit" class="button" name="Submit" id="Submit" value="Download" />
-                    @Html.HiddenFor(m => m.Id)
-                }
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Name, "Nafn myndefnis", new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Name)
+                    @Html.ValidationMessageFor(model => model.Name)
+                </div>
             </div>
+
             <div id="edit_save_button">
                 <input type="submit" class="button" value="Vista" />
             </div>
-        </div>
+       
 
 
     }
+
+    <div class="subtitle_tools">
+    <hr />
+    <div id="edit_upload">
+        @using (Html.BeginForm("Upload", "Project", FormMethod.Post, new { @class = "button", enctype = "multipart/form-data", id = Model.Id }))
+        {
+            <input type='file' name='file' id='file' />
+            <input class="button" type="submit" value="Senda inn" />
+            @Html.HiddenFor(m => m.Id)
+        }
+    </div>
+
+    <div id="edit_download_link">
+        @using (Html.BeginForm("DownloadFile", "Project", FormMethod.Post, new { enctype = "multipart/form-data", id = Model.Id }))
+        {
+            <input type="submit" class="button" name="Submit" id="Submit" value="Download" />
+            @Html.HiddenFor(m => m.Id)
+        }
+    </div>
+</div>
+
+
+
+
+
     <div class="comment_section">
         <ul id="CommentUl" class="list-group">
             @foreach (var item in Model.CommentLines)
