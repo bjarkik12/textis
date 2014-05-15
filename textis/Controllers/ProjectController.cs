@@ -52,13 +52,22 @@ namespace textis.Controllers
             // only used by Unit Testing
             m_ProjectRepository = repository;
             m_CategoryRepository = new CategoryRepository();
-            //m_ProjectViewModel = new ProjectViewModel();
-            //m_ProjectViewModelList = new List<ProjectViewModel>();
             m_CommentRepository = new CommentRepository();
             m_UpvoteRepository = new UpvoteRepository();
             m_ProjectLineRepository = new ProjectLineRepository();
         }
 
+        public ProjectController(IProjectRepository projectRepository, ICategoryRepository categoryRepository, 
+                                 ICommentRepository commentRepository, IUpvoteRepository upvoteRepository, 
+                                 IProjectLineRepository projectLineRepository)
+        {
+            // only used by Unit Testing
+            m_ProjectRepository = projectRepository;
+            m_CategoryRepository = categoryRepository;
+            m_CommentRepository = commentRepository;
+            m_UpvoteRepository = upvoteRepository;
+            m_ProjectLineRepository = projectLineRepository;
+        }
 
 
         /// <summary>

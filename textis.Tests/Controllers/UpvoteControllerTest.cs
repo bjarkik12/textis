@@ -5,6 +5,7 @@ using textis.Controllers;
 using System.Web.Mvc;
 using System.Collections.Generic;
 using textis.ViewModel;
+using textis.Tests.Controllers;
 
 namespace textis.Tests.Controllers
 {
@@ -27,6 +28,25 @@ namespace textis.Tests.Controllers
             List<UpvoteViewModel> model = viewResult.Model as List<UpvoteViewModel>;
             Assert.IsTrue(model.Count == 10);
         }
+
+        [TestMethod]
+        public void TestUpvoteGetSingle()
+        {
+            // Arrange:
+            MockUpvoteRepository upvoteReposiotory = new MockUpvoteRepository();
+            MockProjectRepository projectReposiotory = new MockProjectRepository();
+            UpvoteController controller = new UpvoteController(upvoteReposiotory, projectReposiotory);
+
+            // Act:
+            var result = controller.Edit(1);
+
+            // Assert:
+            var viewResult = (ViewResult)result;
+            //var model = viewResult.Model;
+            UpvoteViewModel model = viewResult.Model as UpvoteViewModel;
+            Assert.IsTrue(model.Id == 1);
+        }
+    
     }
 
     [TestClass]
@@ -49,5 +69,4 @@ namespace textis.Tests.Controllers
             Assert.IsTrue(model.Count == 10);
         }
     }
-
 }
