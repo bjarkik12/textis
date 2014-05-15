@@ -31,6 +31,13 @@ namespace textis.Controllers
             m_ProjectRepository = new ProjectRepository();
         }
 
+        public UpvoteController(IUpvoteRepository upvoteRepository, IProjectRepository projectRepository)
+        {
+            // only used in UnitTesting
+            m_UpvoteRepository = upvoteRepository;
+            m_ProjectRepository = projectRepository;
+        }
+        
 
         public string GetUsername()
         {

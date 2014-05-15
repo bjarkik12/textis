@@ -53,7 +53,7 @@ namespace textis.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Invalid username or password.");
+                    ModelState.AddModelError("", "Rangt lykilorð. Vinsamlegast reyndu aftur.");
                 }
             }
 
