@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\UpvoteControllerTest.cs" />
+    <Compile Include="Mock\MockCommentRepository.cs" />
     <Compile Include="Mock\MockUpvoteRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\CommentRepositoryTest.cs" />
