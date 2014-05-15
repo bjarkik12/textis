@@ -11,7 +11,6 @@ using textis;
 using textis.Repository;
 using textis.ViewModel;
 
-
 namespace textis.Controllers
 {
     public class ProjectController : Controller
@@ -257,6 +256,7 @@ namespace textis.Controllers
         }
 
         // GET: /Project/Edit/5
+        //[Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -284,6 +284,7 @@ namespace textis.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //[Authorize]
         public ActionResult Edit([Bind(Include = "Id,User,Date,Name,Status,Url,CategoryId,DestinationProjectLines, SourceProjectLines")] ProjectViewModel projectViewModel)
         {
             if (ModelState.IsValid)
@@ -554,6 +555,7 @@ namespace textis.Controllers
         }
 
         // GET: /Project/Delete/5
+        //[Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
