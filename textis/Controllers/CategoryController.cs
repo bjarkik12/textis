@@ -26,6 +26,13 @@ namespace textis.Controllers
             //m_CategoryViewModelList = new List<CategoryViewModel>();
         }
 
+        public CategoryController(ICategoryRepository repository)
+        {
+            m_CategoryRepository = repository;
+            //m_CategoryViewModel = new CategoryViewModel();
+            //m_CategoryViewModelList = new List<CategoryViewModel>();
+        }
+
         // GET: /Category/
         public ActionResult Index()
         {
