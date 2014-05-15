@@ -131,16 +131,6 @@ namespace textis.Controllers
             ProjectViewModel m_ProjectViewModel = new ProjectViewModel();
             List<ProjectViewModel> m_ProjectViewModelList = new List<ProjectViewModel>();
 
-            /*
-            //Table of projects: Get sort info from user decending or acending
-            ; // ? "User" : "user_descending";
-            ViewBag.nameSort = "Name";
-            ViewBag.statusSort = "Status"; 
-            ViewBag.categorySort = "Category"; 
-            ViewBag.dateSort = "Date"; 
-            ViewBag.userSort = "User";
-            */
-            //If the user has selected a catecory or input a search string:
             ViewBag.categoryBag = category;
             ViewBag.searchBag = searchString;
             ViewBag.userSort = sortOrder;
@@ -350,6 +340,23 @@ namespace textis.Controllers
         {
             // Todo:
             // Send user some friendly error messages
+            if (file == null)
+            {
+                TempData["alertMessage"] = "Engin skrá var valin.";
+                return RedirectToAction("Edit", new { id = id });
+            }
+            // extract the fielname and add the save location
+            var fileName = Path.GetFileName(file.FileName);
+            var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);
+            ViewBag.alertMessage = null;
+            
+            //make sure the file format is ok
+            if (".srt" != Path.GetExtension(path))
+            {
+                //Need to send add some message to notify the user
+                TempData["alertMessage"] = "Var rétt skrá valin? Aðeins .str skrár eru leyfðar.";
+                return RedirectToAction("Edit", new { id = id });
+            }
 
             if (file != null && file.ContentLength > 0)
             {
@@ -365,16 +372,7 @@ namespace textis.Controllers
                     }
                 }
 
-                // extract the fielname and add the save location
-                var fileName = Path.GetFileName(file.FileName);
-                var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);   
-                
-                //make sure the file format is ok
-                if (".srt" != Path.GetExtension(path))
-                {
-                    //Need to send add some message to notify the user
-                    return RedirectToAction("Edit", new { id = id });
-                }
+
 
                 //save the file
                 file.SaveAs(path);
@@ -483,7 +481,7 @@ namespace textis.Controllers
                 }
                 catch (Exception)
                 {
-                    // we need to add some error message to user
+                    TempData["alertMessage"] = "Skráin sem þú valdir gæti verið skemmd eða gölluð.";
                     return RedirectToAction("Edit", new { id = id });
                 }
             }

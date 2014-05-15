@@ -2,6 +2,7 @@
 @using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "Edit";
+
 }
 <div class="subsection_edit_page">
     <h2>@Html.DisplayFor(model => model.Name)</h2>
@@ -17,6 +18,13 @@
         <div class="row">
             <div class="col-md-12">
                 <span class="error_no_file">Vinsamlegast hlaðið inn textaskrá(.srt) skrá</span>
+
+                <div class="subsection_edit_page">
+                    <h2>@Html.DisplayFor(model => model.Name)</h2>
+                    <center> @Html.DisplayFor(model => model.CategoryName) || @Html.DisplayFor(model => model.User)</center>
+                    <hr />
+                </div>
+
             </div>
         </div>
     }
@@ -118,7 +126,14 @@
         </div>
     </div>
     }
-}
+}}
+
+@if (TempData["alertMessage"] != null)
+{
+   <div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong>Það tókst ekki að taka við skránni!</strong> @TempData["alertMessage"]
+   </div> 
 }
     <br />
     <div class="row">
@@ -128,7 +143,7 @@
                 <input type='file' name='file' id='file' />
                 <input class="button" type="submit" value="Senda inn .srt skrá" />
                 @Html.HiddenFor(m => m.Id)
-            }
+            }                
         </div>
 
         <div class="col-md-6">
@@ -139,7 +154,7 @@
                 @Html.HiddenFor(m => m.Id)
             }
         </div>
-</div>
+    </div>
 <br />
 <hr />
 <h4>Athugasemdir</h4>
@@ -155,12 +170,9 @@
                     </p>
                     <p>
                         <span class="text-muted">@item.Date.ToString("dd. MMMM HH:mm") - </span>
-
                     </p>
-
                 </li>
             }
-
         </ul>
 
         @if (User.Identity.IsAuthenticated)
