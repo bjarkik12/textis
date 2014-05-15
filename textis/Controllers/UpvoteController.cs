@@ -46,7 +46,7 @@ namespace textis.Controllers
                 m_UpvoteViewModelList.Add(upvoteViewModel);
             }
 
-            return View(m_UpvoteViewModelList);    
+            return View(m_UpvoteViewModelList);
         }
 
         // GET: /Upvote/Details/5
@@ -62,7 +62,7 @@ namespace textis.Controllers
             {
                 return HttpNotFound();
             }
-            return View(new UpvoteViewModel (upvote));
+            return View(new UpvoteViewModel(upvote));
         }
 
         // GET: /Upvote/Create
@@ -77,8 +77,8 @@ namespace textis.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Id,ProjectId,User,Date")] UpvoteViewModel upvoteViewModel)
-        {            
+        public ActionResult Create([Bind(Include = "Id,ProjectId,User,Date")] UpvoteViewModel upvoteViewModel)
+        {
             if (ModelState.IsValid)
             {
                 Upvote upvote = new Upvote();
@@ -91,7 +91,8 @@ namespace textis.Controllers
             }
 
             ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", upvoteViewModel.ProjectId);
-            return View(upvoteViewModel);
+            //return View(upvoteViewModel);
+            return View("Index");
         }
 
         // GET: /Upvote/Edit/5
@@ -116,8 +117,8 @@ namespace textis.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,ProjectId,User,Date")] UpvoteViewModel upvoteViewModel)
-        {          
+        public ActionResult Edit([Bind(Include = "Id,ProjectId,User,Date")] UpvoteViewModel upvoteViewModel)
+        {
             if (ModelState.IsValid)
             {
                 Upvote upvote = new Upvote();
@@ -130,6 +131,7 @@ namespace textis.Controllers
             }
             ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", upvoteViewModel.ProjectId);
             return View(upvoteViewModel);
+
         }
 
         // GET: /Upvote/Delete/5
@@ -146,7 +148,7 @@ namespace textis.Controllers
                 return HttpNotFound();
             }
 
-            return View(new UpvoteViewModel (upvote));
+            return View(new UpvoteViewModel(upvote));
         }
 
         // POST: /Upvote/Delete/5
@@ -155,7 +157,7 @@ namespace textis.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Upvote upvote = m_UpvoteRepository.GetSingle(id);
-            if(upvote != null)
+            if (upvote != null)
             {
                 m_UpvoteRepository.Delete(id);
                 m_UpvoteRepository.Save();
@@ -169,12 +171,38 @@ namespace textis.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public ActionResult PostUpvote(Upvote upvote)
+        {
+            Upvote tempUpvote = new Upvote();
+            tempUpvote.ProjectId = upvote.Id;
+            tempUpvote.User = GetUsername();
+            tempUpvote.Date = DateTime.Now;
+            m_UpvoteRepository.Create(tempUpvote);
+            m_UpvoteRepository.Save();
+            return Json(JsonRequestBehavior.AllowGet);
+        }
+
+        //public PartialViewResult GetList()
+        //{
+        //    //var result = from c in m_CommentRepository.GetByProjectId(id)
+        //    //             orderby c.Date ascending
+        //    //             select c;
+        //    List<ProjectViewModel> tempList = new List<ProjectViewModel>();
+        //    //foreach (Comment tempComment in result)
+        //    foreach (Project tempProject in m_ProjectRepository.GetAll())
+        //    {
+        //        tempList.Add(new ProjectViewModel(tempProject));
+        //    }
+        //    return PartialView("index", tempList);
+        //}
+
         protected override void Dispose(bool disposing)
         {
             m_UpvoteRepository.Dispose();
             m_ProjectRepository.Dispose();
             base.Dispose(disposing);
-            
+
         }
     }
 }

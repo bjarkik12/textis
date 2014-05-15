@@ -19,24 +19,31 @@
     }
 </div>
 
-<table class="table">
+<table class="table" id="upvoteTable">
     <tr>
         <th>
-            @Html.ActionLink("Titill", "Index", new { sortOrder = "Name", category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
+            @Html.ActionLink("Titill", "Index", new { sortOrder = ViewBag.nameSort, category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
         </th>
         <th>
-            @Html.ActionLink("Notandi", "Index", new { sortOrder = "User", category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
+            @Html.ActionLink("Notandi", "Index", new { sortOrder = ViewBag.userSort, category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
         </th>
         <th>
-            @Html.ActionLink("Dagsetning", "Index", new { sortOrder = "Date", category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
+            @Html.ActionLink("Dagsetning", "Index", new { sortOrder = ViewBag.dateSort, category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
         </th>
         <th>
-            @Html.ActionLink("Flokkur", "Index", new { sortOrder = "Category", category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
+            @Html.ActionLink("Flokkur", "Index", new { sortOrder = ViewBag.categorySort, category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
         </th>
         <th>
-            @Html.ActionLink("Staða", "Index", new { sortOrder = "Status", category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
+            @Html.ActionLink("Staða", "Index", new { sortOrder = ViewBag.statusSort, category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
         </th>
-        <th></th>
+        <th>
+            @Html.ActionLink("Fjöldi meðmæla", "Index", new { sortOrder = ViewBag.statusSort, category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
+        </th>
+        <th>
+            
+        </th>
+        <th>            
+        </th>
     </tr>
     @foreach (var item in Model)
     {
@@ -61,7 +68,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
-
+            <td>
+                @Html.DisplayFor(ModelItem => item.UpvoteCount)
+            </td>
+            <td>
+                @Html.HiddenFor(ModelItem => item.Id)
+                <button onclick="upvote(@item.Id)" type="submit" class="btn btn-primary" id="upvote-project" value="@item">Mæla með</button>
+            </td>
             @if (User.Identity.IsAuthenticated)
             {
                 <td>
@@ -73,3 +86,7 @@
         </tr>
     }
 </table>
+
+
+
+
