@@ -16,19 +16,20 @@ namespace textis.Controllers
     public class CategoryController : Controller
     {
         private ICategoryRepository m_CategoryRepository;
-        private CategoryViewModel m_CategoryViewModel;
-        private List<CategoryViewModel> m_CategoryViewModelList;
+        //CategoryViewModel m_CategoryViewModel = new CategoryViewModel();
+        //List<CategoryViewModel> m_CategoryViewModelList = new List<CategoryViewModel>();
 
         public CategoryController()
         {
             m_CategoryRepository = new CategoryRepository();
-            m_CategoryViewModel = new CategoryViewModel();
-            m_CategoryViewModelList = new List<CategoryViewModel>();
+            //m_CategoryViewModel = new CategoryViewModel();
+            //m_CategoryViewModelList = new List<CategoryViewModel>();
         }
 
         // GET: /Category/
         public ActionResult Index()
         {
+            List<CategoryViewModel> m_CategoryViewModelList = new List<CategoryViewModel>();
             foreach (Category x in m_CategoryRepository.GetAll().ToList())
             {
                 CategoryViewModel categoryViewModel = new CategoryViewModel(x);

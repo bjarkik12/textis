@@ -5,7 +5,7 @@ using System.Web;
 
 namespace textis.Repository
 {
-    interface ICategoryRepository : IDisposable
+    public interface ICategoryRepository : IDisposable
     {
         List<Category> GetAll();
         Category GetSingle(int? id);

@@ -20,8 +20,8 @@ namespace textis.Controllers
         private ICommentRepository m_CommentRepository;
         private IUpvoteRepository m_UpvoteRepository;
         private IProjectLineRepository m_ProjectLineRepository;
-        private ProjectViewModel m_ProjectViewModel;
-        private List<ProjectViewModel> m_ProjectViewModelList;
+        //private ProjectViewModel m_ProjectViewModel;
+        //private List<ProjectViewModel> m_ProjectViewModelList;
 
  
         public string GetUsername()
@@ -40,12 +40,26 @@ namespace textis.Controllers
         {
             m_ProjectRepository = new ProjectRepository();
             m_CategoryRepository = new CategoryRepository();
-            m_ProjectViewModel = new ProjectViewModel();
-            m_ProjectViewModelList = new List<ProjectViewModel>();
+            //m_ProjectViewModel = new ProjectViewModel();
+            //m_ProjectViewModelList = new List<ProjectViewModel>();
             m_CommentRepository = new CommentRepository();
             m_UpvoteRepository = new UpvoteRepository();
             m_ProjectLineRepository = new ProjectLineRepository();
         }
+
+        public ProjectController(IProjectRepository repository)
+        {
+            // only used by Unit Testing
+            m_ProjectRepository = repository;
+            m_CategoryRepository = new CategoryRepository();
+            //m_ProjectViewModel = new ProjectViewModel();
+            //m_ProjectViewModelList = new List<ProjectViewModel>();
+            m_CommentRepository = new CommentRepository();
+            m_UpvoteRepository = new UpvoteRepository();
+            m_ProjectLineRepository = new ProjectLineRepository();
+        }
+
+
 
         /// <summary>
         /// Populate ProjectViewModel with related data (lines for comment, upvotes and lines)
@@ -113,7 +127,10 @@ namespace textis.Controllers
         }
 
         public ActionResult Index(string category, string searchString, string sortOrder)
-        {  
+        {
+            ProjectViewModel m_ProjectViewModel = new ProjectViewModel();
+            List<ProjectViewModel> m_ProjectViewModelList = new List<ProjectViewModel>();
+
             /*
             //Table of projects: Get sort info from user decending or acending
             ; // ? "User" : "user_descending";

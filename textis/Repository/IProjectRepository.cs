@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace textis.Repository
 {
-    interface IProjectRepository : IDisposable
+    public interface IProjectRepository : IDisposable
     {
         List<Project> GetAll();
         Project GetSingle(int? id);

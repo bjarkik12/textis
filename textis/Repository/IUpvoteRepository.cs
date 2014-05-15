@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace textis.Repository
 {
-    interface IUpvoteRepository : IDisposable
+    public interface IUpvoteRepository : IDisposable
     {
         List<Upvote> GetAll();
         Upvote GetSingle(int? id);
