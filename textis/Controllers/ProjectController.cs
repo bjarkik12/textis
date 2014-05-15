@@ -115,16 +115,19 @@ namespace textis.Controllers
 
         public ActionResult Index(string category, string searchString, string sortOrder)
         {  
+            /*
             //Table of projects: Get sort info from user decending or acending
-            ViewBag.userSort = String.IsNullOrEmpty(sortOrder) ? "User" : "user_descending";
-            ViewBag.dateSort = sortOrder == "Date" ? "Date" : "date_desc";
-            ViewBag.nameSort = String.IsNullOrEmpty(sortOrder) ? "Name" : "name_descending";
-            ViewBag.statusSort = String.IsNullOrEmpty(sortOrder) ? "Status" : "status_descending";
-            ViewBag.categorySort = String.IsNullOrEmpty(sortOrder) ? "Category" : "category_descending";
-
+            ; // ? "User" : "user_descending";
+            ViewBag.nameSort = "Name";
+            ViewBag.statusSort = "Status"; 
+            ViewBag.categorySort = "Category"; 
+            ViewBag.dateSort = "Date"; 
+            ViewBag.userSort = "User";
+            */
             //If the user has selected a catecory or input a search string:
             ViewBag.categoryBag = category;
             ViewBag.searchBag = searchString;
+            ViewBag.userSort = sortOrder;
             
             var categoryQuery = from n in m_ProjectRepository.GetAll()
                                 orderby n.Category.Name
@@ -152,15 +155,16 @@ namespace textis.Controllers
             {
                 case "User":
                     project = project.OrderBy(s => s.User);
+                    //ViewBag.sortOrder = "user_descending";
                     break;
                 case "user_descending":
                     project = project.OrderByDescending(s => s.User);
                     break;
                 case "date_descending":
-                    project = project.OrderByDescending(s => s.Date);
+                    project = project.OrderBy(s => s.Date);
                     break;
                 case "Date":
-                    project = project.OrderBy(s => s.Date);
+                    project = project.OrderByDescending(s => s.Date);
                     break;
                 case "Name":
                     project = project.OrderBy(s => s.Name);
@@ -181,14 +185,11 @@ namespace textis.Controllers
                     project = project.OrderByDescending(s => s.Category.Name);
                     break;
                 default:
-                    if (sortOrder == null)
-                    {
-                       project = project.OrderBy(s => s.Date); 
-                    }
+                     project = project.OrderByDescending(s => s.Date); 
                     break;
             }
 
-            foreach (Project x in project.ToList())
+            foreach (Project x in project)
             {
                 ProjectViewModel projectViewModel = new ProjectViewModel(x);
 
