@@ -104,17 +104,12 @@
                     @Html.ValidationMessageFor(model => model.Name)
                 </div>
             </div>
-
-            <div id="edit_save_button">
-                <input type="submit" class="button" value="Vista" />
-            </div>
-       
-
-
     }
-
     <div class="subtitle_tools">
     <hr />
+        <div id="edit_save_button">
+            <input type="submit" class="button" value="Vista" />
+        </div>
     <div id="edit_upload">
         @using (Html.BeginForm("Upload", "Project", FormMethod.Post, new { @class = "button", enctype = "multipart/form-data", id = Model.Id }))
         {
