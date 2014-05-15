@@ -130,7 +130,7 @@
             @using (Html.BeginForm("Upload", "Project", FormMethod.Post, new { @class = "", enctype = "multipart/form-data", id = Model.Id }))
             {
                 <input type='file' name='file' id='file' />
-                <input class="button" type="submit" value="Senda inn" />
+                <input class="button" type="submit" value="Senda inn .srt skrá" />
                 @Html.HiddenFor(m => m.Id)
             }
         </div>
@@ -139,7 +139,7 @@
             @using (Html.BeginForm("DownloadFile", "Project", FormMethod.Post, new { enctype = "multipart/form-data", id = Model.Id }))
             {
                 <br />
-                <input type="submit" class="button" name="Submit" id="Submit" value="Ná í Skrá" />
+                <input type="submit" class="button" name="Submit" id="Submit" value="Sækja .srt skrá" />
                 @Html.HiddenFor(m => m.Id)
             }
         </div>
