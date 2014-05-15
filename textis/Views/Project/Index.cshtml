@@ -10,8 +10,8 @@
     {
         <div class="search_box">
             @Html.DropDownList("category", "Allir flokkar")
-            @Html.TextBox("SearchString", "", new { placeholder = "Titill myndar" })
-            <input id="search_string_button" type="submit" value="Leita" />
+            @Html.TextBox("SearchString", "", new { placeholder = "Titill myndar", autofocus = "autofocus" })
+            <input id="search_string_button" type="submit" value="Leita"/>
             <p id="text_request">
                 Ég vil @Html.ActionLink("óska eftir texta", "Create") sem ég fann ekki.
             </p>
