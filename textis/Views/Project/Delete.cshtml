@@ -8,65 +8,45 @@
 
 <h3></h3>
 <div>
-    <h4>Verkefni</h4>
-    <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.LabelFor(model => model.User, "Notandi")
+            Notandi
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.User)
         </dd>
-
         <dt>
-            @Html.LabelFor(model => model.Date, "Dagsetning")
+            Dagsetning
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Date)
         </dd>
-
         <dt>
-            @Html.LabelFor(model => model.Name, "Myndefni")
+            Myndefni
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Name)
         </dd>
-
         <dt>
-            @Html.LabelFor(model => model.Status, "Staða")
+            Staða
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Status)
         </dd>
-
-        @*<dt>
-            @Html.LabelFor(model => model.Url, "Vefslóð")
-        </dt>*@
-
-        @*<dd>
-            @Html.DisplayFor(model => model.Url)
-        </dd>*@
-
         <dt>
-            @Html.LabelFor(model => model.CategoryName, "Flokkur")
+            Flokkur
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.CategoryName)
         </dd>
-
     </dl>
 
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Eyða" class="btn btn-default" /> |
-            @Html.ActionLink("Aftur í lista", "Index")
-        </div>
+            <input type="submit" value="Eyða" class="button_red" /> 
+            <button class="button" onclick="@Url.Action("Index", "Index")">Aftur í lista</button>
+    </div>
     }
 </div>
