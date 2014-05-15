@@ -16,7 +16,21 @@ namespace textis.Controllers
     {
         IUpvoteRepository m_UpvoteRepository;
         IProjectRepository m_ProjectRepository;
-        List<UpvoteViewModel> m_UpvoteViewModelList;
+        
+
+        public UpvoteController()
+        {
+            m_UpvoteRepository = new UpvoteRepository();
+            m_ProjectRepository = new ProjectRepository();
+        }
+
+        public UpvoteController(IUpvoteRepository repository)
+        {
+            // only used in UnitTesting
+            m_UpvoteRepository = repository;
+            m_ProjectRepository = new ProjectRepository();
+        }
+
 
         public string GetUsername()
         {
@@ -30,16 +44,11 @@ namespace textis.Controllers
             }
         }
 
-        public UpvoteController()
-        {
-            m_UpvoteRepository = new UpvoteRepository();
-            m_ProjectRepository = new ProjectRepository();
-            m_UpvoteViewModelList = new List<UpvoteViewModel>();
-        }
-
         // GET: /Upvote/
         public ActionResult Index()
         {
+            List<UpvoteViewModel> m_UpvoteViewModelList = new List<UpvoteViewModel>();
+
             foreach (Upvote x in m_UpvoteRepository.GetAll().ToList())
             {
                 UpvoteViewModel upvoteViewModel = new UpvoteViewModel(x);

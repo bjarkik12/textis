@@ -16,7 +16,23 @@ namespace textis.Controllers
     {
         private IProjectLineRepository m_ProjectLineRepository;
         private IProjectRepository m_ProjectRepository;
-        private List<ProjectLineViewModel> m_ProjectLineViewModelList;
+        //List<ProjectLineViewModel> m_ProjectLineViewModelList = new List<ProjectLineViewModel>();
+
+        public ProjectLineController()
+        {
+            m_ProjectLineRepository = new ProjectLineRepository();
+            m_ProjectRepository = new ProjectRepository();
+            //m_ProjectLineViewModelList = new List<ProjectLineViewModel>();
+        }
+
+        public ProjectLineController(IProjectLineRepository repository)
+        {
+            // only used by unit testing
+            m_ProjectLineRepository = repository;
+            m_ProjectRepository = new ProjectRepository();
+            //m_ProjectLineViewModelList = new List<ProjectLineViewModel>();
+        }
+
 
         public string GetUsername()
         {
@@ -31,16 +47,12 @@ namespace textis.Controllers
             }
         }
 
-        public ProjectLineController()
-        {
-            m_ProjectLineRepository = new ProjectLineRepository();
-            m_ProjectRepository = new ProjectRepository();
-            m_ProjectLineViewModelList = new List<ProjectLineViewModel>();
-        }
 
         // GET: /ProjectLine/
         public ActionResult Index()
         {
+            List<ProjectLineViewModel> m_ProjectLineViewModelList = new List<ProjectLineViewModel>();
+
             foreach (ProjectLine x in m_ProjectLineRepository.GetAll().ToList())
             {
                 ProjectLineViewModel projectLineViewModel = new ProjectLineViewModel(x);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace textis.Repository
 {
-    interface ICommentRepository : IDisposable
+    public interface ICommentRepository : IDisposable
     {
         List<Comment> GetAll();
         List<Comment> GetByProjectId(int? id);

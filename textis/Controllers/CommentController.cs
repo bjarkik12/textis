@@ -18,7 +18,21 @@ namespace textis.Controllers
     {
         ICommentRepository m_CommentRepository;
         IProjectRepository m_ProjectRepository;
-        private List<CommentViewModel> m_CommentViewModelList;
+//        List<CommentViewModel> m_CommentViewModelList;
+
+        public CommentController()
+        {
+            m_CommentRepository = new CommentRepository();
+            m_ProjectRepository = new ProjectRepository();
+            //m_CommentViewModelList = new List<CommentViewModel>() = new List<CommentViewModel>();
+        }
+
+        public CommentController(ICommentRepository repository)
+        {
+            m_CommentRepository = repository;
+            m_ProjectRepository = new ProjectRepository();
+  //          m_CommentViewModelList = new List<CommentViewModel>();
+        }
 
         public string GetUsername(){
             if (Request.IsAuthenticated)
@@ -32,16 +46,11 @@ namespace textis.Controllers
             }
         }
         
-        public CommentController()
-        {
-            m_CommentRepository = new CommentRepository();
-            m_ProjectRepository = new ProjectRepository();
-            m_CommentViewModelList = new List<CommentViewModel>();
-        }
 
         // GET: /Comment/
         public ActionResult Index()
         {
+            List<CommentViewModel> m_CommentViewModelList = new List<CommentViewModel>();
             foreach (Comment x in m_CommentRepository.GetAll().ToList())
             {
                 CommentViewModel commentViewModel = new CommentViewModel(x);

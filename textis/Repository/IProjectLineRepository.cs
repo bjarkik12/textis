@@ -5,7 +5,7 @@ using System.Web;
 
 namespace textis.Repository
 {
-    interface IProjectLineRepository : IDisposable
+    public interface IProjectLineRepository : IDisposable
     {
         List<ProjectLine> GetAll();
         List<ProjectLine> GetByProjectId(int? id);
