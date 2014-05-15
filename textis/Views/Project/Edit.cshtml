@@ -1,9 +1,8 @@
 ﻿@model textis.ViewModel.ProjectViewModel
-
+@using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "Edit";
 }
-
 <div class="subsection_edit_page">
     <h2>@Html.DisplayFor(model => model.Name)</h2>
     <center> @Html.DisplayFor(model => model.CategoryName) || @Html.DisplayFor(model => model.User)</center>
@@ -27,8 +26,6 @@
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
         @Html.HiddenFor(model => model.Id)
-
-
         <div class="subtitle_display">
             <div id="subtitle_en">
                 <span class="edit_header">Enskur Texti</span><br />
@@ -47,7 +44,6 @@
                     }
                 </table>
             </div>
-
             <div id="subtitle_time">
                 <span class="edit_header">Tímaás</span><br />
                 <table class="edit_table">
@@ -115,7 +111,7 @@
             @Html.ValidationMessageFor(model => model.CategoryId)
         </div>
         <div class="col-md-3">
-            @Html.LabelFor(model => model.Name, "Titill: ", new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Name, "Titill: ")
             @Html.EditorFor(model => model.Name)
             @Html.ValidationMessageFor(model => model.Name)
         </div>
