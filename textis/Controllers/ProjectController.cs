@@ -292,21 +292,22 @@ namespace textis.Controllers
                 project.User = GetUsername();
                 project.Date = DateTime.Now;
 
+                if (projectViewModel.DestinationProjectLines != null) { 
+                    foreach (ProjectLineViewModel x in projectViewModel.DestinationProjectLines)
+                    {
+                        ProjectLine projectLine = new ProjectLine();
+                        projectLine.Id = x.Id;
+                        projectLine.Language = x.Language;
+                        projectLine.ProjectId = x.ProjectId;
+                        projectLine.TimeFrom = x.TimeFrom;
+                        projectLine.TimeTo = x.TimeTo;
+                        projectLine.TextLine1 = x.TextLine1;
+                        projectLine.TextLine2 = x.TextLine2;
 
-                foreach (ProjectLineViewModel x in projectViewModel.DestinationProjectLines)
-                {
-                    ProjectLine projectLine = new ProjectLine();
-                    projectLine.Id = x.Id;
-                    projectLine.Language = x.Language;
-                    projectLine.ProjectId = x.ProjectId;
-                    projectLine.TimeFrom = x.TimeFrom;
-                    projectLine.TimeTo = x.TimeTo;
-                    projectLine.TextLine1 = x.TextLine1;
-                    projectLine.TextLine2 = x.TextLine2;
-
-                    projectLine.Date = project.Date;
-                    projectLine.User = project.User;
-                    m_ProjectLineRepository.Update(projectLine);
+                        projectLine.Date = project.Date;
+                        projectLine.User = project.User;
+                        m_ProjectLineRepository.Update(projectLine);
+                    }
                 }
 
                 m_ProjectLineRepository.Save();
