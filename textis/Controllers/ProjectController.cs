@@ -20,9 +20,6 @@ namespace textis.Controllers
         private ICommentRepository m_CommentRepository;
         private IUpvoteRepository m_UpvoteRepository;
         private IProjectLineRepository m_ProjectLineRepository;
-        //private ProjectViewModel m_ProjectViewModel;
-        //private List<ProjectViewModel> m_ProjectViewModelList;
-
  
         public string GetUsername()
         {
@@ -40,8 +37,6 @@ namespace textis.Controllers
         {
             m_ProjectRepository = new ProjectRepository();
             m_CategoryRepository = new CategoryRepository();
-            //m_ProjectViewModel = new ProjectViewModel();
-            //m_ProjectViewModelList = new List<ProjectViewModel>();
             m_CommentRepository = new CommentRepository();
             m_UpvoteRepository = new UpvoteRepository();
             m_ProjectLineRepository = new ProjectLineRepository();
@@ -68,7 +63,6 @@ namespace textis.Controllers
             m_UpvoteRepository = upvoteRepository;
             m_ProjectLineRepository = projectLineRepository;
         }
-
 
         /// <summary>
         /// Populate ProjectViewModel with related data (lines for comment, upvotes and lines)
@@ -100,38 +94,38 @@ namespace textis.Controllers
             projectViewModel.UpvoteCount = projectViewModel.UpvoteLines.Count();
 
             projectViewModel.SourceProjectLines = (from item in m_ProjectLineRepository.GetByProjectId(projectViewModel.Id)
-                                                   select new ProjectLineViewModel
-                                                   {
-                                                       Id = item.Id,
-                                                       Date = item.Date,
-                                                       Language = item.Language,
-                                                       ProjectId = item.ProjectId,
-                                                       ProjectName = item.Project.Name,
-                                                       ProjectUser = item.Project.User,
-                                                       TextLine1 = item.TextLine1,
-                                                       TextLine2 = item.TextLine2,
-                                                       TimeFrom = item.TimeFrom,
-                                                       TimeFromString = item.TimeFrom.ToString("HH:mm:ss:fff"),
-                                                       TimeTo = item.TimeTo,
-                                                       TimeToString = item.TimeTo.ToString("HH:mm:ss:fff"),
-                                                       User = item.User
-                                                   }).Where(m => m.Language == "EN").ToList();
+                                            select new ProjectLineViewModel
+                                            {
+                                                Id = item.Id,
+                                                Date = item.Date,
+                                                Language = item.Language,
+                                                ProjectId = item.ProjectId,
+                                                ProjectName = item.Project.Name,
+                                                ProjectUser = item.Project.User,
+                                                TextLine1 = item.TextLine1,
+                                                TextLine2 = item.TextLine2,
+                                                TimeFrom = item.TimeFrom,
+                                                TimeFromString = item.TimeFrom.ToString("HH:mm:ss:fff"),
+                                                TimeTo = item.TimeTo,
+                                                TimeToString = item.TimeTo.ToString("HH:mm:ss:fff"),
+                                                User = item.User
+                                            }).Where(m => m.Language == "EN").ToList();
 
             projectViewModel.DestinationProjectLines = (from item in m_ProjectLineRepository.GetByProjectId(projectViewModel.Id)
-                                                        select new ProjectLineViewModel
-                                                        {
-                                                            Id = item.Id,
-                                                            Date = item.Date,
-                                                            Language = item.Language,
-                                                            ProjectId = item.ProjectId,
-                                                            ProjectName = item.Project.Name,
-                                                            ProjectUser = item.Project.User,
-                                                            TextLine1 = item.TextLine1,
-                                                            TextLine2 = item.TextLine2,
-                                                            TimeFrom = item.TimeFrom,
-                                                            TimeTo = item.TimeTo,
-                                                            User = item.User
-                                                        }).Where(m => m.Language == "IS").ToList();
+                                            select new ProjectLineViewModel
+                                            {
+                                                Id = item.Id,
+                                                Date = item.Date,
+                                                Language = item.Language,
+                                                ProjectId = item.ProjectId,
+                                                ProjectName = item.Project.Name,
+                                                ProjectUser = item.Project.User,
+                                                TextLine1 = item.TextLine1,
+                                                TextLine2 = item.TextLine2,
+                                                TimeFrom = item.TimeFrom,
+                                                TimeTo = item.TimeTo,
+                                                User = item.User
+                                            }).Where(m => m.Language == "IS").ToList();
             return projectViewModel;
         }
 
@@ -176,7 +170,6 @@ namespace textis.Controllers
             {
                 case "User":
                     project = project.OrderBy(s => s.User);
-                    //ViewBag.sortOrder = "user_descending";
                     break;
                 case "user_descending":
                     project = project.OrderByDescending(s => s.User);
@@ -213,9 +206,9 @@ namespace textis.Controllers
                     break;
             }
 
-            foreach (Project x in project)
+            foreach (Project item in project)
             {
-                ProjectViewModel projectViewModel = new ProjectViewModel(x);
+                ProjectViewModel projectViewModel = new ProjectViewModel(item);
 
                 // add related information to projectViewModel (commentlines, upvotelines, projectlines, etc)
                 projectViewModel = PopulateProjectViewModel(projectViewModel);
@@ -225,8 +218,6 @@ namespace textis.Controllers
 
             return View(m_ProjectViewModelList);
         }
-
-        // GET: /Project/Details/5
 
         public ActionResult Details(int? id)
         {
@@ -248,16 +239,12 @@ namespace textis.Controllers
             return View(projectViewModel);
         }
 
-        // GET: /Project/Create
         public ActionResult Create()
         {
             ViewBag.CategoryId = new SelectList(m_CategoryRepository.GetAll(), "Id", "Name");
             return View();
         }
         
-        // POST: /Project/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,User,Date,Name,Status,Url,CategoryId")] ProjectViewModel projectViewModel)
@@ -280,7 +267,6 @@ namespace textis.Controllers
             return View(projectViewModel);
         }
 
-        // GET: /Project/Edit/5
         [Authorize]
         public ActionResult Edit(int? id)
         {
@@ -304,9 +290,6 @@ namespace textis.Controllers
             return View(projectViewModel);
         }
 
-        // POST: /Project/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -320,16 +303,16 @@ namespace textis.Controllers
                 project.Date = DateTime.Now;
 
                 if (projectViewModel.DestinationProjectLines != null) { 
-                    foreach (ProjectLineViewModel x in projectViewModel.DestinationProjectLines)
+                    foreach (ProjectLineViewModel projectLineViewModel in projectViewModel.DestinationProjectLines)
                     {
                         ProjectLine projectLine = new ProjectLine();
-                        projectLine.Id = x.Id;
-                        projectLine.Language = x.Language;
-                        projectLine.ProjectId = x.ProjectId;
-                        projectLine.TimeFrom = x.TimeFrom;
-                        projectLine.TimeTo = x.TimeTo;
-                        projectLine.TextLine1 = x.TextLine1;
-                        projectLine.TextLine2 = x.TextLine2;
+                        projectLine.Id = projectLineViewModel.Id;
+                        projectLine.Language = projectLineViewModel.Language;
+                        projectLine.ProjectId = projectLineViewModel.ProjectId;
+                        projectLine.TimeFrom = projectLineViewModel.TimeFrom;
+                        projectLine.TimeTo = projectLineViewModel.TimeTo;
+                        projectLine.TextLine1 = projectLineViewModel.TextLine1;
+                        projectLine.TextLine2 = projectLineViewModel.TextLine2;
 
                         projectLine.Date = project.Date;
                         projectLine.User = project.User;
@@ -338,7 +321,6 @@ namespace textis.Controllers
                 }
 
                 m_ProjectLineRepository.Save();
-
                 m_ProjectRepository.Update(project);
                 m_ProjectRepository.Save();
 
@@ -347,22 +329,18 @@ namespace textis.Controllers
 
             ViewBag.CategoryId = new SelectList(m_CategoryRepository.GetAll(), "Id", "Name", projectViewModel.CategoryId);
 
-            //string[] arrStatusList = { "Stofnað", "Í vinnslu", "Tilbúið" };
-            //ViewBag.StatusList = new SelectList(arrStatusList, "Status", projectViewModel.Status);
-
             return View(projectViewModel);
         }
 
         [HttpPost]
         public ActionResult Upload(HttpPostedFileBase file, int id)
         {
-            // Todo:
-            // Send user some friendly error messages
             if (file == null)
             {
                 TempData["alertMessage"] = "Engin skrá var valin.";
                 return RedirectToAction("Edit", new { id = id });
             }
+
             // extract the fielname and add the save location
             var fileName = Path.GetFileName(file.FileName);
             var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);
@@ -390,7 +368,6 @@ namespace textis.Controllers
                     }
                 }
 
-                //save the file
                 file.SaveAs(path);
 
                 //Various variables
@@ -402,7 +379,7 @@ namespace textis.Controllers
                 DateTime timeNow = DateTime.Now;
                 string user = GetUsername();
 
-                //to gain speed the file is stored in an array and the stream is closed
+                //to gain speed the file is stored in an array and the filestream is closed
                 string[] linesOfUpload = System.IO.File.ReadAllLines(path);
                 int numberOfLines = linesOfUpload.Length;
                 streamUpload.Close();
@@ -449,7 +426,6 @@ namespace textis.Controllers
                                         if (i != numberOfLines)
                                         {
                                             fileLine = linesOfUpload[i++];
-
                                             //just in case there are more lines that we cannot handle
                                             while (fileLine != "" && i < numberOfLines)
                                             {
@@ -480,7 +456,6 @@ namespace textis.Controllers
                     }
 
                     m_ProjectLineRepository.Save();
-
                 }
                 catch (Exception)
                 {
@@ -495,19 +470,11 @@ namespace textis.Controllers
         [HttpPost]
         public ActionResult DownloadFile(int? id)
         {
-            // Todo:
-            // Only allow download if data has been entered or file marked ready
-
             //Get all the lines from server and order them by time
             var projectToDownload = from x in m_ProjectLineRepository.GetByProjectId(id)
                                     where x.Language == "IS"
                                     orderby x.TimeFrom ascending
                                     select x;
-
-            /*if (projectToDownload == null)
-            {
-                return RedirectToAction("Edit", new { id = id }); 
-            }*/
 
             int i = 0; // array locaton
             int j = 1; //Line numbers to be printed
@@ -534,7 +501,6 @@ namespace textis.Controllers
                 }
 
                 linesToPrint[i++] = "";
-
                 j++;
             }
 
@@ -571,7 +537,6 @@ namespace textis.Controllers
             return RedirectToAction("Edit", new { id = id }); 
         }
 
-        // GET: /Project/Delete/5
         [Authorize]
         public ActionResult Delete(int? id)
         {
@@ -587,7 +552,6 @@ namespace textis.Controllers
             return View(new ProjectViewModel (project));
         }
 
-        // POST: /Project/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -655,19 +619,11 @@ namespace textis.Controllers
 
         public ActionResult DownloadFileFromIndex(int? id)
         {
-            // Todo:
-            // Only allow download if data has been entered or file marked ready
-
             //Get all the lines from server and order them by time
             var projectToDownload = from x in m_ProjectLineRepository.GetByProjectId(id)
                                     where x.Language == "IS"
                                     orderby x.TimeFrom ascending
                                     select x;
-
-            /*if (projectToDownload == null)
-            {
-                return RedirectToAction("Edit", new { id = id }); 
-            }*/
 
             int i = 0; // array locaton
             int j = 1; //Line numbers to be printed
@@ -694,7 +650,6 @@ namespace textis.Controllers
                 }
 
                 linesToPrint[i++] = "";
-
                 j++;
             }
 
@@ -730,6 +685,5 @@ namespace textis.Controllers
 
             return RedirectToAction("Index", new { id = id });
         }
-        
     }
 }
