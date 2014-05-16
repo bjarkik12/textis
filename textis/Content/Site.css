@@ -185,3 +185,14 @@ h4{
     font-size: 20px;
     text-align: center;
 }
+
+#upvote-project{
+    cursor: pointer;
+    color: #0096fd;
+    
+
+}
+
+#columnCenter{
+    text-align: center;
+}

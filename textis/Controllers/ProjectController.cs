@@ -205,6 +205,9 @@ namespace textis.Controllers
                 case "category_descending":
                     project = project.OrderByDescending(s => s.Category.Name);
                     break;
+                case "Like":
+                    project = project.OrderByDescending(s => s.Upvote.Count);
+                    break;
                 default:
                      project = project.OrderByDescending(s => s.Date); 
                     break;

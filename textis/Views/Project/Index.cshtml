@@ -41,13 +41,12 @@
             @Html.ActionLink("Staða", "Index", new { sortOrder = "Status", category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
         </th>
         <th>
-            @Html.ActionLink("Fjöldi meðmæla", "Index", new { sortOrder = "Like", category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
+            @Html.ActionLink("Meðmæli", "Index", new { sortOrder = "Like", category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
         </th>
-        <th>
-            
-        </th>
+@if (User.Identity.IsAuthenticated) { 
         <th>            
         </th>
+}
     </tr>
 
     @foreach (var item in Model)
@@ -74,18 +73,23 @@
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                @Html.DisplayFor(ModelItem => item.UpvoteCount)
-            </td>
-            <td>
-                @Html.HiddenFor(ModelItem => item.Id)
-                <button onclick="upvote(@item.Id)" type="submit" class="btn btn-primary" id="upvote-project" value="@item">Mæla með</button>
+                <div id="columnCenter">
+                    @Html.DisplayFor(ModelItem => item.UpvoteCount)
+                    @Html.HiddenFor(ModelItem => item.Id)
+
+                    <span onclick="upvote(@item.Id)" class="glyphicon glyphicon-arrow-up" id="upvote-project" title="Mæla með"></span>
+                </div>
             </td>
             @if (User.Identity.IsAuthenticated)
             {
                 <td>
-                    @Html.ActionLink("Breyta", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Nánar", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Eyða", "Delete", new { id = item.Id })
+                    @Html.ActionLink("Breyta", "Edit", new { id = item.Id })
+       
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <span>|</span>
+                        @Html.ActionLink("Eyða", "Delete", new { id = item.Id })
+                    }
                 </td>
             }
         </tr>
