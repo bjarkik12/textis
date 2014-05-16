@@ -6,58 +6,81 @@ using System.Data.Entity;
 
 namespace textis.Repository
 {
+    /// <summary>
+    /// Actions for Project, implements IProjectRepository
+    /// </summary>
     public class ProjectRepository : IProjectRepository
     {
-        private readonly TextisModelContainer context = new TextisModelContainer();
+        private readonly TextisModelContainer m_context = new TextisModelContainer();
+        private bool m_disposed = false;
 
+        /// <summary>
+        /// Get all projects
+        /// </summary>
+        /// <returns>List of Project object</returns>
         public List<Project> GetAll()
         {
-            IQueryable<Project> query = context.Project; 
+            IQueryable<Project> query = m_context.Project; 
             return query.ToList();
         }
 
+        /// <summary>
+        /// Create Project
+        /// </summary>
+        /// <param name="project"></param>
         public void Create(Project project)
         {
-            context.Project.Add(project);
-            
+            m_context.Project.Add(project);
         }
 
+        /// <summary>
+        /// Get one project by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Project object</returns>
         public Project GetSingle(int? id)
         {
             var query = this.GetAll().FirstOrDefault(x => x.Id == id);
             return query;
         }
 
+        /// <summary>
+        /// Update project
+        /// </summary>
+        /// <param name="project"></param>
         public void Update(Project project)
         {
-            context.Entry(project).State = EntityState.Modified;
-            //context.SaveChanges();
+            m_context.Entry(project).State = EntityState.Modified;
         }
 
+        /// <summary>
+        /// Delete project
+        /// </summary>
+        /// <param name="id"></param>
         public void Delete(int? id)
         {
             Project project = this.GetSingle(id);
-            context.Project.Remove(project);
-            //context.SaveChanges();
+            m_context.Project.Remove(project);
         }
 
+        /// <summary>
+        /// Save project
+        /// </summary>
         public void Save()
         {
-            context.SaveChanges();
+            m_context.SaveChanges();
         }
         
-        private bool disposed = false;
-
         protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposed)
+            if (!this.m_disposed)
             {
                 if (disposing)
                 {
-                    context.Dispose();
+                    m_context.Dispose();
                 }
             }
-            this.disposed = true;
+            this.m_disposed = true;
         }
 
         public void Dispose()
