@@ -387,8 +387,6 @@ namespace textis.Controllers
                     }
                 }
 
-
-
                 //save the file
                 file.SaveAs(path);
 
@@ -409,86 +407,73 @@ namespace textis.Controllers
 
                 try
                 {
-                    //This is working too slow but WHY !!!???
-                    //Need to clean up: too many if(x)->break;
                     for (int i = 0; i < numberOfLines; )
                     {
                         fileLine = linesOfUpload[i++]; //This is the line number (which we will disregard)
 
-                        //in case the file has extra empty lines
+                        //in case the file has extra empty lines at the end
                         if (fileLine == "" || i >= numberOfLines)
                         {
-                            while (fileLine == "")
+                            while (fileLine == "" && i < (numberOfLines))
                             {
-                                if (i >= numberOfLines)
-                                {
-                                    break;
-                                }
                                 fileLine = linesOfUpload[i++];
                             }
                         }
-
-                        ProjectLine line = new ProjectLine();
-
-                        fileLine = linesOfUpload[i++]; //now myLine is holding the time to and from
-                        //Now we need to get the timestring to the correct format before parsing it to DateTime
-                        timeCapsule = fakeYear + fileLine.Substring(0, 8) + fakeDot + fileLine.Substring(9, 3);
-                        line.TimeFrom = Convert.ToDateTime(timeCapsule);
-                        timeCapsule = fakeYear + fileLine.Substring(17, 8) + fakeDot + fileLine.Substring(26, 3);
-                        line.TimeTo = Convert.ToDateTime(timeCapsule);
-
-                        //we are sure to have at least one line
-                        fileLine = linesOfUpload[i++];
-                        line.TextLine1 = fileLine;
-
-                        //in case it was the last line
-                        if (i >= numberOfLines)
+                        else
                         {
-                            break;
-                        }
+                            ProjectLine line = new ProjectLine();
+                            fileLine = linesOfUpload[i++]; //now myLine is holding the time to and from
+                            //Now we need to get the timestring to the correct format before parsing it to DateTime
+                            timeCapsule = fakeYear + fileLine.Substring(0, 8) + fakeDot + fileLine.Substring(9, 3);
+                            line.TimeFrom = Convert.ToDateTime(timeCapsule);
+                            timeCapsule = fakeYear + fileLine.Substring(17, 8) + fakeDot + fileLine.Substring(26, 3);
+                            line.TimeTo = Convert.ToDateTime(timeCapsule);
 
-                        //there may or may not be a second line
-                        fileLine = linesOfUpload[i++];
-
-                        if (fileLine != "")
-                        {
-                            line.TextLine2 = fileLine;
-                            fileLine = linesOfUpload[i++];
-                        }
-
-                        //again in case it was the last line
-                        if (i >= numberOfLines)
-                        {
-                            break;
-                        }
-
-                        //just in case there are more lines that we cannot handle
-                        while (fileLine != "" && i < numberOfLines)
-                        {
-                            fileLine = linesOfUpload[i++];
-
-                            if (i >= numberOfLines)
+                            //we are sure to have at least one line
+                            if (i < numberOfLines)
                             {
-                                break;
+                                fileLine = linesOfUpload[i++];
+                                line.TextLine1 = fileLine;
+
+                                if (i < numberOfLines)
+                                {
+                                    fileLine = linesOfUpload[i++];
+                                    //there may or may not be a second line
+                                    if (fileLine != "")
+                                    {
+                                        line.TextLine2 = fileLine;
+
+                                        if (i != numberOfLines)
+                                        {
+                                            fileLine = linesOfUpload[i++];
+
+                                            //just in case there are more lines that we cannot handle
+                                            while (fileLine != "" && i < numberOfLines)
+                                            {
+                                                fileLine = linesOfUpload[i++];
+                                            }
+                                        }
+                                    }
+                                }
                             }
+
+                            line.Date = timeNow;
+                            line.User = user;
+                            line.Language = "EN";
+                            line.ProjectId = id;
+
+                            //The parallel Icelandic text:
+                            ProjectLine lineIcelandic = new ProjectLine();
+                            lineIcelandic.ProjectId = line.ProjectId;
+                            lineIcelandic.Language = "IS";
+                            lineIcelandic.TimeFrom = line.TimeFrom;
+                            lineIcelandic.TimeTo = line.TimeTo;
+                            lineIcelandic.Date = timeNow;
+                            lineIcelandic.User = user;
+
+                            m_ProjectLineRepository.Create(line);
+                            m_ProjectLineRepository.Create(lineIcelandic);
                         }
-
-                        line.Date = timeNow;
-                        line.User = user;
-                        line.Language = "EN";
-                        line.ProjectId = id;
-
-                        //The parallel Icelandic text:
-                        ProjectLine lineIcelandic = new ProjectLine();
-                        lineIcelandic.ProjectId = line.ProjectId;
-                        lineIcelandic.Language = "IS";
-                        lineIcelandic.TimeFrom = line.TimeFrom;
-                        lineIcelandic.TimeTo = line.TimeTo;
-                        lineIcelandic.Date = timeNow;
-                        lineIcelandic.User = user;
-
-                        m_ProjectLineRepository.Create(line);
-                        m_ProjectLineRepository.Create(lineIcelandic);
                     }
 
                     m_ProjectLineRepository.Save();
@@ -550,18 +535,18 @@ namespace textis.Controllers
                 j++;
             }
 
-            string[] printMaggiFeiti = new string[i + 1];
+            string[] printer = new string[i + 1];
             //In case the project has no saved lines
             if (i == 0)
             {
-                printMaggiFeiti[0] = "Því miður hafa smaladrengirnir okkar ekki komist í að þýða þessa mynd, því að litu bardagadvergarnir komu í veg fyrir það :(";
+                printer[0] = "Því miður hafa smaladrengirnir okkar ekki komist í að þýða þessa mynd, því að litu bardagadvergarnir komu í veg fyrir það :(";
             }
             //If the project is not empty
             else
             {
                  for (int k = 0; k < i; k++)
 			    {
-			        printMaggiFeiti[k] = linesToPrint[k];
+			        printer[k] = linesToPrint[k];
 			    }
             }
        
@@ -569,7 +554,7 @@ namespace textis.Controllers
             var project = m_ProjectRepository.GetSingle(id);
             string fileName = project.Name + ".srt";
             var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);
-            System.IO.File.WriteAllLines(path, printMaggiFeiti);
+            System.IO.File.WriteAllLines(path, printer);
 
             //send the new file to the user
             //( As seen on youtube: www.youtube.com/watch?v=-EH1zptSmdQ )
