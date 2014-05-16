@@ -8,50 +8,56 @@ using textis.Tests.Repository;
 
 namespace textis.Tests.Mock
 {
+    /// <summary>
+    /// Mock CategoryRepository
+    /// Constructor here should not create data...
+    /// </summary>
     class MockCategoryRepository : ICategoryRepository
     {
         private List<Category> m_TestList = new List<Category>();
 
+        /// <summary>
+        /// Create TEST data, should not be done here
+        /// </summary>
         public MockCategoryRepository()
         {
             DateTime TestDate = DateTime.Now;
 
-            Project pro1 = new Project();
-            pro1.Name = "Test Project 1";
-            pro1.Id = 1;
-            pro1.Status = "status";
-            pro1.ProjectLine = new List<ProjectLine>();
-            pro1.User = "username";
-            pro1.Date = DateTime.Now;
-            pro1.Comment = new List<Comment>();
-            pro1.CategoryId = 2;
-            pro1.Category = new Category { Id = 1, Name = "cat 1" };
+            Project project1 = new Project();
+            project1.Name = "Test Project 1";
+            project1.Id = 1;
+            project1.Status = "status";
+            project1.ProjectLine = new List<ProjectLine>();
+            project1.User = "username";
+            project1.Date = DateTime.Now;
+            project1.Comment = new List<Comment>();
+            project1.CategoryId = 2;
+            project1.Category = new Category { Id = 1, Name = "cat 1" };
 
-            Project pro2 = new Project();
-            pro2.Name = "Test Project 2";
-            pro2.Id = 2;
-            pro2.Status = "status";
-            pro2.ProjectLine = new List<ProjectLine>();
-            pro2.User = "username";
-            pro2.Date = DateTime.Now;
-            pro2.Comment = new List<Comment>();
-            pro2.CategoryId = 2;
-            pro2.Category = new Category { Id = 1, Name = "cat 1" };
-
-            
+            Project project2 = new Project();
+            project2.Name = "Test Project 2";
+            project2.Id = 2;
+            project2.Status = "status";
+            project2.ProjectLine = new List<ProjectLine>();
+            project2.User = "username";
+            project2.Date = DateTime.Now;
+            project2.Comment = new List<Comment>();
+            project2.CategoryId = 2;
+            project2.Category = new Category { Id = 1, Name = "cat 1" };
+          
             for (int i = 1; i <= 6; i++)
             {
                 Category TestCategory = new Category();
                 TestCategory.Id = i;
                 TestCategory.Name = "name " + i.ToString();
-                TestCategory.Project.Add(pro1);
+                TestCategory.Project.Add(project1);
                 m_TestList.Add(TestCategory);
             }
             for (int i = 7; i <= 10; i++)
             {
                 Category TestCategory = new Category();
                 TestCategory.Id = i;
-                TestCategory.Project.Add(pro2);
+                TestCategory.Project.Add(project2);
                 m_TestList.Add(TestCategory);
             }
         }

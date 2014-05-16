@@ -8,65 +8,71 @@ using textis.Tests.Repository;
 
 namespace textis.Tests.Mock
 {
+    /// <summary>
+    /// Mock ProjectLineRepository
+    /// </summary>
     class MockProjectLineRepository : IProjectLineRepository
     {
         private List<ProjectLine> m_TestList = new List<ProjectLine>();
 
+        /// <summary>
+        /// Data creation should be moved to ...ControllerTest
+        /// </summary>
         public MockProjectLineRepository()
         {
-            DateTime TestDate = DateTime.Now;
+            DateTime testDate = DateTime.Now;
 
-            Project pro1 = new Project();
-            pro1.Name = "Test Project 1";
-            pro1.Id = 1;
-            pro1.Status = "status";
-            pro1.ProjectLine = new List<ProjectLine>();
-            pro1.User = "username";
-            pro1.Date = DateTime.Now;
-            pro1.Comment = new List<Comment>();
-            pro1.CategoryId = 2;
-            pro1.Category = new Category { Id = 1, Name = "cat 1" };
+            Project project1 = new Project();
+            project1.Name = "Test Project 1";
+            project1.Id = 1;
+            project1.Status = "status";
+            project1.ProjectLine = new List<ProjectLine>();
+            project1.User = "username";
+            project1.Date = DateTime.Now;
+            project1.Comment = new List<Comment>();
+            project1.CategoryId = 2;
+            project1.Category = new Category { Id = 1, Name = "cat 1" };
 
-            Project pro2 = new Project();
-            pro2.Name = "Test Project 2";
-            pro2.Id = 2;
-            pro2.Status = "status";
-            pro2.ProjectLine = new List<ProjectLine>();
-            pro2.User = "username";
-            pro2.Date = DateTime.Now;
-            pro2.Comment = new List<Comment>();
-            pro2.CategoryId = 2;
-            pro2.Category = new Category { Id = 1, Name = "cat 1" };
+            Project project2 = new Project();
+            project2.Name = "Test Project 2";
+            project2.Id = 2;
+            project2.Status = "status";
+            project2.ProjectLine = new List<ProjectLine>();
+            project2.User = "username";
+            project2.Date = DateTime.Now;
+            project2.Comment = new List<Comment>();
+            project2.CategoryId = 2;
+            project2.Category = new Category { Id = 1, Name = "cat 1" };
 
             
             for (int i = 1; i <= 6; i++)
             {
                 ProjectLine TestProjectLine = new ProjectLine();
                 TestProjectLine.Id = i;
-                TestProjectLine.Date = TestDate;
+                TestProjectLine.Date = testDate;
                 TestProjectLine.User = "User " + i.ToString();
                 TestProjectLine.ProjectId = 1;
-                TestProjectLine.Project = pro1;
+                TestProjectLine.Project = project1;
                 TestProjectLine.Language = "EN";
                 TestProjectLine.TextLine1 = "text1." + i.ToString();
                 TestProjectLine.TextLine2 = "text2." + i.ToString();
-                TestProjectLine.TimeFrom = TestDate.AddHours(-i);
-                TestProjectLine.TimeTo = TestDate.AddHours(i);
+                TestProjectLine.TimeFrom = testDate.AddHours(-i);
+                TestProjectLine.TimeTo = testDate.AddHours(i);
                 m_TestList.Add(TestProjectLine);
             }
             for (int i = 7; i <= 10; i++)
             {
                 ProjectLine TestProjectLine = new ProjectLine();
                 TestProjectLine.Id = i;
-                TestProjectLine.Date = TestDate;
+                TestProjectLine.Date = testDate;
                 TestProjectLine.User = "User " + i.ToString();
                 TestProjectLine.ProjectId = 2;
-                TestProjectLine.Project = pro2;
+                TestProjectLine.Project = project2;
                 TestProjectLine.Language = "IS";
                 TestProjectLine.TextLine1 = "text1." + i.ToString();
                 TestProjectLine.TextLine2 = "text2." + i.ToString();
-                TestProjectLine.TimeFrom = TestDate.AddHours(-i);
-                TestProjectLine.TimeTo = TestDate.AddHours(i);
+                TestProjectLine.TimeFrom = testDate.AddHours(-i);
+                TestProjectLine.TimeTo = testDate.AddHours(i);
                 m_TestList.Add(TestProjectLine);
             }
         }
@@ -126,8 +132,6 @@ namespace textis.Tests.Mock
 
         public void Update(ProjectLine ProjectLine)
         {
-            //ProjectLine TestProjectLine = new ProjectLine();
-            //TestProjectLine = GetSingle(ProjectLine.Id);
             ProjectLine.User = "ChangeUser";
         }
 

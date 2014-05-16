@@ -8,19 +8,25 @@ using textis.Tests.Repository;
 
 namespace textis.Tests.Mock
 {
+    /// <summary>
+    /// Mock ProjectRepository
+    /// </summary>
     class MockProjectRepository : IProjectRepository
     {
         private List<Project> m_TestList = new List<Project>();
 
+        /// <summary>
+        /// data creation should not be here, move to ...ControllerTest
+        /// </summary>
         public MockProjectRepository()
         {
-            DateTime TestDate = DateTime.Now;
+            DateTime testDate = DateTime.Now;
 
             for (int i = 1; i <= 6; i++)
             {
                 Project TestProject = new Project();
                 TestProject.Id = i;
-                TestProject.Date = TestDate.AddDays(i);
+                TestProject.Date = testDate.AddDays(i);
                 TestProject.Status = "status";
                 TestProject.User = "User " + i.ToString();
                 TestProject.Name = "Project " + i.ToString();
@@ -34,7 +40,7 @@ namespace textis.Tests.Mock
             {
                 Project TestProject = new Project();
                 TestProject.Id = i;
-                TestProject.Date = TestDate.AddDays(-i);
+                TestProject.Date = testDate.AddDays(-i);
                 TestProject.Status = "status";
                 TestProject.User = "User " + i.ToString();
                 TestProject.Name = "Project " + i.ToString();
@@ -91,8 +97,6 @@ namespace textis.Tests.Mock
 
         public void Update(Project Project)
         {
-            //Project TestProject = new Project();
-            //TestProject = GetSingle(Project.Id);
             Project.User = "ChangeUser";
         }
 
@@ -112,7 +116,5 @@ namespace textis.Tests.Mock
         {
             // empty
         }
-
-
     }
 }

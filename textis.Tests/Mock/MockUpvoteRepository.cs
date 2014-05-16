@@ -8,35 +8,41 @@ using textis.Tests.Repository;
 
 namespace textis.Tests.Mock
 {
+    /// <summary>
+    /// Mock UpvoteRepository
+    /// </summary>
     class MockUpvoteRepository : IUpvoteRepository
     {
         private List<Upvote> m_TestList = new List<Upvote>();
 
+        /// <summary>
+        /// data creation should be moved to ..ControllerTest
+        /// </summary>
         public MockUpvoteRepository()
         {
             DateTime TestDate = DateTime.Now;
 
-            Project pro1 = new Project();
-            pro1.Name = "Test Project 1";
-            pro1.Id = 1;
-            pro1.Status = "status";
-            pro1.ProjectLine = new List<ProjectLine>();
-            pro1.User = "username";
-            pro1.Date = DateTime.Now;
-            pro1.Comment = new List<Comment>();
-            pro1.CategoryId = 2;
-            pro1.Category = new Category { Id = 1, Name = "cat 1" };
+            Project project1 = new Project();
+            project1.Name = "Test Project 1";
+            project1.Id = 1;
+            project1.Status = "status";
+            project1.ProjectLine = new List<ProjectLine>();
+            project1.User = "username";
+            project1.Date = DateTime.Now;
+            project1.Comment = new List<Comment>();
+            project1.CategoryId = 2;
+            project1.Category = new Category { Id = 1, Name = "cat 1" };
 
-            Project pro2 = new Project();
-            pro2.Name = "Test Project 2";
-            pro2.Id = 2;
-            pro2.Status = "status";
-            pro2.ProjectLine = new List<ProjectLine>();
-            pro2.User = "username";
-            pro2.Date = DateTime.Now;
-            pro2.Comment = new List<Comment>();
-            pro2.CategoryId = 2;
-            pro2.Category = new Category { Id = 1, Name = "cat 1" };
+            Project project2 = new Project();
+            project2.Name = "Test Project 2";
+            project2.Id = 2;
+            project2.Status = "status";
+            project2.ProjectLine = new List<ProjectLine>();
+            project2.User = "username";
+            project2.Date = DateTime.Now;
+            project2.Comment = new List<Comment>();
+            project2.CategoryId = 2;
+            project2.Category = new Category { Id = 1, Name = "cat 1" };
 
             
             for (int i = 1; i <= 6; i++)
@@ -46,7 +52,7 @@ namespace textis.Tests.Mock
                 TestUpvote.Date = TestDate;
                 TestUpvote.User = "User " + i.ToString();
                 TestUpvote.ProjectId = 1;
-                TestUpvote.Project = pro1;
+                TestUpvote.Project = project1;
                 m_TestList.Add(TestUpvote);
             }
             for (int i = 7; i <= 10; i++)
@@ -56,7 +62,7 @@ namespace textis.Tests.Mock
                 TestUpvote.Date = TestDate;
                 TestUpvote.User = "Another User " + i.ToString();
                 TestUpvote.ProjectId = 2;
-                TestUpvote.Project = pro2;
+                TestUpvote.Project = project2;
                 m_TestList.Add(TestUpvote);
             }
         }
@@ -111,8 +117,6 @@ namespace textis.Tests.Mock
 
         public void Update(Upvote upvote)
         {
-            //Upvote TestUpvote = new Upvote();
-            //TestUpvote = GetSingle(upvote.Id);
             upvote.User = "ChangeUser";
         }
 
@@ -132,7 +136,5 @@ namespace textis.Tests.Mock
         {
             // empty
         }
-
-
     }
 }
