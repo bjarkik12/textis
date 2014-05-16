@@ -18,20 +18,17 @@ namespace textis.Controllers
     {
         ICommentRepository m_CommentRepository;
         IProjectRepository m_ProjectRepository;
-//        List<CommentViewModel> m_CommentViewModelList;
 
         public CommentController()
         {
             m_CommentRepository = new CommentRepository();
             m_ProjectRepository = new ProjectRepository();
-            //m_CommentViewModelList = new List<CommentViewModel>() = new List<CommentViewModel>();
         }
 
         public CommentController(ICommentRepository commentRepository, IProjectRepository projectRepository)
         {
             m_CommentRepository = commentRepository;
             m_ProjectRepository = projectRepository;
-  //          m_CommentViewModelList = new List<CommentViewModel>();
         }
 
         public string GetUsername(){
@@ -46,8 +43,6 @@ namespace textis.Controllers
             }
         }
         
-
-        // GET: /Comment/
         public ActionResult Index()
         {
             List<CommentViewModel> m_CommentViewModelList = new List<CommentViewModel>();
@@ -60,7 +55,6 @@ namespace textis.Controllers
             return View(m_CommentViewModelList);            
         }
 
-        // GET: /Comment/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -76,16 +70,12 @@ namespace textis.Controllers
             return View(new CommentViewModel(comment));
         }
 
-        // GET: /Comment/Create
         public ActionResult Create()
         {
             ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name");
             return View();
         }
 
-        // POST: /Comment/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include="Id,ProjectId,Text,User,Date")] CommentViewModel commentViewModel)
@@ -107,7 +97,6 @@ namespace textis.Controllers
             return View(commentViewModel);
         }
 
-        // GET: /Comment/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -123,9 +112,6 @@ namespace textis.Controllers
             return View(new CommentViewModel(comment));
         }
 
-        // POST: /Comment/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include="Id,ProjectId,Text,User,Date,ProjectName")] CommentViewModel commentViewModel)
@@ -144,7 +130,6 @@ namespace textis.Controllers
             return View(commentViewModel);
         }
 
-        // GET: /Comment/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -159,7 +144,6 @@ namespace textis.Controllers
             return View(new CommentViewModel(comment));
         }
 
-        // POST: /Comment/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -183,28 +167,21 @@ namespace textis.Controllers
             m_ProjectRepository.Dispose();
             base.Dispose(disposing);
         }
-
-
-        //public IEnumerable<Comment> GetComments(int id)
-        //{
-        //    var result = from c in m_CommentRepository.GetByProjectId(id)
-        //                 orderby c.Date ascending
-        //                 select c;
-        //    return result;
-        //}
-
+        /// <summary>
+        /// Returns a List of Comments for current Project
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>IEnumerable<CommentViewModel></returns>
         public IEnumerable<CommentViewModel> GetComments(int id)
         {
-            //var result = from c in m_CommentRepository.GetByProjectId(id)
-            //             orderby c.Date ascending
-            //             select c;
-            List<CommentViewModel> tempList = new List<CommentViewModel>();
-            //foreach (Comment tempComment in result)
-            foreach (Comment tempComment in m_CommentRepository.GetByProjectId(id))
+            List<CommentViewModel> commentList = new List<CommentViewModel>();
+
+            foreach (Comment comment in m_CommentRepository.GetByProjectId(id))
             {
-                tempList.Add(new CommentViewModel(tempComment));
+                commentList.Add(new CommentViewModel(comment));
             }
-            return tempList;
+
+            return commentList;
         }
 
         [HttpPost]
@@ -212,7 +189,6 @@ namespace textis.Controllers
         {
             Comment comment = new Comment();
             var tempid = Int32.Parse(formData["ProjectId"]);
-            //Id,ProjectId,Text,User,Date
             comment.ProjectId = tempid;
             comment.Text = formData["Text"];
             comment.User = GetUsername();
@@ -220,9 +196,7 @@ namespace textis.Controllers
 
             m_CommentRepository.Create(comment);
             m_CommentRepository.Save();
-            //IEnumerable<Comment> test = GetComments(tempid);
             return Json(GetComments(tempid), JsonRequestBehavior.AllowGet);
-            //return Json("status":"ok" , JsonRequestBehavior.AllowGet);
         }
     }
 }
