@@ -64,7 +64,6 @@ namespace textis.Controllers
             m_ProjectLineRepository = projectLineRepository;
         }
 
-
         /// <summary>
         /// Populate ProjectViewModel with related data (lines for comment, upvotes and lines)
         /// </summary>
@@ -207,9 +206,9 @@ namespace textis.Controllers
                     break;
             }
 
-            foreach (Project x in project)
+            foreach (Project item in project)
             {
-                ProjectViewModel projectViewModel = new ProjectViewModel(x);
+                ProjectViewModel projectViewModel = new ProjectViewModel(item);
 
                 // add related information to projectViewModel (commentlines, upvotelines, projectlines, etc)
                 projectViewModel = PopulateProjectViewModel(projectViewModel);
@@ -304,16 +303,16 @@ namespace textis.Controllers
                 project.Date = DateTime.Now;
 
                 if (projectViewModel.DestinationProjectLines != null) { 
-                    foreach (ProjectLineViewModel x in projectViewModel.DestinationProjectLines)
+                    foreach (ProjectLineViewModel projectLineViewModel in projectViewModel.DestinationProjectLines)
                     {
                         ProjectLine projectLine = new ProjectLine();
-                        projectLine.Id = x.Id;
-                        projectLine.Language = x.Language;
-                        projectLine.ProjectId = x.ProjectId;
-                        projectLine.TimeFrom = x.TimeFrom;
-                        projectLine.TimeTo = x.TimeTo;
-                        projectLine.TextLine1 = x.TextLine1;
-                        projectLine.TextLine2 = x.TextLine2;
+                        projectLine.Id = projectLineViewModel.Id;
+                        projectLine.Language = projectLineViewModel.Language;
+                        projectLine.ProjectId = projectLineViewModel.ProjectId;
+                        projectLine.TimeFrom = projectLineViewModel.TimeFrom;
+                        projectLine.TimeTo = projectLineViewModel.TimeTo;
+                        projectLine.TextLine1 = projectLineViewModel.TextLine1;
+                        projectLine.TextLine2 = projectLineViewModel.TextLine2;
 
                         projectLine.Date = project.Date;
                         projectLine.User = project.User;
