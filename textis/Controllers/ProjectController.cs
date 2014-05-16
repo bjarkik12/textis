@@ -332,11 +332,17 @@ namespace textis.Controllers
             return View(projectViewModel);
         }
 
+        /// <summary>
+        /// Uploads a .srt file from the user, breaks it down and adds data to the database
+        /// Adds empty icelandic text lines to the database
+        /// </summary>
+        /// <param name="id" name="file"></param>
+        /// <returns>View(Edit)<EditViewModel></returns>
         [HttpPost]
         public ActionResult Upload(HttpPostedFileBase file, int id)
         {
             if (file == null)
-            {
+            { 
                 TempData["alertMessage"] = "Engin skrá var valin.";
                 return RedirectToAction("Edit", new { id = id });
             }
@@ -467,6 +473,12 @@ namespace textis.Controllers
             return RedirectToAction("Edit", new { id = id });
         }
 
+        /// <summary>
+        /// Creates an icelandic .srt file from projectdata no:"id" on the database.
+        /// Allows the user to download the file and then deletes it.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>View(Edit)<EditViewModel></returns>
         [HttpPost]
         public ActionResult DownloadFile(int? id)
         {
