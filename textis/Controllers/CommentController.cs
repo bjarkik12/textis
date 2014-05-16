@@ -27,10 +27,10 @@ namespace textis.Controllers
             //m_CommentViewModelList = new List<CommentViewModel>() = new List<CommentViewModel>();
         }
 
-        public CommentController(ICommentRepository repository)
+        public CommentController(ICommentRepository commentRepository, IProjectRepository projectRepository)
         {
-            m_CommentRepository = repository;
-            m_ProjectRepository = new ProjectRepository();
+            m_CommentRepository = commentRepository;
+            m_ProjectRepository = projectRepository;
   //          m_CommentViewModelList = new List<CommentViewModel>();
         }
 
