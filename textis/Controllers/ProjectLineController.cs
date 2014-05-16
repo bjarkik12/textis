@@ -16,13 +16,11 @@ namespace textis.Controllers
     {
         private IProjectLineRepository m_ProjectLineRepository;
         private IProjectRepository m_ProjectRepository;
-        //List<ProjectLineViewModel> m_ProjectLineViewModelList = new List<ProjectLineViewModel>();
 
         public ProjectLineController()
         {
             m_ProjectLineRepository = new ProjectLineRepository();
             m_ProjectRepository = new ProjectRepository();
-            //m_ProjectLineViewModelList = new List<ProjectLineViewModel>();
         }
 
         public ProjectLineController(IProjectLineRepository repository)
@@ -30,7 +28,6 @@ namespace textis.Controllers
             // only used by unit testing
             m_ProjectLineRepository = repository;
             m_ProjectRepository = new ProjectRepository();
-            //m_ProjectLineViewModelList = new List<ProjectLineViewModel>();
         }
 
 
@@ -47,8 +44,6 @@ namespace textis.Controllers
             }
         }
 
-
-        // GET: /ProjectLine/
         public ActionResult Index()
         {
             List<ProjectLineViewModel> m_ProjectLineViewModelList = new List<ProjectLineViewModel>();
@@ -62,7 +57,6 @@ namespace textis.Controllers
             return View(m_ProjectLineViewModelList);            
         }
 
-        // GET: /ProjectLine/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -79,16 +73,12 @@ namespace textis.Controllers
             return View(new ProjectLineViewModel(projectLine));
         }
 
-        // GET: /ProjectLine/Create
         public ActionResult Create()
         {
             ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name");
             return View();
         }
 
-        // POST: /ProjectLine/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include="Id,ProjectId,User,TimeFrom,TimeTo,TextLine1,TextLine2,Date,Language")] ProjectLineViewModel projectLineViewModel)
@@ -109,7 +99,6 @@ namespace textis.Controllers
             return View(projectLineViewModel);
         }
 
-        // GET: /ProjectLine/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -127,9 +116,6 @@ namespace textis.Controllers
             return View(new ProjectLineViewModel(projectLine));
         }
 
-        // POST: /ProjectLine/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include="Id,ProjectId,User,TimeFrom,TimeTo,TextLine1,TextLine2,Date,Language")] ProjectLineViewModel projectLineViewModel)
@@ -149,7 +135,6 @@ namespace textis.Controllers
             return View(projectLineViewModel);
         }
 
-        // GET: /ProjectLine/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -166,7 +151,6 @@ namespace textis.Controllers
             return View(new ProjectLineViewModel (projectLine));
         }
 
-        // POST: /ProjectLine/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

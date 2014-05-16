@@ -6,6 +6,9 @@ using System.Web;
 
 namespace textis.ViewModel
 {
+    /// <summary>
+    /// Constructs a ViewModel for the Comment Entity to the sent to the View
+    /// </summary>
     public class CommentViewModel
     {
         public int Id { get; set; }
@@ -25,23 +28,23 @@ namespace textis.ViewModel
         {
             Id = comment.Id;
             ProjectId = comment.ProjectId;
-            // these lines cause crash of comment posting...!
-            //ProjectId = comment.Project.Id;
-            //ProjectName = comment.Project.Name;
             User = comment.User;
             Text = comment.Text;
             Date = comment.Date;
         }
 
+        /// <summary>
+        /// Used to shuffle data from a ViewModel to Model
+        /// </summary>
         public Comment CastViewModelToModel()
         {
-            Comment m_comment = new Comment();
-            m_comment.Id = Id;
-            m_comment.User = User;
-            m_comment.Date = Date;
-            m_comment.ProjectId = ProjectId;
-            m_comment.Text = Text;
-            return m_comment;
+            Comment comment = new Comment();
+            comment.Id = Id;
+            comment.User = User;
+            comment.Date = Date;
+            comment.ProjectId = ProjectId;
+            comment.Text = Text;
+            return comment;
         }
     }
 }

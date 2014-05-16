@@ -8,6 +8,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace textis.ViewModel
 {
+    /// <summary>
+    /// Constructs a ViewModel for the Project Entity to the sent to the View
+    /// </summary>
     public class ProjectViewModel
     {
         public int Id { get; set; }
@@ -48,17 +51,20 @@ namespace textis.ViewModel
             UpvoteLines = new List<UpvoteViewModel>();
         }
 
+        /// <summary>
+        /// Used to shuffle data from a ViewModel to Model
+        /// </summary>
         public Project CastViewModelToModel()
         {
-            Project m_project = new Project();
-            m_project.Id = Id;
-            m_project.User = User;
-            m_project.Date = Date;
-            m_project.Name = Name;
-            m_project.Status = Status;
-            m_project.Url = Url;
-            m_project.CategoryId = CategoryId; 
-            return m_project;
+            Project project = new Project();
+            project.Id = Id;
+            project.User = User;
+            project.Date = Date;
+            project.Name = Name;
+            project.Status = Status;
+            project.Url = Url;
+            project.CategoryId = CategoryId; 
+            return project;
         }
     }
 }

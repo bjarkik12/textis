@@ -315,6 +315,7 @@
     <Content Include="Views\ProjectLine\Index.cshtml" />
     <Content Include="Views\Project\Edit2.cshtml" />
     <Content Include="Views\Project\Create2.cshtml" />
+    <Content Include="Views\Home\faq.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

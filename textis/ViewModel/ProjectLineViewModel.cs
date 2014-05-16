@@ -5,6 +5,9 @@ using System.Web;
 
 namespace textis.ViewModel
 {
+    /// <summary>
+    /// Constructs a ViewModel for the ProjectLine Entity to the sent to the View
+    /// </summary>
     public class ProjectLineViewModel
     {
         public int ProjectId { get; set; }
@@ -25,6 +28,7 @@ namespace textis.ViewModel
         {
             //empty
         }
+
         public ProjectLineViewModel(ProjectLine projectLine)
         {
             ProjectId = projectLine.ProjectId;
@@ -42,20 +46,22 @@ namespace textis.ViewModel
             Id = projectLine.Id;
         }
 
+        /// <summary>
+        /// Used to shuffle data from a ViewModel to Model
+        /// </summary>
         public ProjectLine CastViewModelToModel()
         {
-            ProjectLine m_ProjectLine = new ProjectLine();
-            m_ProjectLine.ProjectId = ProjectId;
-            m_ProjectLine.User = User;
-            m_ProjectLine.TextLine1 = TextLine1;
-            m_ProjectLine.TextLine2 = TextLine2;
-            m_ProjectLine.TimeFrom = TimeFrom;
-            m_ProjectLine.TimeTo = TimeTo;
-            m_ProjectLine.Language = Language;
-            m_ProjectLine.Date = Date;
-            m_ProjectLine.Id = Id;
-            return m_ProjectLine;
-
+            ProjectLine projectLine = new ProjectLine();
+            projectLine.ProjectId = ProjectId;
+            projectLine.User = User;
+            projectLine.TextLine1 = TextLine1;
+            projectLine.TextLine2 = TextLine2;
+            projectLine.TimeFrom = TimeFrom;
+            projectLine.TimeTo = TimeTo;
+            projectLine.Language = Language;
+            projectLine.Date = Date;
+            projectLine.Id = Id;
+            return projectLine;
         }
     }
 }

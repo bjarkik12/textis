@@ -5,11 +5,13 @@ using System.Web;
 
 namespace textis.ViewModel
 {
+    /// <summary>
+    /// Constructs a ViewModel for the Category Entity to the sent to the View
+    /// </summary>
     public class CategoryViewModel{
 
         public int Id { get; set; }
         public string Name { get; set; }
-//        public string Project { get; set; }
 
         public CategoryViewModel()
         {
@@ -20,9 +22,11 @@ namespace textis.ViewModel
         {
            Id = category.Id;
            Name = category.Name;
-  //         Project = category.Project;
         }
 
+        /// <summary>
+        /// Used to shuffle data from a ViewModel to Model
+        /// </summary>
         public Category CastViewModelToModel()
         {
             Category m_category = new Category();
@@ -30,15 +34,5 @@ namespace textis.ViewModel
             m_category.Name = Name;         
             return m_category;
         }
-
-        //public CategoryViewModel CastModelToViewModel(Category category)
-        //{
-        //    CategoryViewModel m_categoryViewModel = new CategoryViewModel(category);
-        //    Id = category.Id;
-        //    Name = category.Name;
-        //    return m_categoryViewModel;
-        //}
-
-
     }
 }

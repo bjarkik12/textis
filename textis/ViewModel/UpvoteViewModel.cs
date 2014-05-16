@@ -5,6 +5,9 @@ using System.Web;
 
 namespace textis.ViewModel
 {
+    /// <summary>
+    /// Constructs a ViewModel for the Upvote Entity to the sent to the View
+    /// </summary>
     public class UpvoteViewModel
     {
         public int Id { get; set; }
@@ -27,14 +30,17 @@ namespace textis.ViewModel
             Date = upvote.Date;
         }
 
+        /// <summary>
+        /// Used to shuffle data from a ViewModel to Model
+        /// </summary>
         public Upvote CastViewModelToModel()
         {
-            Upvote m_upvote = new Upvote();
-            m_upvote.Id = Id;
-            m_upvote.ProjectId = ProjectId;
-            m_upvote.User = User;
-            m_upvote.Date = Date;
-            return m_upvote;
+            Upvote upvote = new Upvote();
+            upvote.Id = Id;
+            upvote.ProjectId = ProjectId;
+            upvote.User = User;
+            upvote.Date = Date;
+            return upvote;
         }
     }
 }
