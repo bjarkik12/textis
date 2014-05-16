@@ -12,63 +12,58 @@ using textis.ViewModel;
 
 namespace textis.Controllers
 {
+    /// <summary>
+    /// Only Administrators are allowed to Edit, Add or Remove Categories
+    /// </summary>
     [Authorize(Roles = "Admin")]
     public class CategoryController : Controller
     {
         private ICategoryRepository m_CategoryRepository;
-        //CategoryViewModel m_CategoryViewModel = new CategoryViewModel();
-        //List<CategoryViewModel> m_CategoryViewModelList = new List<CategoryViewModel>();
 
         public CategoryController()
         {
             m_CategoryRepository = new CategoryRepository();
-            //m_CategoryViewModel = new CategoryViewModel();
-            //m_CategoryViewModelList = new List<CategoryViewModel>();
         }
 
         public CategoryController(ICategoryRepository repository)
         {
             m_CategoryRepository = repository;
-            //m_CategoryViewModel = new CategoryViewModel();
-            //m_CategoryViewModelList = new List<CategoryViewModel>();
         }
 
-        // GET: /Category/
         public ActionResult Index()
         {
             List<CategoryViewModel> m_CategoryViewModelList = new List<CategoryViewModel>();
+
             foreach (Category x in m_CategoryRepository.GetAll().ToList())
             {
                 CategoryViewModel categoryViewModel = new CategoryViewModel(x);
                 m_CategoryViewModelList.Add(categoryViewModel);
             }
+
             return View(m_CategoryViewModelList);            
         }
 
-        // GET: /Category/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Category category = m_CategoryRepository.GetSingle(id);
             if (category == null)
             {
                 return HttpNotFound();
             }
+
             return View(new CategoryViewModel(category));
         }
 
-        // GET: /Category/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: /Category/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include="Id,Name")] CategoryViewModel categoryViewModel)
@@ -79,14 +74,12 @@ namespace textis.Controllers
                 category = categoryViewModel.CastViewModelToModel();
                 m_CategoryRepository.Create(category);
                 m_CategoryRepository.Save();
-
                 return RedirectToAction("Index");
             }
 
             return View(categoryViewModel);
         }
 
-        // GET: /Category/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -105,9 +98,6 @@ namespace textis.Controllers
             return View(categoryViewModel);
         }
 
-        // POST: /Category/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include="Id,Name")] CategoryViewModel categoryViewModel)
@@ -124,7 +114,6 @@ namespace textis.Controllers
             return View(categoryViewModel);
         }
 
-        // GET: /Category/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -143,7 +132,6 @@ namespace textis.Controllers
             return View(categoryViewModel);
         }
 
-        // POST: /Category/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

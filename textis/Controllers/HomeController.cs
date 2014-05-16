@@ -8,7 +8,13 @@ using textis.ViewModel;
 namespace textis.Controllers
 {
     public class HomeController : Controller
-    {         
+    {
+        /// <summary>
+        /// Accepts search parameters for the name of project and category
+        /// </summary>
+        /// <param name="category"></param>
+        /// <param name="searchString"></param>
+        /// <returns>ActionResult</returns>
         public ActionResult Index(string category, string searchString)
         {
             IProjectRepository m_ProjectRepository = new ProjectRepository();
@@ -46,11 +52,15 @@ namespace textis.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "Hvað er textis?";
 
             return View();
         }
 
+        /// <summary>
+        /// Contact page is not currently used and therefore closed to other than admins.
+        /// </summary>
+        [Authorize(Roles = "Admin")]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
