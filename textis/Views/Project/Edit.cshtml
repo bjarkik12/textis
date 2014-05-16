@@ -128,25 +128,28 @@
         <strong>Það tókst ekki að taka við skránni!</strong> @TempData["alertMessage"]
    </div> 
 }
-    <br />
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-5">
             @using (Html.BeginForm("Upload", "Project", FormMethod.Post, new { @class = "", enctype = "multipart/form-data", id = Model.Id }))
             {
                 <input type='file' name='file' id='file' />
-                <input class="button" type="submit" value="Senda inn .srt skrá" />
+                <input class="button" type="submit" value="Senda inn enska .srt skrá" />
                 @Html.HiddenFor(m => m.Id)
             }                
         </div>
+        <br />
+        @if (Model.SourceProjectLines.Count != 0)
+        {
+            <div class="col-md-5">
+                @using (Html.BeginForm("DownloadFile", "Project", FormMethod.Post, new { enctype = "multipart/form-data", id = Model.Id }))
+                {
+                    <br />
+                    <input type="submit" class="button" name="Submit" id="Submit" value="Sækja íslenska .srt skrá" />
+                    @Html.HiddenFor(m => m.Id)
+                }
+            </div>
+        }
 
-        <div class="col-md-6">
-            @using (Html.BeginForm("DownloadFile", "Project", FormMethod.Post, new { enctype = "multipart/form-data", id = Model.Id }))
-            {
-                <br />
-                <input type="submit" class="button" name="Submit" id="Submit" value="Sækja .srt skrá" />
-                @Html.HiddenFor(m => m.Id)
-            }
-        </div>
     </div>
 <br />
 <hr />
