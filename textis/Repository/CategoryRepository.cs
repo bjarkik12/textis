@@ -31,7 +31,6 @@ namespace textis.Repository
         public void Create(Category category)
         {
             m_context.Category.Add(category);
-            //context.SaveChanges();
         }
 
         /// <summary>
@@ -62,7 +61,6 @@ namespace textis.Repository
         {
             Category category = this.GetSingle(id);
             m_context.Category.Remove(category);
-            //context.SaveChanges();
         }
 
         /// <summary>

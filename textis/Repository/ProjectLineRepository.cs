@@ -65,7 +65,6 @@ namespace textis.Repository
         public void Update(ProjectLine projectLine)
         {
             m_context.Entry(projectLine).State = EntityState.Modified;
-            //context.SaveChanges();
         }
 
         /// <summary>
@@ -76,7 +75,6 @@ namespace textis.Repository
         {
             ProjectLine projectLine = this.GetSingle(id);
             m_context.ProjectLine.Remove(projectLine);
-            //context.SaveChanges();
         }
 
         /// <summary>
