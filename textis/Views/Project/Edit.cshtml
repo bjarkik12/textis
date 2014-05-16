@@ -21,105 +21,108 @@
             </div>
         </div>
     }
-    else {
-    using (Html.BeginForm())
+    else 
     {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary(true)
-        @Html.HiddenFor(model => model.Id)
-        <div class="subtitle_display">
-            <div id="subtitle_en">
-                <span class="edit_header">Enskur Texti</span><br />
-                <table class="edit_table">
-                    @foreach (var item in Model.SourceProjectLines)
-                    {
-                        <tr>
-                            <td>Lína #1: @Html.TextBoxFor(modelItem => item.TextLine1, new { @disabled = "disabled", @class = "edit_textline" })</td>
-                        </tr>
-                        <tr>
-                            <td>Lína #2: @Html.TextBoxFor(modelItem => item.TextLine2, new { @disabled = "disabled", @class = "edit_textline" })</td>
-                        </tr>
-                        <tr>
-                            <td><br /></td>
-                        </tr>
-                    }
-                </table>
+        using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.Id)
+            <div class="subtitle_display">
+                <div id="subtitle_en">
+                    <span class="edit_header">Enskur Texti</span><br />
+                    <table class="edit_table">
+                        @foreach (var item in Model.SourceProjectLines)
+                        {
+                            <tr>
+                                <td>Lína #1: @Html.TextBoxFor(modelItem => item.TextLine1, new { @disabled = "disabled", @class = "edit_textline" })</td>
+                            </tr>
+                            <tr>
+                                <td>Lína #2: @Html.TextBoxFor(modelItem => item.TextLine2, new { @disabled = "disabled", @class = "edit_textline" })</td>
+                            </tr>
+                            <tr>
+                                <td><br /></td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div id="subtitle_time">
+                    <span class="edit_header">Tímaás</span><br />
+                    <table class="edit_table">
+                        @foreach (var item in Model.SourceProjectLines)
+                        {
+                            <tr>
+                                <td>Byrjun: @Html.TextBoxFor(modelItem => item.TimeFromString, new { @disabled = "disabled", @class = "edit_timeline" })</td>
+                            </tr>
+                            <tr>
+                                <td>Endar:&nbsp @Html.TextBoxFor(modelItem => item.TimeToString, new { @disabled = "disabled", @class = "edit_timeline" })</td>
+                            </tr>
+                            <tr>
+                                <td><br /></td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div id="subtitle_is">
+                    <span class="edit_header">Íslenskur texti</span><br />
+                    <table class="edit_table">
+                        @{ 
+                            int index = 0; 
+                        }
+                        @foreach (var item in Model.DestinationProjectLines)
+                        {
+                            <tr>
+                                <td>Lína #1: @Html.TextBox(string.Format("DestinationProjectLines[{0}].TextLine1", index), item.TextLine1, new { @class = "edit_textline" }) </td>
+                            </tr>
+                            <tr>
+                                <td>Lína #2: @Html.TextBox(string.Format("DestinationProjectLines[{0}].TextLine2", index), item.TextLine2, new { @class = "edit_textline" })
+                                @Html.Hidden(string.Format("DestinationProjectLines[{0}].Id", index), item.Id) 
+                                @Html.Hidden(string.Format("DestinationProjectLines[{0}].TimeFrom", index), item.TimeFrom)
+                                @Html.Hidden(string.Format("DestinationProjectLines[{0}].TimeTo", index), item.TimeTo)
+                                @Html.Hidden(string.Format("DestinationProjectLines[{0}].ProjectId", index), item.ProjectId)
+                                @Html.Hidden(string.Format("DestinationProjectLines[{0}].Language", index), item.Language)</td>
+                            </tr>
+                            <tr>
+                                <td><br /></td>
+                            </tr>
+                            index++;
+                        }
+                    </table>
+                </div>
             </div>
-            <div id="subtitle_time">
-                <span class="edit_header">Tímaás</span><br />
-                <table class="edit_table">
-                    @foreach (var item in Model.SourceProjectLines)
+            <br />
+            <div class="row">
+                <div class="col-md-3">
+                    <b>Staða: </b>
+                    @Html.DropDownListFor(model => model.Status, new SelectList(
+                    new List<Object>
                     {
-                        <tr>
-                            <td>Byrjun: @Html.TextBoxFor(modelItem => item.TimeFromString, new { @disabled = "disabled", @class = "edit_timeline" })</td>
-                        </tr>
-                        <tr>
-                            <td>Endar:&nbsp @Html.TextBoxFor(modelItem => item.TimeToString, new { @disabled = "disabled", @class = "edit_timeline" })</td>
-                        </tr>
-                        <tr>
-                            <td><br /></td>
-                        </tr>
-                    }
-                </table>
-
+                        new { value = "Stofnað", text = "Stofnað" },
+                        new { value = "Í vinnslu", text = "Í vinnslu" },
+                        new { value = "Tilbúið", text = "Tilbúið" },
+                    },
+                    "value",
+                    "text",
+                    "Stofnað"))
+                    @Html.ValidationMessageFor(model => model.Status)
+                </div>
+                <div class="col-md-3">
+                    <b>Flokkur: </b>
+                    @Html.DropDownList("CategoryId", "Velja flokk")
+                    @Html.ValidationMessageFor(model => model.CategoryId)
+                </div>
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Name, "Titill: ")
+                    @Html.EditorFor(model => model.Name)
+                    @Html.ValidationMessageFor(model => model.Name)
+                </div>
+                <div class="col-md-3">
+                    <input type="submit" class="button" value="Vista" />
+                </div>
             </div>
-            <div id="subtitle_is">
-                <span class="edit_header">Íslenskur texti</span><br />
-                <table class="edit_table">
-                    @{ int index = 0; }
-                    @foreach (var item in Model.DestinationProjectLines)
-                    {
-                        <tr>
-                            <td>Lína #1: @Html.TextBox(string.Format("DestinationProjectLines[{0}].TextLine1", index), item.TextLine1, new { @class = "edit_textline" }) </td>
-                        </tr>
-                        <tr>
-                            <td>Lína #2: @Html.TextBox(string.Format("DestinationProjectLines[{0}].TextLine2", index), item.TextLine2, new { @class = "edit_textline" })
-                            @Html.Hidden(string.Format("DestinationProjectLines[{0}].Id", index), item.Id) 
-                            @Html.Hidden(string.Format("DestinationProjectLines[{0}].TimeFrom", index), item.TimeFrom)
-                            @Html.Hidden(string.Format("DestinationProjectLines[{0}].TimeTo", index), item.TimeTo)
-                            @Html.Hidden(string.Format("DestinationProjectLines[{0}].ProjectId", index), item.ProjectId)
-                            @Html.Hidden(string.Format("DestinationProjectLines[{0}].Language", index), item.Language)</td>
-                        </tr>
-                        <tr>
-                            <td><br /></td>
-                        </tr>
-                        index++;
-                    }
-                </table>
-            </div>
-        </div>
-        <br />
-    <div class="row">
-        <div class="col-md-3">
-            <b>Staða: </b>
-            @Html.DropDownListFor(model => model.Status, new SelectList(
-                new List<Object>
-                {
-                    new { value = "Stofnað", text = "Stofnað" },
-                    new { value = "Í vinnslu", text = "Í vinnslu" },
-                    new { value = "Tilbúið", text = "Tilbúið" },
-                },
-                "value",
-                "text",
-                "Stofnað"))
-            @Html.ValidationMessageFor(model => model.Status)
-        </div>
-        <div class="col-md-3">
-            <b>Flokkur: </b>
-            @Html.DropDownList("CategoryId", "Velja flokk")
-            @Html.ValidationMessageFor(model => model.CategoryId)
-        </div>
-        <div class="col-md-3">
-            @Html.LabelFor(model => model.Name, "Titill: ")
-            @Html.EditorFor(model => model.Name)
-            @Html.ValidationMessageFor(model => model.Name)
-        </div>
-        <div class="col-md-3">
-            <input type="submit" class="button" value="Vista" />
-        </div>
-    </div>
+        }
     }
-}}
+}
 
 @if (TempData["alertMessage"] != null)
 {
@@ -128,77 +131,71 @@
         <strong>Það tókst ekki að taka við skránni!</strong> @TempData["alertMessage"]
    </div> 
 }
-    <div class="row">
-        <div class="col-md-5">
-            @using (Html.BeginForm("Upload", "Project", FormMethod.Post, new { @class = "", enctype = "multipart/form-data", id = Model.Id }))
-            {
-                <input type='file' name='file' id='file' />
-                <input class="button" type="submit" value="Senda inn enska .srt skrá" />
-                @Html.HiddenFor(m => m.Id)
-            }                
-        </div>
-        <br />
-        @if (Model.SourceProjectLines.Count != 0)
+<div class="row">
+    <div class="col-md-5">
+        @using (Html.BeginForm("Upload", "Project", FormMethod.Post, new { @class = "", enctype = "multipart/form-data", id = Model.Id }))
         {
-            <div class="col-md-5">
-                @using (Html.BeginForm("DownloadFile", "Project", FormMethod.Post, new { enctype = "multipart/form-data", id = Model.Id }))
-                {
-                    <br />
-                    <input type="submit" class="button" name="Submit" id="Submit" value="Sækja íslenska .srt skrá" />
-                    @Html.HiddenFor(m => m.Id)
-                }
-            </div>
-        }
+            <input type='file' name='file' id='file' />
+            <input class="button" type="submit" value="Senda inn enska .srt skrá" />
+            @Html.HiddenFor(m => m.Id)
+        }                
     </div>
+    <br />
+    @if (Model.SourceProjectLines.Count != 0)
+    {
+        <div class="col-md-5">
+            @using (Html.BeginForm("DownloadFile", "Project", FormMethod.Post, new { enctype = "multipart/form-data", id = Model.Id }))
+            {
+                <br />
+                <input type="submit" class="button" name="Submit" id="Submit" value="Sækja íslenska .srt skrá" />
+                @Html.HiddenFor(m => m.Id)
+            }
+        </div>
+    }
+</div>
 <br />
 <hr />
 <h4>Athugasemdir</h4>
-    <div class="comment_section">   
-        <ul id="CommentUl" class="list-group">
-            @foreach (var item in Model.CommentLines)
-            {
-                <li class="list-group-item">
-                    <p>
-                        <span class="glyphicon glyphicon-user"></span>
-                        <span class="text-primary">@Html.DisplayFor(modelItem => item.User)</span>
-                        <span>@Html.DisplayFor(modelItem => item.Text)</span>
-                    </p>
-                    <p>
-                        <span class="text-muted">@item.Date.ToString("dd. MMMM HH:mm") - </span>
-                    </p>
-                </li>
-            }
-        </ul>
-
-        @if (User.Identity.IsAuthenticated)
+<div class="comment_section">   
+    <ul id="CommentUl" class="list-group">
+        @foreach (var item in Model.CommentLines)
         {
-            <div class="form-horizontal">
-                <label class="sr-only" for="Text">Comment</label>
-                <textarea class="form-control" rows="3" id="Text" name="Text"></textarea>
-                @Html.HiddenFor(model => model.Id)
-                <button type="submit" class="button" id="Button">Birta</button>
-            </div>
-        }
-
-        <script type="text/html" id="commentTemplate">
-
             <li class="list-group-item">
                 <p>
                     <span class="glyphicon glyphicon-user"></span>
-                    <span class="text-primary" data-content="User"></span>
-                    <span data-content="Text"></span>
+                    <span class="text-primary">@Html.DisplayFor(modelItem => item.User)</span>
+                    <span>@Html.DisplayFor(modelItem => item.Text)</span>
                 </p>
                 <p>
-                    <span class="text-muted" data-content="Date"></span>
-
+                    <span class="text-muted">@item.Date.ToString("dd. MMMM HH:mm") - </span>
                 </p>
-
             </li>
-
-
-        </script>
-    </div>
-   
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
+        }
+    </ul>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="form-horizontal">
+            <label class="sr-only" for="Text">Comment</label>
+            <textarea class="form-control" rows="3" id="Text" name="Text"></textarea>
+            @Html.HiddenFor(model => model.Id)
+            <button type="submit" class="button" id="Button">Birta</button>
+        </div>
     }
+
+    <script type="text/html" id="commentTemplate">
+        <li class="list-group-item">
+            <p>
+                <span class="glyphicon glyphicon-user"></span>
+                <span class="text-primary" data-content="User"></span>
+                <span data-content="Text"></span>
+            </p>
+            <p>
+                <span class="text-muted" data-content="Date"></span>
+            </p>
+        </li>
+    </script>
+</div>
+   
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

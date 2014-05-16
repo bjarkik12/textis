@@ -9,11 +9,17 @@ using textis.Tests.Controllers;
 
 namespace textis.Tests.Controllers
 {
+    /// <summary>
+    /// Testing UpvoteController actions
+    /// </summary>
     [TestClass]
     public class UpvoteControllerTest
     {
+        /// <summary>
+        /// Test UpvoteController.Index
+        /// </summary>
         [TestMethod]
-        public void TestUpvoteGetAll()
+        public void TestUpvoteIndex()
         {
             // Arrange:
             MockUpvoteRepository reposiotory = new MockUpvoteRepository();
@@ -29,8 +35,11 @@ namespace textis.Tests.Controllers
             Assert.IsTrue(model.Count == 10);
         }
 
+        /// <summary>
+        /// Test UpvoteController.Edit
+        /// </summary>
         [TestMethod]
-        public void TestUpvoteGetSingle()
+        public void TestUpvoteEdit()
         {
             // Arrange:
             MockUpvoteRepository upvoteReposiotory = new MockUpvoteRepository();

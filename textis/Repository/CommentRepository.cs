@@ -6,67 +6,95 @@ using System.Data.Entity;
 
 namespace textis.Repository
 {
+    /// <summary>
+    /// Actions for Comment, implements ICommentRepository
+    /// </summary>
     public class CommentRepository : ICommentRepository
     {
-        private readonly TextisModelContainer context = new TextisModelContainer();
+        private readonly TextisModelContainer m_context = new TextisModelContainer();
+        private bool m_disposed = false;
 
+        /// <summary>
+        /// Get all comments
+        /// </summary>
+        /// <returns>List of comment objects</returns>
         public List<Comment> GetAll()
         {
-            IQueryable<Comment> query = context.Comment;
+            IQueryable<Comment> query = m_context.Comment;
             return query.ToList();
         }
 
+        /// <summary>
+        /// Get comments for one project
+        /// </summary>
+        /// <param name="ProjectId"></param>
+        /// <returns>List of comment objects</returns>
         public List<Comment> GetByProjectId(int? id)
         {
-            IQueryable<Comment> query = context.Comment;
+            IQueryable<Comment> query = m_context.Comment;
             var query2 = (from x in query
                           where x.ProjectId == id
                           select x);
             return query2.ToList();
         }
 
+        /// <summary>
+        /// Create comment
+        /// </summary>
+        /// <param name="comment"></param>
         public void Create(Comment comment)
         {
-            context.Comment.Add(comment);
-            //context.SaveChanges();
+            m_context.Comment.Add(comment);
         }
 
+        /// <summary>
+        /// Get single comment
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>comment object</returns>
         public Comment GetSingle(int? id)
         {
             var query = this.GetAll().FirstOrDefault(x => x.Id == id);
             return query;
         }
 
+        /// <summary>
+        /// Update comment
+        /// </summary>
+        /// <param name="comment"></param>
         public void Update(Comment comment)
         {
-            context.Entry(comment).State = EntityState.Modified;
-            //context.SaveChanges();
+            m_context.Entry(comment).State = EntityState.Modified;
         }
 
+        /// <summary>
+        /// Delete Comment
+        /// </summary>
+        /// <param name="id"></param>
         public void Delete(int? id)
         {
             Comment comment = this.GetSingle(id);
-            context.Comment.Remove(comment);
-            //context.SaveChanges();
+            m_context.Comment.Remove(comment);
         }
 
+        /// <summary>
+        /// Save comment
+        /// </summary>
         public void Save()
         {
-            context.SaveChanges();
+            m_context.SaveChanges();
         }
-
-        private bool disposed = false;
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposed)
+            if (!this.m_disposed)
             {
                 if (disposing)
                 {
-                    context.Dispose();
+                    m_context.Dispose();
                 }
             }
-            this.disposed = true;
+            this.m_disposed = true;
         }
 
         public void Dispose()

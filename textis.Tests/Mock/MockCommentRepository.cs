@@ -8,35 +8,41 @@ using textis.Tests.Repository;
 
 namespace textis.Tests.Mock
 {
+    /// <summary>
+    /// Mock CommentRepository
+    /// </summary>
     class MockCommentRepository : ICommentRepository
     {
         private List<Comment> m_TestList = new List<Comment>();
 
+        /// <summary>
+        /// Data creation should be moved to ...ControllerTest
+        /// </summary>
         public MockCommentRepository()
         {
             DateTime TestDate = DateTime.Now;
 
-            Project pro1 = new Project();
-            pro1.Name = "Test Project 1";
-            pro1.Id = 1;
-            pro1.Status = "status";
-            pro1.ProjectLine = new List<ProjectLine>();
-            pro1.User = "username";
-            pro1.Date = DateTime.Now;
-            pro1.Comment = new List<Comment>();
-            pro1.CategoryId = 2;
-            pro1.Category = new Category { Id = 1, Name = "cat 1" };
+            Project project1 = new Project();
+            project1.Name = "Test Project 1";
+            project1.Id = 1;
+            project1.Status = "status";
+            project1.ProjectLine = new List<ProjectLine>();
+            project1.User = "username";
+            project1.Date = DateTime.Now;
+            project1.Comment = new List<Comment>();
+            project1.CategoryId = 2;
+            project1.Category = new Category { Id = 1, Name = "cat 1" };
 
-            Project pro2 = new Project();
-            pro2.Name = "Test Project 2";
-            pro2.Id = 2;
-            pro2.Status = "status";
-            pro2.ProjectLine = new List<ProjectLine>();
-            pro2.User = "username";
-            pro2.Date = DateTime.Now;
-            pro2.Comment = new List<Comment>();
-            pro2.CategoryId = 2;
-            pro2.Category = new Category { Id = 1, Name = "cat 1" };
+            Project project2 = new Project();
+            project2.Name = "Test Project 2";
+            project2.Id = 2;
+            project2.Status = "status";
+            project2.ProjectLine = new List<ProjectLine>();
+            project2.User = "username";
+            project2.Date = DateTime.Now;
+            project2.Comment = new List<Comment>();
+            project2.CategoryId = 2;
+            project2.Category = new Category { Id = 1, Name = "cat 1" };
 
             
             for (int i = 1; i <= 6; i++)
@@ -46,7 +52,7 @@ namespace textis.Tests.Mock
                 TestComment.Date = TestDate;
                 TestComment.User = "User " + i.ToString();
                 TestComment.ProjectId = 1;
-                TestComment.Project = pro1;
+                TestComment.Project = project1;
                 TestComment.Text = "CommentText " + i;
                 m_TestList.Add(TestComment);
             }
@@ -57,7 +63,7 @@ namespace textis.Tests.Mock
                 TestComment.Date = TestDate;
                 TestComment.User = "Another User " + i.ToString();
                 TestComment.ProjectId = 2;
-                TestComment.Project = pro2;
+                TestComment.Project = project2;
                 TestComment.Text = "CommentText " + i;
                 m_TestList.Add(TestComment);
             }
@@ -114,8 +120,6 @@ namespace textis.Tests.Mock
 
         public void Update(Comment comment)
         {
-            //Comment TestComment = new Comment();
-            //TestComment = GetSingle(comment.Id);
             comment.User = "ChangeUser";
         }
 

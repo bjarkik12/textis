@@ -6,67 +6,97 @@ using System.Data.Entity;
 
 namespace textis.Repository
 {
+    /// <summary>
+    /// Actions for ProjectLines, Implements IProjectLineRepository
+    /// </summary>
     public class ProjectLineRepository : IProjectLineRepository
     {
-        private readonly TextisModelContainer context = new TextisModelContainer();
+        private readonly TextisModelContainer m_context = new TextisModelContainer();
+        private bool m_disposed = false;
 
+        /// <summary>
+        /// Get all projectlines
+        /// </summary>
+        /// <returns>List of projectline object</returns>
         public List<ProjectLine> GetAll()
         {
-            IQueryable<ProjectLine> query = context.ProjectLine; 
+            IQueryable<ProjectLine> query = m_context.ProjectLine; 
             return query.ToList();
         }
 
+        /// <summary>
+        /// Get all projectlines for one project
+        /// </summary>
+        /// <param name="ProjectId"></param>
+        /// <returns>List of projectline object</returns>
         public List<ProjectLine> GetByProjectId(int? id)
         {
-            IQueryable<ProjectLine> query = context.ProjectLine;
+            IQueryable<ProjectLine> query = m_context.ProjectLine;
             var query2 = (from x in query
                           where x.ProjectId == id
                           select x);
             return query2.ToList();
         }
 
+        /// <summary>
+        /// Create project
+        /// </summary>
+        /// <param name="projectLine"></param>
         public void Create(ProjectLine projectLine)
         {
-            context.ProjectLine.Add(projectLine);
-            //context.SaveChanges();
+            m_context.ProjectLine.Add(projectLine);
         }
 
+        /// <summary>
+        /// Get single projectline
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>ProjectLine object</returns>
         public ProjectLine GetSingle(int? id)
         {
             var query = this.GetAll().FirstOrDefault(x => x.Id == id);
             return query;
         }
 
+        /// <summary>
+        /// Update projectline
+        /// </summary>
+        /// <param name="projectLine"></param>
         public void Update(ProjectLine projectLine)
         {
-            context.Entry(projectLine).State = EntityState.Modified;
+            m_context.Entry(projectLine).State = EntityState.Modified;
             //context.SaveChanges();
         }
 
+        /// <summary>
+        /// Delete projectline
+        /// </summary>
+        /// <param name="id"></param>
         public void Delete(int? id)
         {
             ProjectLine projectLine = this.GetSingle(id);
-            context.ProjectLine.Remove(projectLine);
+            m_context.ProjectLine.Remove(projectLine);
             //context.SaveChanges();
         }
 
+        /// <summary>
+        /// Save projectline
+        /// </summary>
         public void Save()
         {
-            context.SaveChanges();
+            m_context.SaveChanges();
         }
-
-        private bool disposed = false;
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposed)
+            if (!this.m_disposed)
             {
                 if (disposing)
                 {
-                    context.Dispose();
+                    m_context.Dispose();
                 }
             }
-            this.disposed = true;
+            this.m_disposed = true;
         }
 
         public void Dispose()

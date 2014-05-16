@@ -14,6 +14,5 @@ namespace textis.Repository
         void Update(ProjectLine projectLine);
         void Delete(int? id);
         void Save();
-        //void Dispose(bool disposing);
     }
 }

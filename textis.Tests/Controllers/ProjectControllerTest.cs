@@ -9,11 +9,17 @@ using textis.Tests.Controllers;
 
 namespace textis.Tests.Controllers
 {
+    /// <summary>
+    /// Testing ProjectController
+    /// </summary>
     [TestClass]
     public class ProjectControllerTest
     {
+        /// <summary>
+        /// Test ProjectController.Details
+        /// </summary>
         [TestMethod]
-        public void ProjectDetails()
+        public void TestProjectDetails()
         {
             // Arrange:
             MockProjectRepository projectReposiotory = new MockProjectRepository();
@@ -24,10 +30,6 @@ namespace textis.Tests.Controllers
             ProjectController controller = new ProjectController(projectReposiotory, categoryRepository, 
                                                                  commentRepository, upvoteRepository, projectLineRepository);
 
-
-            //IProjectRepository projectRepository, ICategoryRepository categoryRepository, 
-            //                     ICommentRepository commentRepository, IUpvoteRepository upvoteRepository, 
-            //                     IProjectLineRepository projectLineRepository
             // Act:
             var result = controller.Details(1);
 
