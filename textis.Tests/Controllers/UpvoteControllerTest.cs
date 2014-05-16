@@ -46,7 +46,5 @@ namespace textis.Tests.Controllers
             UpvoteViewModel model = viewResult.Model as UpvoteViewModel;
             Assert.IsTrue(model.Id == 1);
         }
-    
     }
-
 }

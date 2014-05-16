@@ -83,9 +83,13 @@
             @if (User.Identity.IsAuthenticated)
             {
                 <td>
-                    @Html.ActionLink("Breyta", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Nánar", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Eyða", "Delete", new { id = item.Id })
+                    @Html.ActionLink("Breyta", "Edit", new { id = item.Id }) 
+                   @* @Html.ActionLink("Nánar", "Details", new { id = item.Id }) |*@
+                    @if (User.IsInRole("Admin"))
+                    { 
+                        <span>|</span> 
+                        @Html.ActionLink("Eyða", "Delete", new { id = item.Id })
+                    }
                 </td>
             }
         </tr>
