@@ -38,20 +38,19 @@ namespace textis.Controllers
             m_ProjectRepository = projectRepository;
         }
         
-
         public string GetUsername()
         {
             if (Request.IsAuthenticated)
             {
                 return User.Identity.Name;
             }
+
             else
             {
                 return "Nafnlaus";
             }
         }
 
-        // GET: /Upvote/
         public ActionResult Index()
         {
             List<UpvoteViewModel> m_UpvoteViewModelList = new List<UpvoteViewModel>();
@@ -65,7 +64,6 @@ namespace textis.Controllers
             return View(m_UpvoteViewModelList);
         }
 
-        // GET: /Upvote/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -74,6 +72,7 @@ namespace textis.Controllers
             }
 
             Upvote upvote = m_UpvoteRepository.GetSingle(id);
+
             if (upvote == null)
             {
                 return HttpNotFound();
@@ -81,16 +80,12 @@ namespace textis.Controllers
             return View(new UpvoteViewModel(upvote));
         }
 
-        // GET: /Upvote/Create
         public ActionResult Create()
         {
             ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name");
             return View();
         }
 
-        // POST: /Upvote/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,ProjectId,User,Date")] UpvoteViewModel upvoteViewModel)
@@ -107,11 +102,9 @@ namespace textis.Controllers
             }
 
             ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", upvoteViewModel.ProjectId);
-            //return View(upvoteViewModel);
             return View("Index");
         }
 
-        // GET: /Upvote/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -124,13 +117,11 @@ namespace textis.Controllers
             {
                 return HttpNotFound();
             }
+
             ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", upvote.ProjectId);
             return View(new UpvoteViewModel(upvote));
         }
 
-        // POST: /Upvote/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,ProjectId,User,Date")] UpvoteViewModel upvoteViewModel)
@@ -145,12 +136,12 @@ namespace textis.Controllers
                 m_UpvoteRepository.Save();
                 return RedirectToAction("Index");
             }
+
             ViewBag.ProjectId = new SelectList(m_ProjectRepository.GetAll(), "Id", "Name", upvoteViewModel.ProjectId);
             return View(upvoteViewModel);
 
         }
 
-        // GET: /Upvote/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -167,7 +158,6 @@ namespace textis.Controllers
             return View(new UpvoteViewModel(upvote));
         }
 
-        // POST: /Upvote/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -186,32 +176,22 @@ namespace textis.Controllers
 
             return RedirectToAction("Index");
         }
-
+        /// <summary>
+        /// Accepts parameter from upvote function in scrip_textis.js
+        /// </summary>
+        /// <param name="upvote"></param>
+        /// <returns>Json</returns>
         [HttpPost]
         public ActionResult PostUpvote(Upvote upvote)
         {
-            Upvote tempUpvote = new Upvote();
-            tempUpvote.ProjectId = upvote.Id;
-            tempUpvote.User = GetUsername();
-            tempUpvote.Date = DateTime.Now;
-            m_UpvoteRepository.Create(tempUpvote);
+            Upvote newUpvote = new Upvote();
+            newUpvote.ProjectId = upvote.Id;
+            newUpvote.User = GetUsername();
+            newUpvote.Date = DateTime.Now;
+            m_UpvoteRepository.Create(newUpvote);
             m_UpvoteRepository.Save();
             return Json(JsonRequestBehavior.AllowGet);
         }
-
-        //public PartialViewResult GetList()
-        //{
-        //    //var result = from c in m_CommentRepository.GetByProjectId(id)
-        //    //             orderby c.Date ascending
-        //    //             select c;
-        //    List<ProjectViewModel> tempList = new List<ProjectViewModel>();
-        //    //foreach (Comment tempComment in result)
-        //    foreach (Project tempProject in m_ProjectRepository.GetAll())
-        //    {
-        //        tempList.Add(new ProjectViewModel(tempProject));
-        //    }
-        //    return PartialView("index", tempList);
-        //}
 
         protected override void Dispose(bool disposing)
         {

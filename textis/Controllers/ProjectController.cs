@@ -619,70 +619,7 @@ namespace textis.Controllers
 
         public ActionResult DownloadFileFromIndex(int? id)
         {
-            //Get all the lines from server and order them by time
-            var projectToDownload = from x in m_ProjectLineRepository.GetByProjectId(id)
-                                    where x.Language == "IS"
-                                    orderby x.TimeFrom ascending
-                                    select x;
-
-            int i = 0; // array locaton
-            int j = 1; //Line numbers to be printed
-            string time;
-            //all print lines collected in an array
-            string[] linesToPrint = new string[10000];
-
-            foreach (ProjectLine line in projectToDownload)
-            {
-                linesToPrint[i++] = j.ToString(); //The number line
-
-                //Time to-from line
-                time = line.TimeFrom.ToString("HH:mm:ss,fff") + " --> ";
-                time = time + line.TimeFrom.ToString("HH:mm:ss,fff");
-                linesToPrint[i++] = time;
-
-                //first text line
-                linesToPrint[i++] = line.TextLine1;
-
-                if (line.TextLine2 != null)
-                {
-                    //second text line
-                    linesToPrint[i++] = line.TextLine2;
-                }
-
-                linesToPrint[i++] = "";
-                j++;
-            }
-
-            string[] printer = new string[i + 1];
-            //In case the project has no saved lines
-            if (i == 0)
-            {
-                printer[0] = "Því miður hafa smaladrengirnir okkar ekki komist í að þýða þessa mynd, því að litu bardagadvergarnir komu í veg fyrir það :(";
-            }
-            else //If the project is not empty
-            {
-                for (int k = 0; k < i; k++)
-                {
-                    printer[k] = linesToPrint[k];
-                }
-            }
-
-            //create and store a .srt file
-            var project = m_ProjectRepository.GetSingle(id);
-            string fileName = project.Name + ".srt";
-            var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);
-            System.IO.File.WriteAllLines(path, printer);
-
-            //send the new file to the user
-            //( As seen on youtube: www.youtube.com/watch?v=-EH1zptSmdQ )
-            Response.ContentType = "application/octet-stream";
-            Response.AppendHeader("content-disposition", "attachment;filename=" + fileName);
-            Response.TransmitFile(path);
-            Response.End();
-
-            //clean up, we have no more use for that file
-            System.IO.File.Delete(path);
-
+            DownloadFile(id);
             return RedirectToAction("Index", new { id = id });
         }
     }
