@@ -17,6 +17,7 @@ namespace textis.ViewModel
         public string Name { get; set; }
         public string Status { get; set; }
         public string Url { get; set; }
+        [Required(ErrorMessage = "Vinsamlegast fyllið inn flokk myndefnis")]
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public int UpvoteCount { get; set; }
