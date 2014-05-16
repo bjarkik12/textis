@@ -43,11 +43,10 @@
         <th>
             @Html.ActionLink("Meðmæli", "Index", new { sortOrder = "Like", category = ViewBag.categoryBag, searchString = ViewBag.searchBag })
         </th>
-        <th>
-            
-        </th>
+@if (User.Identity.IsAuthenticated) { 
         <th>            
         </th>
+}
     </tr>
 
     @foreach (var item in Model)
